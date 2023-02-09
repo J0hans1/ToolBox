@@ -5,6 +5,7 @@ import Button from '@mui/material/Button';
 import TitledBox from './components/opplaering';
 import { Counter, Counter2 } from './components/opplaering';
 import UserInfo from './components/userInfo';
+import AddsInfo from './components/addsInfo';
 
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
         <Counter message="Du har trykket på knappen"/>
         <Counter2 message="Du har trykket på knappen"/>
         <UserInfo />
+        <AddsInfo />
       </header>
     </div>
   );

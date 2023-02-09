@@ -1,4 +1,4 @@
-import { Adds, User } from "../types/users";
+import { User } from "../types/users";
 
 interface IProps{
     user: User;
