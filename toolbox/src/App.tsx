@@ -11,8 +11,6 @@ import Ads from './pages/Ads';
 
 import { HashRouter, Route, Routes, } from "react-router-dom"
 
-import './App.css';
-import AdCreator from './pages/AdCreator';
 
 function App() {
   return (
