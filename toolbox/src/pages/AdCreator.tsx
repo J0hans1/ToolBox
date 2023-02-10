@@ -1,42 +1,35 @@
 import Textbox from "../components/Textbox";
 import AdCreatorStep from "../components/AdCreatorStep";
-import { MenuItem, Select, TextField, Button, FormControl, InputLabel } from "@mui/material";
+import { MenuItem, Select, TextField, Button, FormControl, InputLabel, ImageListItem, ImageList, FormControlLabel, RadioGroup, Radio, IconButton, Box } from "@mui/material";
+import { useState } from "react";
+
+
+
+
 
 const AdCreator = () => {
+    const [disabled, setDisabled] = useState(false);
+
+    const handleOnChange = () => {
+        return (
+            setDisabled(!disabled)
+        )}
+
     return (
         <div className="flex flex-col w-full">
-            <Textbox title="Ad Creator">
+
+            <Textbox title="Opprett " title2="anonnse" >
+                <br />
                 <p>
-                    Lorem ipsum er opprinnelig et lettere redigert 
-                    utdrag fra De finibus bonorum et malorum 
-                    (Om det høyeste mål for godt og ondt) av Cicero.
-                    Opprinnelig begynte avsnittet: Neque porro quisquam 
-                    est qui dolorem ipsum quia dolor sit amet, consectetur, 
-                    adipisci velit («Ingen liker smerte for smertens skyld, 
-                    eller søker den og ønsker den, bare fordi den er smerte…»).
+                    Start utlån allerede i dag. Følg stegene, så er annonsen din oppe og går i løpet av kort tid!
                 </p>
+                <br />
             </Textbox>
 
-            <div>
-                <AdCreatorStep step={1} title="Tittel">
-                    <TextField 
-                        label="Tittel" 
-                        variant="filled" 
-                        fullWidth
-                    />
-                </AdCreatorStep>
-
-                <AdCreatorStep step={2} title="Beskrivelse">
-                    <TextField 
-                        multiline 
-                        minRows={4} 
-                        label="Beskrivelse" 
-                        variant="filled"
-                        fullWidth
-                    />
-                </AdCreatorStep>
-
-                <AdCreatorStep step={3} title="Kategori">
+            <div className="flex w-full flex-col justify-center">
+                <AdCreatorStep step={1} title="Kategori">
+                    <p>Velg en passende kategori så brukere enkelt kan finne annonsen din. Sjekk gjerne at valgt kategori inneholder lignende produkter.</p>
+                    <br />
                     <FormControl fullWidth>
                         <InputLabel id="demo-simple-select-label">Kategori</InputLabel>
                         <Select
@@ -59,16 +52,134 @@ const AdCreator = () => {
                         </Select>
                     </FormControl>
                 </AdCreatorStep>
-            </div>
 
-            <Button 
-                variant="contained"
-                className="w-1/6"
-                color="primary"
-            >
-                Publiser annonse
-            </Button>
-        </div>
+                <AdCreatorStep step={2} title="Tittel og beskrivelse">
+                    <p> Velg en kort og beskrivende tittel. Legg til en mer detaljert beskrivelse så bruker kan få mer informasjon om produktet når de trykker på annonsen. </p>
+                    <br />
+                    <TextField
+                        label="Tittel"
+                        variant="filled"
+                        fullWidth
+                    />
+                    <br />
+
+
+                    <TextField
+                        multiline
+                        minRows={4}
+                        label="Beskrivelse"
+                        variant="filled"
+                        fullWidth
+                    />
+                </AdCreatorStep>
+                <AdCreatorStep step={3} title="Bilder">
+                    <p>Vis frem produktet så brukere kan se hva du leier ut. Vi anbefaler 3-5 bilder for best resultat. Trykk på boksene eller bruk knappen.</p>
+                    <br />
+
+                    <ImageList sx={{ width: 500, height: "auto" }} cols={3} rowHeight={164}>
+                        {/* {itemData.map((item) => (
+                <ImageListItem key={item.img}>
+                <img
+        src={`${item.img}?w=164&h=164&fit=crop&auto=format`}
+        srcSet={`${item.img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+        alt={item.title}
+        loading="lazy"
+      />
+    </ImageListItem>
+  ))} */}
+                    </ImageList>
+                    <Button
+                        variant="outlined"
+                        component="label"
+                        className="w-1/3"
+                        color="primary"
+                        sx={{
+                            ':hover': {
+                                bgcolor: 'black',
+                                color: 'white',
+                            },
+                        }}>Last opp bilder <input
+                        accept="image/"
+                        type="file"
+                        hidden
+                        id="select-image"
+                        // onChange={e => setSelectedImage(e.target.files[0])}
+                     /></Button>
+                </AdCreatorStep>
+
+                <AdCreatorStep step={4} title="Pris">
+
+                    <RadioGroup
+                        row
+                        aria-labelledby="demo-row-radio-buttons-group-label"
+                        name="row-radio-buttons-group"
+                        defaultValue="utleie"
+                    >
+                        <FormControlLabel value="utleie" control={<Radio />} label="utleie" onClick={handleOnChange}/>
+                          <FormControlLabel value="utlån" control={<Radio />} label="utlån" onClick={handleOnChange}/>
+
+                    </RadioGroup>
+                    <br />
+                    {/* ønsker å disable text-field dersom utlån er valgt */}
+                 
+                    <TextField
+                        id="pris"
+                        label="Velg pris per dag"
+                        variant="filled"
+                        fullWidth
+                        disabled={disabled}
+                    />
+
+                </AdCreatorStep>
+                <AdCreatorStep step={5} title="Sted"> <TextField
+                    label="Gateadresse"
+                    variant="filled"
+                    fullWidth
+                />
+                    <br />
+                    <TextField
+                        label="Postnr."
+                        variant="filled"
+                        className="w-1/2"
+                    />
+                    <TextField
+                        label="Sted"
+                        variant="filled"
+                        className="w-1/2"
+
+                    /></AdCreatorStep>
+
+
+            </div>
+            <div className="flex-row ml-20">
+                <Button
+                    variant="outlined"
+                    className="w-1/6"
+                    color="primary"
+                    sx={{
+                        ':hover': {
+                            bgcolor: 'black',
+                            color: 'white',
+                        },
+                    }}>
+                    Publiser annonse
+                </Button>
+                <Button
+                    variant="outlined"
+                    className="w-1/6"
+                    color="primary"
+                    sx={{
+                        ':hover': {
+                            bgcolor: 'black',
+                            color: 'white',
+                        },
+                    }} >
+                        Forhåndsvisning            
+                    </Button>    
+                    <br />
+                    <br />    
+                </div>  
+            </div>
     );
 };
 

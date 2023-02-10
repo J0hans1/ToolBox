@@ -41,6 +41,7 @@ export default function App() {
           <Route path="/ads" element={<Ads />} />
           <Route path="/" element={<LandingPage />} />
           <Route path="*" element={<ErrorPage/>} />
+          <Route path="/adcreator" element={<AdCreator />} />
         </Routes>
       </HashRouter>
     </ThemeProvider>
