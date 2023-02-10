@@ -10,7 +10,7 @@ import Ads from './pages/Ads';
 
 import { HashRouter, Route, Routes, } from "react-router-dom"
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { grey } from '@mui/material/colors';
+import { grey, amber } from '@mui/material/colors';
 
 
 export default function App() {
@@ -22,6 +22,9 @@ export default function App() {
       },
       secondary: {
         main: grey[50],
+      },
+      info: {
+        main: amber[300],
       },
     },
   });
