@@ -1,3 +1,5 @@
+import Ad from '../components/Ad';
+
 import Textbox from "../components/Textbox";
 import AdCreatorStep from "../components/AdCreatorStep";
 import { MenuItem, Select, TextField, Button, FormControl, InputLabel, ImageListItem, ImageList, FormControlLabel, RadioGroup, Radio, IconButton, Box } from "@mui/material";
@@ -181,6 +183,8 @@ const AdCreator = () => {
                 </div>  
             </div>
     );
+
+
 };
 
 export default AdCreator;

@@ -13,7 +13,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { grey, amber } from '@mui/material/colors';
 
 import './App.css';
-import AdCreator from './pages/AdCreator';
+
 
 export default function App() {
   const theme = createTheme({
@@ -30,7 +30,6 @@ export default function App() {
       },
     },
   });
-
   return (
     <ThemeProvider theme={theme}>
       <HashRouter>
@@ -46,4 +45,6 @@ export default function App() {
       </HashRouter>
     </ThemeProvider>
   );
+
+
 }
