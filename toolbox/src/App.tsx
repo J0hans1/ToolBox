@@ -9,23 +9,35 @@ import LandingPage from './pages/LandingPage';
 import Ads from './pages/Ads';
 
 import { HashRouter, Route, Routes, } from "react-router-dom"
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { grey } from '@mui/material/colors';
 
 
-function App() {
+export default function App() {
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: grey[900],
+        
+      },
+      secondary: {
+        main: grey[50],
+      },
+    },
+  });
+
   return (
-    <div className="App">
+    <ThemeProvider theme={theme}>
       <HashRouter>
         <Navbar />
-          <Routes>
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/ads" element={<Ads />} />
-            <Route path="/" element={<LandingPage />} />
-            <Route path="*" element={<ErrorPage/>} />
-          </Routes>
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/ads" element={<Ads />} />
+          <Route path="/" element={<LandingPage />} />
+          <Route path="*" element={<ErrorPage/>} />
+        </Routes>
       </HashRouter>
-    </div>
+    </ThemeProvider>
   );
 }
-
-export default App;
