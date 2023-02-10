@@ -14,30 +14,29 @@ const Header = () => {
 }
 
 const LoginPage = () => {
+
     return(
         <div className="h-screen" >
             <div className='flex h-full'>
                 <div className='flex flex-col justify-between w-1/4 bg-yellow-400 h-full'></div>
                 <div className='flex flex-col w-2/4 p-6' >
                     <div>
-                        <img src={PEOPLE} className='h-10'/>
+                        <img src={PEOPLE} className='h-10' alt="People icon"/>
                     </div>
                     <Header/>
                     <div className='flex flex-col h-3/4'>
-                        <div className='flex justify-between h-1/6 flex-col'>
-                            <TextField label="Brukernavn" variant="outlined"/>
-                            <TextField label="Passord" variant="outlined"/>                              
+                        <div className='flex justify-between h-32 flex-col'>
+                            <TextField color="primary" label="Brukernavn" variant="outlined"/>
+                            <TextField color="primary" label="Passord" variant="outlined"/>                              
                         </div>
                         
                         <div className='mt-10'>   
-                            <Button variant="contained">Login</Button>
+                            <Button color="primary" variant="contained">Login</Button>
                         </div>
                     </div>  
                 </div>
             </div>
         </div>
-
-        
     );
 }
 
