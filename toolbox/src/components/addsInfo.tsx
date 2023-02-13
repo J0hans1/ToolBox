@@ -1,6 +1,6 @@
 import { DocumentData, onSnapshot, QuerySnapshot } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { Adds } from "../types/users";
+import { Adds } from "../types/types";
 import { Button } from "@mui/material"
 import { addsCollection } from "../lib/controller";
 import AddsCard from "./addsCard";

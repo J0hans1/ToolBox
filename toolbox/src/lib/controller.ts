@@ -1,6 +1,6 @@
 import { addDoc, collection, collectionGroup, deleteDoc, doc, getDocs, getFirestore, query, updateDoc, where } from "firebase/firestore";
 import { app } from "./firebase";
-import { NewUser } from "../types/users";
+import { NewUser } from "../types/types";
 
 
 const firestore = getFirestore(app);
@@ -18,10 +18,10 @@ export const addUser = async (userData: NewUser) => {
 };
 
 // CREATE A NEW ADD
-export const addAdd = async (addData: any) => {
-  const userId = sessionStorage.getItem("userId"); // Get userId from sessionStorage
-  const newAdd = await addDoc(collection(firestore, `users/${userId}/adds`), {...addData});
-  console.log(`New add created${newAdd.path}`)
+export const addAd = async (addData: any) => {
+  const userId = sessionStorage.getItem("userID"); // Get userId from sessionStorage
+  const newAd = await addDoc(collection(firestore, `users/${userId}/adds`), {...addData});
+  console.log(`New add created${newAd.path}`)
 };
 
 
