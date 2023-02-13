@@ -1,6 +1,7 @@
 import { Avatar } from "@mui/material";
 import { amber } from "@mui/material/colors";
 
+//Only in use for testing hardcoding data
 interface AdProps {
     title: string;
     description: string;
