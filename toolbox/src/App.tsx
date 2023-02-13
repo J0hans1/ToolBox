@@ -10,6 +10,7 @@ import { HashRouter, Route, Routes, } from "react-router-dom"
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { grey, amber } from '@mui/material/colors';
 import AdCreator from './pages/AdCreator';
+import { Helmet } from "react-helmet";
 
 
 export default function App() {
@@ -17,7 +18,7 @@ export default function App() {
     palette: {
       primary: {
         main: grey[900],
-        
+
       },
       secondary: {
         main: grey[50],
@@ -28,6 +29,15 @@ export default function App() {
     },
   });
   return (
+    
+    <div className="App">
+    <Helmet>
+      <meta charSet="utf-8" />
+      <title>ToolBox</title>
+      <link rel="canonical" href="http://mysite.com/example" />
+    </Helmet>
+        
+      
     <ThemeProvider theme={theme}>
       <HashRouter>
 
@@ -47,6 +57,9 @@ export default function App() {
         </Routes>
       </HashRouter>
     </ThemeProvider>
+
+    
+    </div>
   );
 
 
