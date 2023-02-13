@@ -1,5 +1,5 @@
 import { Avatar } from "@mui/material";
-import { deepPurple } from "@mui/material/colors";
+import { amber } from "@mui/material/colors";
 
 interface AdProps {
     title: string;
@@ -37,7 +37,7 @@ const Ad = (props: AdProps) => {
                 <div className="flex flex-row bg-white rounded-lg h-auto absolute bottom-0 p-4 justify-between w-full">
 
                     <div className="w-1/5">
-                        <Avatar sx={{bgcolor: deepPurple[500]}}>TH</Avatar>
+                        <Avatar sx={{bgcolor: amber[500]}}>TH</Avatar>
                     </div>
                     <div className="flex flex-col w-4/5">
                         <h2 className="text-md font-bold">{props.title}</h2>

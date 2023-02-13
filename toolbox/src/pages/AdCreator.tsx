@@ -1,8 +1,6 @@
-import Ad from '../components/Ad';
-
 import Textbox from "../components/Textbox";
 import AdCreatorStep from "../components/AdCreatorStep";
-import { MenuItem, Select, TextField, Button, FormControl, InputLabel, ImageListItem, ImageList, FormControlLabel, RadioGroup, Radio, IconButton, Box } from "@mui/material";
+import { MenuItem, Select, TextField, Button, FormControl, InputLabel, ImageList, FormControlLabel, RadioGroup, Radio } from "@mui/material";
 import { useState } from "react";
 
 
