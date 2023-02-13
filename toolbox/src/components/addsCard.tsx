@@ -1,5 +1,5 @@
 import { deleteAdd } from "../lib/controller";
-import { Adds } from "../types/users";
+import { Adds } from "../types/types";
 
 
 interface AddsProps{

@@ -1,5 +1,5 @@
 import { deleteUser } from "../lib/controller";
-import { User } from "../types/users";
+import { User } from "../types/types";
 
 interface IProps{
     user: User;

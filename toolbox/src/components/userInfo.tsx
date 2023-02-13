@@ -1,7 +1,7 @@
 import { DocumentData, onSnapshot, QuerySnapshot } from "@firebase/firestore";
 import { useEffect, useState } from "react";
 import { usersCollection } from "../lib/controller";
-import { User } from "../types/users";
+import { User } from "../types/types";
 import InformationUser from "./information";
 
 

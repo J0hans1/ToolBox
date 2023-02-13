@@ -2,22 +2,65 @@ import Textbox from "../components/Textbox";
 import AdCreatorStep from "../components/AdCreatorStep";
 import { MenuItem, Select, TextField, Button, FormControl, InputLabel, ImageList, FormControlLabel, RadioGroup, Radio } from "@mui/material";
 import { useState } from "react";
+import { addAd } from "../lib/controller";
+import {Ad} from "../types/types";
 
 
-
-
+function writeAdToDatabase(props : Ad) {
+    const ad = {
+        title: props.title,
+        description: props.description,
+        category: props.category,
+        price: props.price,
+        rental: props.rental,
+        adress: props.adress,
+        zip: props.zip,
+        city: props.city
+    }
+    console.log(ad)
+    addAd(ad); // Add ad to database
+}
 
 const AdCreator = () => {
     const [disabled, setDisabled] = useState(false);
+
+    const [description, setDescription] = useState("");
+    const [title, setTitle] = useState("");
+    const [category, setCategory] = useState("");
+    const [price, setPrice] = useState("");
+    const [rental, setRental] = useState("");
+    const [adress, setAdress] = useState("");
+    const [zip, setZip] = useState("");
+    const [city, setCity] = useState("");
 
     const handleOnChange = () => {
         return (
             setDisabled(!disabled)
         )}
 
+    
+    const handleOnClick = () => {
+        // check if user is logged in
+        if (localStorage.getItem("user") === null) {
+            alert("Du må være logget inn for å opprette en annonse");
+            return;
+        }
+
+        const adToDatabase = {
+            title: title,
+            description: description,
+            category: category,
+            price: parseInt(price),
+            rental: rental,
+            adress: adress,
+            zip: parseInt(zip),
+            city: city
+        }
+        writeAdToDatabase(adToDatabase);
+    }
+
     return (
         <div className="flex flex-col w-full">
-
             <Textbox title="Opprett " title2="anonnse" >
                 <br />
                 <p>
@@ -25,19 +68,18 @@ const AdCreator = () => {
                 </p>
                 <br />
             </Textbox>
-
             <div className="flex w-full flex-col justify-center">
                 <AdCreatorStep step={1} title="Kategori">
                     <p>Velg en passende kategori så brukere enkelt kan finne annonsen din. Sjekk gjerne at valgt kategori inneholder lignende produkter.</p>
                     <br />
                     <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">Kategori</InputLabel>
+                        <InputLabel id="category">Kategori</InputLabel>
                         <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
-                            // value={}
+                            value={category}
                             label="Kategori"
-                            // onChange={handleChange}
+                            onChange={(e) => { setCategory(e.target.value as string) }}
                             variant="filled"
                         >
                             <MenuItem value="Håndverktøy">Håndverktøy</MenuItem>
@@ -57,16 +99,18 @@ const AdCreator = () => {
                     <p> Velg en kort og beskrivende tittel. Legg til en mer detaljert beskrivelse så bruker kan få mer informasjon om produktet når de trykker på annonsen. </p>
                     <br />
                     <TextField
+                        value={title}
+                        onChange={(e) => { setTitle(e.target.value) }}
                         label="Tittel"
                         variant="filled"
                         fullWidth
                     />
                     <br />
-
-
                     <TextField
                         multiline
                         minRows={4}
+                        onChange={(e) => { setDescription(e.target.value) }}
+                        value={description}
                         label="Beskrivelse"
                         variant="filled"
                         fullWidth
@@ -108,48 +152,53 @@ const AdCreator = () => {
                 </AdCreatorStep>
 
                 <AdCreatorStep step={4} title="Pris">
-
                     <RadioGroup
                         row
                         aria-labelledby="demo-row-radio-buttons-group-label"
                         name="row-radio-buttons-group"
                         defaultValue="utleie"
+                        onChange={(e) => { setRental(e.target.value as string) }}
+                        value={rental}
                     >
                         <FormControlLabel value="utleie" control={<Radio />} label="utleie" onClick={handleOnChange}/>
-                          <FormControlLabel value="utlån" control={<Radio />} label="utlån" onClick={handleOnChange}/>
-
+                        <FormControlLabel value="utlån" control={<Radio />} label="utlån" onClick={handleOnChange}/>
                     </RadioGroup>
                     <br />
                     {/* ønsker å disable text-field dersom utlån er valgt */}
-                 
                     <TextField
                         id="pris"
                         label="Velg pris per dag"
                         variant="filled"
+                        type="number"
                         fullWidth
                         disabled={disabled}
+                        value={price}
+                        onChange={(e) => { setPrice(e.target.value) }}
                     />
-
                 </AdCreatorStep>
                 <AdCreatorStep step={5} title="Sted"> <TextField
                     label="Gateadresse"
                     variant="filled"
                     fullWidth
+                    value={adress}
+                    onChange={(e) => { setAdress(e.target.value) }}
                 />
                     <br />
                     <TextField
                         label="Postnr."
                         variant="filled"
                         className="w-1/2"
+                        value={zip}
+                        type="number"
+                        onChange={(e) => { setZip(e.target.value) }}
                     />
                     <TextField
                         label="Sted"
                         variant="filled"
                         className="w-1/2"
-
+                        value={city}
+                        onChange={(e) => { setCity(e.target.value) }}
                     /></AdCreatorStep>
-
-
             </div>
             <div className="flex-row ml-20">
                 <Button
@@ -161,7 +210,8 @@ const AdCreator = () => {
                             bgcolor: 'black',
                             color: 'white',
                         },
-                    }}>
+                    }}
+                    onClick={() => handleOnClick()}>
                     Publiser annonse
                 </Button>
                 <Button
@@ -181,8 +231,6 @@ const AdCreator = () => {
                 </div>  
             </div>
     );
-
-
 };
 
 export default AdCreator;

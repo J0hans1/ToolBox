@@ -8,6 +8,7 @@ export interface User{
     Adds?: [Adds];
 }
 
+// slette denne?
 export interface Adds{
     id: string;
     category?: string;
@@ -20,8 +21,24 @@ export interface Adds{
     location?: string;
 }
 
+/* interface adValues {
+    adObject : ad
+} */
+
+export interface Ad{
+    title: string;
+    description: string;
+    category: string;
+    price: number;
+    rental: string;
+    adress: string;
+    zip: number;
+    city: string;
+}
+
 export interface NewUser{
     username: string;
     password: string;
     location: string;
 }
+
