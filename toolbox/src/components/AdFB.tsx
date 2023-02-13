@@ -1,6 +1,6 @@
-import { Adds } from "../types/users";
 import { Avatar } from "@mui/material";
 import { amber } from "@mui/material/colors";
+import { Adds } from "../types/types";
 
 interface AdProps {
     ad: Adds;

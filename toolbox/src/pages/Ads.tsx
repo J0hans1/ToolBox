@@ -1,7 +1,7 @@
 //import Ad from '../components/Ad';
 import AdFilter from '../components/AdFilter';
 import { Button, TextField } from '@mui/material';
-import { Adds } from '../types/users';
+import { Adds } from '../types/types';
 import { useState, useEffect } from 'react';
 import { DocumentData, onSnapshot, QuerySnapshot } from 'firebase/firestore';
 import { addsCollection } from '../lib/controller';

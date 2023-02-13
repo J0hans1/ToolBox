@@ -25,8 +25,8 @@ const NavButtons = () => {
 
 const Navbar = () => {
     return(
-        <div className="absolute w-screen p-4 flex items-center justify-center">
-            <div className='w-2/3 flex bg-black rounded-2xl p-3 justify-between'>
+        <div className=" w-full flex">
+            <div className='w-full flex bg-black rounded-2xl p-3 justify-between'>
                 <a href="/#/" className="text-4xl text-white">ToolBox</a>
                 <NavButtons/>
             </div>
