@@ -17,7 +17,7 @@ const FilterModuler = (props: TitledChildren) => {
     );
 }
 
-const FilterComponent = () => {
+const AdFilter = () => {
     return (
         <div className="m-4 h-auto rounded-2xl border-2 w-fit bg-white p-5 shadow-lg">
             <FilterModuler title="Kategori" margin="mt-4">
@@ -57,4 +57,4 @@ const FilterComponent = () => {
 
 
 
-export default FilterComponent;
+export default AdFilter;
