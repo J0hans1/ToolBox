@@ -17,6 +17,7 @@ export interface Adds{
     toDate?: Timestamp;
     picture?: string;
     title?: string;
+    location?: string;
 }
 
 export interface NewUser{
