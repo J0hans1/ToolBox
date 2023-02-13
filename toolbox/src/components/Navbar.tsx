@@ -1,4 +1,4 @@
-import { Button } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 
 const NavButtons = () => {
     return(
@@ -9,8 +9,13 @@ const NavButtons = () => {
                     <Button color="secondary" href="/#/ads" variant="text">Anonnser</Button>
                 </div>
                 <div className='flex w-2/6 justify-evenly'>
+                    
                     <Button href="/#/login" variant="contained">Login</Button>
                     <Button color="secondary" href="/#/register" variant="outlined">Registrer</Button>
+                </div>
+                <div className='flex w-2/6 justify-evenly'>
+                    {/* Knapp som viser brukernavnet man er logget inn på. Når en klikker på knapper refreshes siden, og brukernavnet kommer opp. */}
+                    <Button color="secondary" variant="outlined" onClick={() => window.location.reload()} > {sessionStorage.getItem("username")} </Button> {/* Oppdateres kun på refresh */}
                 </div>
             </div>
         </nav>  
