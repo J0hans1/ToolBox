@@ -44,15 +44,12 @@ const LoginPage = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     let navigate = useNavigate();
-    
 
-
-    
     return(
         <div className="h-screen" >
             <div className='flex h-full'>
                 <div className='flex flex-col justify-between w-1/4 bg-yellow-400 h-full'></div>
-                <div className='flex flex-col w-2/4 p-6' >
+                <div className='flex flex-col w-2/4 p-6 pt-40' >
                     <div>
                         <img src={PEOPLE} className='h-10' alt="People icon"/>
                     </div>

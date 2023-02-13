@@ -30,7 +30,13 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <HashRouter>
-        <Navbar />
+
+        <div id="c_section" className='fixed top-0 w-screen h-auto content-center z-20'>
+            <div id="c_container" className='flex m-auto w-full max-w-7xl p-10'>
+              <Navbar />
+            </div>
+        </div>
+
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
