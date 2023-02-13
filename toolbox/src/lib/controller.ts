@@ -1,8 +1,10 @@
-import { addDoc, collection, collectionGroup, deleteDoc, doc, getDocs, getFirestore, query, snapshotEqual, updateDoc, where } from "firebase/firestore";
+import { addDoc, collection, collectionGroup, deleteDoc, doc, getDocs, getFirestore, query, updateDoc, where } from "firebase/firestore";
 import { app } from "./firebase";
 import { NewUser } from "../types/users";
 
+
 const firestore = getFirestore(app);
+
 
 // CRUD FUNCTIONS
 
@@ -90,13 +92,47 @@ export function addToSessionStorage(username: string) { // Brukes i loginpage og
   console.log("Username sessionstorage set to: " + sessionStorage.getItem("username"));
   const dummy = getDocs(query(usersCollection, where("username", "==", username))).then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
-      //console.log("User ID: ", doc.id)
       const userID = doc.id; // Itererer gjennom alle brukere i databasen og setter userID lik brukerens ID
       sessionStorage.setItem("userID", userID);
       console.log("User ID sessionstorage: " + sessionStorage.getItem("userID"));
-      // printer kun hvis brukeren eksisterer fra før av, noe den skal når valideringsfunksjonen fungerer.
     });
   });
 }
 
+export function removeFromSessionStorage() { // Brukes from logoutbutton når det lages
+  sessionStorage.removeItem("username");
+  sessionStorage.removeItem("userID");
+  console.log("Username and userID removed from sessionstorage");
+}
 
+
+export async function validateUser(username: string, password: string) { // Brukes i loginpage
+  let a = false;
+  const dummy = await getDocs(query(usersCollection, where("username", "==", username))).then((querySnapshot) => {
+    querySnapshot.forEach((doc) => {
+      //console.log("User ID: ", doc.id)
+      const userID = doc.id; // Itererer gjennom alle brukere i databasen og setter userID lik brukerens ID
+      const userPassword = doc.data().password;
+      if (password === userPassword && username === doc.data().username) {
+        addToSessionStorage(username);
+        a = true;
+        console.log("Correct password");
+      }
+    });
+  });
+  return a;
+}
+
+export async function validateUsername(username: string) { // Brukes i registerpage
+  let a = false;
+  const dummy = await getDocs(query(usersCollection, where("username", "==", username))).then((querySnapshot) => {
+    querySnapshot.forEach((doc) => {
+      const userID = doc.id; // Itererer gjennom alle brukere i databasen og setter userID lik brukerens ID
+      if (username === doc.data().username) {
+        a = true;
+        console.log("Username already exists");
+      }
+    });
+  });
+  return a;
+}

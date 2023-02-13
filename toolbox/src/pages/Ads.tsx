@@ -23,7 +23,7 @@ const Ads = () => {
                             <TextField variant="filled" label="Ønsket produkt" />
                             <Button variant="contained">Søk</Button>
                         </div>
-                        <Button color="info" variant="contained" href="/#/postAd">+</Button>
+                        <Button color="info" variant="contained" href="/#/adcreator">+</Button>
                     </div>
 
                     <div className='flex m-auto w-full max-w-7xl p-10 text-current flex-wrap flex-row justify-center'>

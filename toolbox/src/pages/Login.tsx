@@ -1,14 +1,29 @@
 import { Button, TextField } from '@mui/material';
 import PEOPLE from '../img/people.svg';
 import { useNavigate } from "react-router-dom";
-import { addToSessionStorage, usersCollection } from '../lib/controller';
+import { addToSessionStorage, removeFromSessionStorage, validateUser } from '../lib/controller';
 import { useState } from 'react';
 
 
-function validation(username: string, password: string) {
-    // TODO - Sjekke at brukernavn og passord stemmer overens med databasen
-
-    return true; // returner boolean
+// Check for valid input on Login
+async function validation(username: string, password: string) {
+    // Check if user is already logged in
+    if (sessionStorage.getItem("username") !== null) {
+        alert("Du er allerede logget inn");
+        return false;
+    }
+    // Check if username and password is longer than 3 characters
+    if (username.length < 3 || password.length < 3) {
+        alert("Brukernavn og passord må være lengre enn 3 tegn");
+        return false;
+    }
+    // Check if user exists in database
+    if (await validateUser(username, password)) {
+        return true;
+    } else {
+        alert("Brukernavn eller passord er feil");
+        return false; 
+    }
 }
 
 
@@ -30,6 +45,9 @@ const LoginPage = () => {
     const [password, setPassword] = useState("");
     let navigate = useNavigate();
     
+
+
+    
     return(
         <div className="h-screen" >
             <div className='flex h-full'>
@@ -49,11 +67,17 @@ const LoginPage = () => {
                             <Button 
                             color="primary" 
                             variant="contained" 
-                            onClick={() => {
-                                if (validation(username, password)) {
-                                    addToSessionStorage(username); // lagrer brukernavn og brukerID til session storage
+                            onClick={async () => {
+                                if (await validation(username, password)) {
                                     navigate("/");  /* navigerer fra loginpage til hovedsiden */
                             }}}>Login</Button>
+                            <Button 
+                            color="primary" 
+                            variant="contained" 
+                            onClick={() => {
+                                removeFromSessionStorage(); // fjerner brukernavn og brukerID fra session storage
+                                console.log("Logged out");
+                                }}>Logout</Button>
                         </div>
                     </div>  
                 </div>

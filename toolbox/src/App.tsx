@@ -6,8 +6,6 @@ import RegisterPage from "./pages/Register";
 import ErrorPage from './pages/ErrorPage';
 import LandingPage from './pages/LandingPage';
 import Ads from './pages/Ads';
-import AdCreator from './pages/AdCreator';
-
 import { HashRouter, Route, Routes, } from "react-router-dom"
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { grey, amber } from '@mui/material/colors';
@@ -37,7 +35,6 @@ export default function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/ads" element={<Ads />} />
-          <Route path="/postAd" element={<AdCreator/>} />
           <Route path="/" element={<LandingPage />} />
           <Route path="*" element={<ErrorPage/>} />
           <Route path="/adcreator" element={<AdCreator />} />
