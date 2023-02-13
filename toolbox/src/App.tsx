@@ -1,7 +1,6 @@
 import './App.css';
 
 import Navbar from './components/Navbar';
-
 import LoginPage from './pages/Login';
 import RegisterPage from "./pages/Register";
 import ErrorPage from './pages/ErrorPage';
@@ -12,8 +11,7 @@ import AdCreator from './pages/AdCreator';
 import { HashRouter, Route, Routes, } from "react-router-dom"
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { grey, amber } from '@mui/material/colors';
-
-import './App.css';
+import AdCreator from './pages/AdCreator';
 
 
 export default function App() {

@@ -1,15 +1,27 @@
+import { deleteAdd } from "../lib/controller";
 import { Adds } from "../types/users";
 
 
-interface AProps{
+interface AddsProps{
     adds: Adds;
 }
 
-export default function Information({adds}: AProps){
+function deleteAddButton(add: string){
+
+    if (add != null){
+        const x = deleteAdd(add);
+        console.log(x);
+    } 
+}
+
+export default function InformationAdds(props: AddsProps){
     return (
         <div className="addsInfo">
-            <h2>{adds.price}</h2>
-            <h2>{adds.title}</h2>
+            <br />
+            <h2>{props.adds.price}</h2>
+            <h2>{props.adds.title}</h2>
+
+            <button onClick={() => deleteAddButton(props.adds.id)}>Delete add above</button>
         </div>
     )
 }
