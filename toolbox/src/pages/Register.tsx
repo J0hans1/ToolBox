@@ -1,5 +1,9 @@
 import { Button, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TextField } from '@mui/material';
+import { useState } from 'react';
+import { addToSessionStorage, addUser } from "../lib/controller"
 import PEOPLE from '../img/people.svg';
+import { useNavigate } from 'react-router-dom';
+
 
 const Header = () => {
     return (
@@ -13,7 +17,37 @@ const Header = () => {
     )
 }
 
+function validation(username: string, password: string, location: string) {
+    //TODO: Sjekke at det ikke finnes bruker med samme brukernavn i databasen
+    if (username.length < 3) {
+        alert("Brukernavn må være lengre enn 3 tegn");
+        return false;
+    }
+    if (password.length < 3) {
+        alert("Passord må være lengre enn 3 tegn");
+        return false;
+    }
+    return true;
+}
+
+
+
 const RegisterPage = () => {
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [location, setLocation] = useState("");
+
+    let navigate = useNavigate();
+
+    const addNewUser = () => {
+        addUser({
+            username,
+            password,
+            location,
+        })
+    }
+
+
     return(
         <div className="h-screen" >
             <div className='flex h-full'>
@@ -25,16 +59,18 @@ const RegisterPage = () => {
                     <Header/>
                     <div className='flex flex-col h-3/4'>
                         <div className='flex justify-between h-32 flex-col'>
-                            <TextField label="Brukernavn" variant="outlined"/>
-                            <TextField label="Passord" variant="outlined"/>                              
+                            <TextField label="Brukernavn" variant="outlined" value={username} onChange={(e) => setUsername(e.target.value)}/>
+                            <TextField label="Passord" variant="outlined" value={password} onChange={(e) => setPassword(e.target.value)}/>                              
                         </div>
                         <div className='mt-10'>
                             <FormControl>
                                 <FormLabel id="demo-radio-buttons-group-label">Sted</FormLabel>
                                 <RadioGroup
                                     aria-labelledby="demo-radio-buttons-group-label"
-                                    defaultValue="female"
                                     name="radio-buttons-group"
+                                    value={location}
+                                    onChange={(e) => setLocation(e.target.value)}
+
                                 >
                                     <FormControlLabel value="Fredrikstad" control={<Radio />} label="Fredrikstad" />
                                     <FormControlLabel value="Trondheim" control={<Radio />} label="Trondheim" />
@@ -43,7 +79,15 @@ const RegisterPage = () => {
                             </FormControl>
                         </div>
                         <div className='mt-10'>   
-                            <Button variant="contained">Registrer</Button>
+                            <Button 
+                            variant="contained" 
+                            onClick={() => {  
+                                if (validation(username, password, location)) {
+                                    addNewUser();
+                                    addToSessionStorage(username); // lagrer brukernavn og brukerID til session storage
+                                    navigate("/"); /* navigerer fra registrersiden til hovedsiden */
+                                }
+                            }}>Registrer</Button>
                         </div>
                     </div>  
                 </div>

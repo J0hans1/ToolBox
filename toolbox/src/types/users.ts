@@ -1,7 +1,7 @@
 import { Timestamp } from "@firebase/firestore";
 
 export interface User{
-    id?: string;
+    id: string;
     location?: string;
     password?: string;
     username?: string;
@@ -9,7 +9,7 @@ export interface User{
 }
 
 export interface Adds{
-    id?: string;
+    id: string;
     category?: string;
     description?: string;
     price?: number;
@@ -17,4 +17,10 @@ export interface Adds{
     toDate?: Timestamp;
     picture?: string;
     title?: string;
+}
+
+export interface NewUser{
+    username: string;
+    password: string;
+    location: string;
 }
