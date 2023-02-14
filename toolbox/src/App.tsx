@@ -10,6 +10,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { grey, amber } from '@mui/material/colors';
 import AdCreator from './pages/AdCreator';
 import { Helmet } from "react-helmet";
+import MyAds from './pages/MyAds';
 
 
 export default function App() {
@@ -53,7 +54,8 @@ export default function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="*" element={<ErrorPage/>} />
           <Route path="/adcreator" element={<AdCreator />} />
-        </Routes>
+          <Route path='/myads' element={<MyAds />} />
+         </Routes>
       </HashRouter>
     </ThemeProvider>
 
