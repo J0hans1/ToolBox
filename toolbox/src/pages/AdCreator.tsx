@@ -1,7 +1,7 @@
 import Textbox from "../components/Textbox";
 import AdCreatorStep from "../components/AdCreatorStep";
 import { MenuItem, Select, TextField, Button, FormControl, InputLabel, ImageList, FormControlLabel, RadioGroup, Radio } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { addAd } from "../lib/controller";
 import {Ad} from "../types/types";
 
@@ -68,6 +68,11 @@ const AdCreator = () => {
         setZip("");
         setCity("");
     }
+
+    useEffect(() => {
+        window.scrollTo(0, 0)
+      }, [])
+      
 
     return (
         <div className="flex flex-col w-full">
