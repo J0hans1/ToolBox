@@ -1,5 +1,6 @@
 import './App.css';
 import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 import LoginPage from './pages/Login';
 import RegisterPage from "./pages/Register";
 import ErrorPage from './pages/ErrorPage';
@@ -10,7 +11,6 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { grey, amber } from '@mui/material/colors';
 import AdCreator from './pages/AdCreator';
 import { Helmet } from "react-helmet";
-import MyAds from './pages/MyAds';
 
 
 export default function App() {
@@ -54,8 +54,14 @@ export default function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="*" element={<ErrorPage/>} />
           <Route path="/adcreator" element={<AdCreator />} />
-          <Route path='/myads' element={<MyAds />} />
-         </Routes>
+        </Routes>
+
+        <div id="c_section" className='w-screen h-auto content-center bg-black text-white'>
+            <div id="c_container" className='flex m-auto w-full max-w-7xl p-10'>
+              <Footer />
+            </div>
+        </div>
+
       </HashRouter>
     </ThemeProvider>
 

@@ -1,5 +1,5 @@
 import { Button, TextField } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { addToSessionStorage, addUser, removeFromSessionStorage, validateUsername } from "../lib/controller"
 import PEOPLE from '../img/people.svg';
 import { useNavigate } from 'react-router-dom';
@@ -60,6 +60,11 @@ const RegisterPage = () => {
             location,
         })
     }
+
+    useEffect(() => {
+        window.scrollTo(0, 0)
+      }, [])
+      
 
     return (
 
