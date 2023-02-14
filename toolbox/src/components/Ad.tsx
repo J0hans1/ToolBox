@@ -14,16 +14,22 @@ interface AdProps {
 interface IconText {
     icon: string;
     text: string;
+    iconSize:string;
+    textSize:string;
 }
 
-const AdIconAndText = (props : IconText) => { 
+ const AdIconAndText = (props : IconText) => { 
     return (
-        <div className="flex flex-row h-5">
-            <img className="h-full" src={props.icon} alt="icon" />
-            <p className="text-xs ml-1">{props.text}</p>
+        <div className={`flex flex-row ${props.iconSize}`}>
+            <img className="h-full mr-5" src={props.icon} alt="icon" />
+            <p className={`ml-1 mt-3 ${props.textSize}`}>{props.text}</p>
         </div>
     )
 }
+
+export {AdIconAndText};
+
+
 
 
 const Ad = (props: AdProps) => {
@@ -44,8 +50,8 @@ const Ad = (props: AdProps) => {
                         <h2 className="text-md font-bold">{props.title}</h2>
                         <p className="text-sm my-2">{props.description}</p>
                         <div className="flex flex-row gap-5">
-                            <AdIconAndText icon="https://img.icons8.com/ios/50/000000/price-tag-euro.png" text={props.price} />
-                            <AdIconAndText icon="https://img.icons8.com/material-sharp/256/map-marker.png" text={props.location} />
+                            <AdIconAndText icon="https://img.icons8.com/ios/50/000000/price-tag-euro.png" text={props.price} iconSize="h-5" textSize="text-xs"/>
+                            <AdIconAndText icon="https://img.icons8.com/material-sharp/256/map-marker.png" text={props.location} iconSize="h-5" textSize="text-xs"/>
                         </div>
                     </div>
 

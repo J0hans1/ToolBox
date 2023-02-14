@@ -5,11 +5,13 @@ import RegisterPage from "./pages/Register";
 import ErrorPage from './pages/ErrorPage';
 import LandingPage from './pages/LandingPage';
 import Ads from './pages/Ads';
+import AdInspector from './pages/AdInspectorPage';
 import { HashRouter, Route, Routes, } from "react-router-dom"
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { grey, amber } from '@mui/material/colors';
 import AdCreator from './pages/AdCreator';
 import { Helmet } from "react-helmet";
+import AdInspectorPage from './pages/AdInspectorPage';
 
 
 export default function App() {
@@ -53,6 +55,9 @@ export default function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="*" element={<ErrorPage/>} />
           <Route path="/adcreator" element={<AdCreator />} />
+          <Route path="/adinspector" element={<AdInspectorPage />} />
+
+
         </Routes>
       </HashRouter>
     </ThemeProvider>

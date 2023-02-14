@@ -40,8 +40,8 @@ const Ads = () => {
                         </div>
                         <Button color="info" variant="contained" href="/#/adcreator">+</Button>
                     </div>
-
-                    <div className='flex m-auto w-full max-w-7xl p-10 text-current flex-wrap flex-row justify-center'>
+                    <a href='/#/adinspector'>
+                        <div className='flex m-auto w-full max-w-7xl p-10 text-current flex-wrap flex-row justify-center' >
                         {/* Not in use but can be used as testdata
                         <Ad 
                             src="https://static.bb.se/wcsstore/CAS/PIM/Luna/imgs/1151376.jpg"
@@ -56,6 +56,7 @@ const Ads = () => {
                             <AdFB key={ad.id} ad={ad} />
                         ))}
                     </div> 
+                </a>
                 </section>                
             </div>
         </div>
