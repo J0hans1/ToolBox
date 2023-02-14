@@ -43,13 +43,11 @@ async function validation(username: string, password: string, location: string) 
 }
 
 
-
 const RegisterPage = () => {
+    let navigate = useNavigate();
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [location, setLocation] = useState("");
-
-    let navigate = useNavigate();
 
     const addNewUser = () => {
         addUser({
@@ -95,6 +93,7 @@ const RegisterPage = () => {
                                 if (await validation(username, password, location)) {
                                     addNewUser();
                                     addToSessionStorage(username); // lagrer brukernavn og brukerID til session storage
+                                    alert("Du er nå registrert og logget inn som " + username)
                                     navigate("/"); /* navigerer fra registrersiden til hovedsiden */
                                 }
                             }}>Registrer</Button>
@@ -103,8 +102,6 @@ const RegisterPage = () => {
                 </div>
             </div>
         </div>
-
-        
     );
 }
 

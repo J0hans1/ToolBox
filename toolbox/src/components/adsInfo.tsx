@@ -1,17 +1,17 @@
 import { DocumentData, onSnapshot, QuerySnapshot } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { Adds } from "../types/types";
+import { Ad } from "../types/types";
 import { Button } from "@mui/material"
-import { addsCollection } from "../lib/controller";
-import AddsCard from "./addsCard";
+import { adsCollection } from "../lib/controller";
+/* import AdsCard from "./adsCard"; */
 
-export default function AddsInfo(){
-    const [adds, setAdds] = useState<Adds[]>([]);
+/* export default function AdsInfo(){
+    const [ads, setAds] = useState<Ad[]>([]);
 
     useEffect(
         () => 
-            onSnapshot(addsCollection, (snapshot: QuerySnapshot<DocumentData>) => {
-                setAdds(
+            onSnapshot(adsCollection, (snapshot: QuerySnapshot<DocumentData>) => {
+                setAds(
                     snapshot.docs.map((doc) => {
                         return {
                             id: doc.id,
@@ -19,7 +19,7 @@ export default function AddsInfo(){
                         };
                     })
                 );
-                console.log(adds);
+                console.log(ads);
             }),
         []
     );
@@ -30,19 +30,19 @@ export default function AddsInfo(){
                 <Button 
                     variant="text" 
                     onClick={() => {
-                        adds.map((add => (
-                        <AddsCard key={add.id} adds ={add} />
+                        ads.map((ad => (
+                        <AdsCard key={ad.id} ad = {ad} />
                     )))}}
                     > 
                     log ads 
                 </Button>
             </div>
             <div>
-                {adds.map((add) => (
-                    <AddsCard key={add.id} adds ={add} />
+                {ads.map((ad) => (
+                    <AdsCard key={ad.id} ad = {ad} />
                 ))}
 
             </div>
         </div>
     )
-}
+} */

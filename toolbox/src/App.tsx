@@ -1,5 +1,4 @@
 import './App.css';
-
 import Navbar from './components/Navbar';
 import LoginPage from './pages/Login';
 import RegisterPage from "./pages/Register";
