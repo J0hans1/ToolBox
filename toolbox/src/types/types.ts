@@ -37,6 +37,14 @@ export interface Ad{
 export interface NewUser{
     username: string;
     password: string;
+    password2: string;
     location: string;
+    firstname: string;
+    lastname: string;
+    phone: string;
+    email: string;
+    address: string;
+    zip: string;
+    city: string;
 }
 
