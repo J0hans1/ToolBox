@@ -1,39 +1,37 @@
-import { Timestamp } from "@firebase/firestore";
+//import { Timestamp } from "@firebase/firestore";
 
 export interface User{
     id: string;
     location?: string;
     password?: string;
     username?: string;
-    Adds?: [Adds];
+    Ads?: [Ad];
 }
 
 // slette denne?
-export interface Adds{
+/* export interface Adds{
     id: string;
-    category?: string;
+    title?: string;
     description?: string;
+    category?: string;
     price?: number;
     fromDate?: Timestamp;
     toDate?: Timestamp;
     picture?: string;
-    title?: string;
     location?: string;
-}
-
-/* interface adValues {
-    adObject : ad
 } */
 
+
 export interface Ad{
-    title: string;
-    description: string;
-    category: string;
-    price: number;
-    rental: string;
-    adress: string;
-    zip: number;
-    city: string;
+    id?: string;
+    title?: string;
+    description?: string;
+    category?: string;
+    price?: number;
+    rental?: string;
+    address?: string;
+    zip?: number;
+    city?: string;
 }
 
 export interface NewUser{

@@ -1,7 +1,7 @@
 import { deleteUser } from "../lib/controller";
 import { User } from "../types/types";
 
-interface IProps{
+/* interface IProps{
     user: User;
 }
 
@@ -21,4 +21,4 @@ export default function InformationUser({user}: IProps){
         </div>
         
     )
-}
+} */

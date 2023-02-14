@@ -1,9 +1,9 @@
 import { Avatar } from "@mui/material";
 import { amber } from "@mui/material/colors";
-import { Adds } from "../types/types";
+import { Ad } from "../types/types";
 
 interface AdProps {
-    ad: Adds;
+    ad: Ad;
 }
 
 export default function AdFB({ad}: AdProps){
@@ -25,12 +25,12 @@ export default function AdFB({ad}: AdProps){
                     <p className="text-sm my-2">{ad.description}</p>
                     <div className="flex flex-row gap-5">
                         <div className="flex flex-row h-5">
-                            <img className="h-full" src="https://img.icons8.com/ios/50/000000/price-tag-euro.png" />
+                            <img alt="bilde" className="h-full" src="https://img.icons8.com/ios/50/000000/price-tag-euro.png" />
                             <p className="text-xs ml-1">{ad.price}kr/dag</p>
                         </div>
                         <div className="flex flex-row h-5">
-                            <img className="h-full" src="https://img.icons8.com/material-sharp/256/map-marker.png" />
-                            <p className="text-xs ml-1">{ad.location}</p>
+                            <img alt="bilde" className="h-full" src="https://img.icons8.com/material-sharp/256/map-marker.png" />
+                            <p className="text-xs ml-1">{ad.city}</p>
                         </div>
                     </div>
                 </div>

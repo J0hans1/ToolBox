@@ -1,7 +1,7 @@
 import { Button, TextField } from '@mui/material';
 import PEOPLE from '../img/people.svg';
 import { useNavigate } from "react-router-dom";
-import { addToSessionStorage, removeFromSessionStorage, validateUser } from '../lib/controller';
+import { removeFromSessionStorage, validateUser } from '../lib/controller';
 import { useState } from 'react';
 
 
@@ -41,10 +41,10 @@ const Header = () => {
 
 const LoginPage = () => {
 
+    let navigate = useNavigate();
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    let navigate = useNavigate();
-
+    
     return(
         <div className="h-screen" >
             <div className='flex h-full'>
@@ -66,6 +66,7 @@ const LoginPage = () => {
                             variant="contained" 
                             onClick={async () => {
                                 if (await validation(username, password)) {
+                                    alert("Du er nå logget inn på bruker: " + username);
                                     navigate("/");  /* navigerer fra loginpage til hovedsiden */
                             }}}>Login</Button>
                             <Button 
@@ -74,6 +75,7 @@ const LoginPage = () => {
                             onClick={() => {
                                 removeFromSessionStorage(); // fjerner brukernavn og brukerID fra session storage
                                 console.log("Logged out");
+                                alert("Du er nå logget ut");
                                 }}>Logout</Button>
                         </div>
                     </div>  

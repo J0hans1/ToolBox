@@ -13,36 +13,36 @@ function writeAdToDatabase(props : Ad) {
         category: props.category,
         price: props.price,
         rental: props.rental,
-        adress: props.adress,
+        adress: props.address,
         zip: props.zip,
         city: props.city
     }
     console.log(ad)
     addAd(ad); // Add ad to database
+    alert("Annonse opprettet");
 }
 
 const AdCreator = () => {
-    const [disabled, setDisabled] = useState(false);
 
     const [description, setDescription] = useState("");
     const [title, setTitle] = useState("");
     const [category, setCategory] = useState("");
     const [price, setPrice] = useState("");
     const [rental, setRental] = useState("");
-    const [adress, setAdress] = useState("");
+    const [address, setAddress] = useState("");
     const [zip, setZip] = useState("");
     const [city, setCity] = useState("");
-
-    const handleOnChange = () => {
-        return (
-            setDisabled(!disabled)
-        )}
 
     
     const handleOnClick = () => {
         // check if user is logged in
-        if (localStorage.getItem("user") === null) {
+        if (localStorage.getItem("username") === null) {
             alert("Du må være logget inn for å opprette en annonse");
+            return;
+        }
+        // check if all fields are filled
+        if (title === "" || description === "" || category === "" || price === "" || rental === "" || address === "" || zip === "" || city === "") {
+            alert("Alle felt må fylles ut");
             return;
         }
 
@@ -52,11 +52,21 @@ const AdCreator = () => {
             category: category,
             price: parseInt(price),
             rental: rental,
-            adress: adress,
+            adress: address,
             zip: parseInt(zip),
             city: city
         }
         writeAdToDatabase(adToDatabase);
+
+        // set states to default
+        setTitle("");
+        setDescription("");
+        setCategory("");
+        setPrice("");
+        setRental("");
+        setAddress("");
+        setZip("");
+        setCity("");
     }
 
     return (
@@ -156,12 +166,12 @@ const AdCreator = () => {
                         row
                         aria-labelledby="demo-row-radio-buttons-group-label"
                         name="row-radio-buttons-group"
-                        defaultValue="utleie"
+                        //defaultValue=""
                         onChange={(e) => { setRental(e.target.value as string) }}
                         value={rental}
                     >
-                        <FormControlLabel value="utleie" control={<Radio />} label="utleie" onClick={handleOnChange}/>
-                        <FormControlLabel value="utlån" control={<Radio />} label="utlån" onClick={handleOnChange}/>
+                        <FormControlLabel value="utleie" control={<Radio />} label="utleie" />
+                        <FormControlLabel value="utlån" control={<Radio />} label="utlån" />
                     </RadioGroup>
                     <br />
                     {/* ønsker å disable text-field dersom utlån er valgt */}
@@ -171,7 +181,6 @@ const AdCreator = () => {
                         variant="filled"
                         type="number"
                         fullWidth
-                        disabled={disabled}
                         value={price}
                         onChange={(e) => { setPrice(e.target.value) }}
                     />
@@ -180,8 +189,8 @@ const AdCreator = () => {
                     label="Gateadresse"
                     variant="filled"
                     fullWidth
-                    value={adress}
-                    onChange={(e) => { setAdress(e.target.value) }}
+                    value={address}
+                    onChange={(e) => { setAddress(e.target.value) }}
                 />
                     <br />
                     <TextField
