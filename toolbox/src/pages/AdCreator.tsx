@@ -15,7 +15,7 @@ function writeAdToDatabase(props: Ad) {
         category: props.category,
         price: props.price,
         rental: props.rental,
-        adress: props.address,
+        address: props.address,
         zip: props.zip,
         city: props.city
     }
@@ -38,7 +38,7 @@ const AdCreator = () => {
 
     const handleOnClick = () => {
         // check if user is logged in
-        if (localStorage.getItem("username") === null) {
+        if (sessionStorage.getItem("username") === null) {
             alert("Du må være logget inn for å opprette en annonse");
             return;
         }
@@ -48,13 +48,15 @@ const AdCreator = () => {
             return;
         }
 
+        console.log("Fakk");
+
         const adToDatabase = {
             title: title,
             description: description,
             category: category,
             price: parseInt(price),
             rental: rental,
-            adress: address,
+            address: address,
             zip: parseInt(zip),
             city: city
         }
