@@ -1,4 +1,4 @@
-import { addDoc, collection, collectionGroup, deleteDoc, doc, getDocs, getFirestore, query, updateDoc, where } from "firebase/firestore";
+import { addDoc, collection, collectionGroup, deleteDoc, doc, getDoc, getDocs, getFirestore, query, updateDoc, where } from "firebase/firestore";
 import { app } from "./firebase";
 import { NewUser } from "../types/types";
 
@@ -25,7 +25,15 @@ export const addAd = async (adData: any) => {
 
 // READ
 export const usersCollection = collection(firestore, "users"); // USERS COLLECTION
-export const adsCollection = collectionGroup(firestore, "ads"); // ADS COLLECTION
+export const adsCollection = collectionGroup(firestore, "ads"); // ADDS COLLECTION
+// GET SPECIFIC USER
+export const getUser = async (id: string) => {
+  const document = doc(firestore, `users/${id}`);
+  const user = await getDoc(document);
+  console.log(`User with ID: ${id} found`);
+  return user;
+};
+
 
 // UPDATE 
 // UPDATE A USER
