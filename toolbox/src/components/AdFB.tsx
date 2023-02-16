@@ -8,7 +8,7 @@ interface AdProps {
 
 export default function AdFB({ad}: AdProps){
     return (
-        <div className='rounded-lg w-80 h-80 shadow-lg overflow-hidden relative hover:scale-105 hover:shadow-2xl active:scale-100 duration-200 m-3'>
+        <div className='rounded-lg w-40 h-40 md:w-60 md:h-60 lg:w-80 lg:h-80 shadow-lg overflow-hidden relative hover:scale-105 hover:shadow-2xl active:scale-100 duration-200 m-3'>
         <div className="flex h-full w-full overflow-hidden bg-cover ">
             <img className="h-full w-full " src="https://static.bb.se/wcsstore/CAS/PIM/Luna/imgs/1151376.jpg" alt="ad" />
         </div>
@@ -17,20 +17,26 @@ export default function AdFB({ad}: AdProps){
 
             <div className="flex flex-row bg-white rounded-lg h-auto absolute bottom-0 p-4 justify-between w-full">
 
-                <div className="w-1/5">
+                <div className="w-1/5 hidden md:block">
                     <Avatar sx={{bgcolor: amber[500]}}>TH</Avatar>
                 </div>
                 <div className="flex flex-col w-4/5">
-                    <h2 className="text-md font-bold">{ad.title}</h2>
-                    <p className="text-sm my-2">{ad.description}</p>
-                    <div className="flex flex-row gap-5">
+                    <div className="flex justify-between">
+                        <h2 className="text-md font-bold">{ad.title}</h2>
+                        <div className="flex flex-row h-5 lg:hidden">
+                            <img alt="bilde" className="h-full" src="https://img.icons8.com/ios/50/000000/price-tag-euro.png" />
+                            <p className="md:text-lg text-pu-ghost ml-1">{ad.price}kr/dag</p>
+                        </div>
+                    </div>
+                    <p className="text-sm text-left my-2 hidden lg:block">{ad.description}</p>
+                    <div className=" flex-row gap-5 hidden lg:flex">
                         <div className="flex flex-row h-5">
                             <img alt="bilde" className="h-full" src="https://img.icons8.com/ios/50/000000/price-tag-euro.png" />
-                            <p className="text-xs ml-1">{ad.price}kr/dag</p>
+                            <p className="text-xs text-pu-ghost ml-1">{ad.price}kr/dag</p>
                         </div>
                         <div className="flex flex-row h-5">
                             <img alt="bilde" className="h-full" src="https://img.icons8.com/material-sharp/256/map-marker.png" />
-                            <p className="text-xs ml-1">{ad.city}</p>
+                            <p className="text-xs text-pu-ghost ml-1">{ad.city}</p>
                         </div>
                     </div>
                 </div>

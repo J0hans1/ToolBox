@@ -7,12 +7,10 @@ module.exports = {
     extend: {
       colors: {
         'pu' : {
-          beach : '#E4CAB0',
-          rød : '#FF594A',
-          seafoam : '#00B397',
-          oker : '#FFB129',
-          jungel : '#01595B',
-          hav : '#05AFFF',
+          gul : '#FFD542',
+          grunn : 'F7F7F7',
+          svart : '#000000',
+          ghost: '#64748B',
         },
       },
     },

@@ -26,7 +26,8 @@ export default function App() {
         main: grey[50],
       },
       info: {
-        main: amber[300],
+        main: '#FFD542',
+        dark: '#ffca12',
       },
     },
   });
@@ -42,10 +43,10 @@ export default function App() {
       
     <ThemeProvider theme={theme}>
       <HashRouter>
+        <Navbar />
 
-        <div id="c_section" className='fixed top-0 w-screen h-auto content-center z-20'>
-            <div id="c_container" className='flex m-auto w-full max-w-7xl p-10'>
-              <Navbar />
+        <div id="c_section" className='absolute top-0 w-screen h-auto content-center z-20'>
+            <div id="c_container" className='relative m-auto w-full max-w-7xl p-10 pt-2'>
             </div>
         </div>
 

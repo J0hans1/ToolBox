@@ -17,7 +17,7 @@ const Step = (props: StepContent) => {
     return (
         <div className='w-80 h-auto p-5 bg-slate-700'>
             <h2 className='mb-3'>{props.icon}</h2>
-            <p><span className='text-yellow-300'>{props.span}</span>{props.description}</p>
+            <p><span className='text-pu-gul'>{props.span}</span>{props.description}</p>
         </div>
     )
 }
@@ -55,9 +55,8 @@ const LandingPage = () => {
             </div>
         </div> */}
 
-        <div id="c_section" className='flex h-screen content-center bg-slate-100 overflow-hidden'>
-            <div id="c_container" className='static flex flex-row mr-auto ml-auto mt-auto mb-auto w-full max-w-7xl p-10'>
-
+        <div id="c_section" className='flex h-screen content-center gap-10 bg-pu-grunn overflow-hidden'>
+            <div id="c_container" className='static flex flex-row m-auto w-full max-w-7xl p-10'>
                 <div id="c_wrapper" className='max-w-3xl text-left mt-64 mb-32 z-10 flex-row'>
                     <Title 
                         size="text-7xl"
@@ -69,16 +68,25 @@ const LandingPage = () => {
                         description='Hos oss får du enkelt tilgang på verktøyet du trenger, når du trenger det. Lei verktøyet du ønsker, så lenge du trenger det, kun ved et par tastetrykk.'
                     />
                     <div className="flex place-content-between justify-between gap-5 my-5 w-11/12">
-                        <TextField fullWidth id="outlined-search" label="Search field" type="search" />
-                        <Button sx={{ px: 5 }} variant='contained' onClick={() => navigate("/ads")}>Se annonser</Button>
+                        <TextField fullWidth id="outlined-search" label="Søk i våre annonser!" type="search" />
+                        <Button sx={{ px: 5 }} variant='contained'>Søk</Button>
                     </div>
                 </div>
 
             </div>
 
-            <div className='absolute top-0 right-0 w-5/12 h-full bg-slate-400 bg-cover overflow-hidden'>
-                <img className="absolute top-0 left-0 w-full h-full mt-16" src="https://images.unsplash.com/photo-1631630259742-c0f0b17c6c10?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80" alt="inside cabin" />
+            <div 
+                className='bg-cover bg-center absolute top-0 right-0 w-4/12 h-full' 
+                style={{
+                    backgroundImage: `url("https://images.unsplash.com/photo-1631630259742-c0f0b17c6c10?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80")`
+                }}
+            > 
+                <img></img>
             </div>
+{/* 
+            <div className='absolute top-0 right-0 w-5/12 h-full bg-slate-400 bg-cover overflow-hidden '>
+                <img className="absolute top-0 object-cover left-0 h-full" src="https://images.unsplash.com/photo-1631630259742-c0f0b17c6c10?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80" alt="inside cabin" />
+            </div> */}
 
         </div>
 
@@ -113,7 +121,7 @@ const LandingPage = () => {
             </div>
         </div>
 
-        <div id="c_section" className='flex h-auto content-center bg-yellow-300 text-black overflow-hidden'>
+        <div id="c_section" className='flex h-auto content-center bg-pu-gul text-black overflow-hidden'>
             <div id="c_container" className='flex flex-row mr-auto ml-auto mt-auto mb-auto w-full max-w-7xl p-10'>
                 <div id="c_wrapper" className='max-w-3xl text-left z-10 flex-row'>
                     <Title size='text-5xl' heading='Hvorfor oss?' description='Med 16 år i bransjen er vi en gammel spiller i et ungt game' />
