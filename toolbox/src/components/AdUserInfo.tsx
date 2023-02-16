@@ -32,19 +32,18 @@ interface Info {
 
 const AdUserInfo = (props: Info) => {
     return (
-        <div className='rounded-lg w-auto h-96 shadow-lg hover:shadow-2xl '>
+        <div className='rounded-lg w-auto h-96 shadow-lg hover:shadow-2xl justify-center'>
 
             <div className="flex flex-row w-3/4 h-1/4 ml-10 gap-10 mt-5 p-8" >
                 <Avatar sx={{ bgcolor: amber[500], width: 70, height: 70 }}>AO</Avatar>
                 <div className="text-left justify-start pb-5 ">
-                    <h2 className="text-5xl mt-2 font-bold flex flex-row">{props.name}</h2>
+                    <h2 className="text-5xl mt-2 font-bold">{props.name}</h2>
                 </div>
             </div>
-            <br/>
-            <br/>
-            <p className="font-bold pt-7 ">Kontakt utleier for å avtale leie eller utlån: </p>
 
-            <br />
+           <div className="font-bold text-left p-8 pt-20 flex-wrap justify-center">
+            <p>Kontakt utleier for å avtale leie eller utlån: </p>
+            </div>
             <div className="flex flex-row font-bold ">
                 <img className="h-10 ml-5" src="https://img.icons8.com/ios/512/message-squared.png" />
                 <ButtonMailto label="Kontakt på mail" mailto="mailto:no-reply@example.com" />
