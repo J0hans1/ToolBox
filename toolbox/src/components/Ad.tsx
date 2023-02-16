@@ -3,19 +3,19 @@ import { amber } from "@mui/material/colors";
 
 //Only in use for testing hardcoding data
 interface AdProps {
-    title: string;
-    description: string;
-    src: string;
-    location: string;
-    price: string;
-    date: string;
+    title?: string;
+    description?: string;
+    src?: string;
+    location?: string;
+    price?: number;
+    date?: string;
 }
 
 interface IconText {
-    icon: string;
-    text: string;
-    iconSize:string;
-    textSize:string;
+    icon?: string;
+    text?: string;
+    iconSize?:string;
+    textSize?:string;
 }
 
  const AdIconAndText = (props : IconText) => { 
@@ -50,7 +50,7 @@ const Ad = (props: AdProps) => {
                         <h2 className="text-md font-bold">{props.title}</h2>
                         <p className="text-sm my-2">{props.description}</p>
                         <div className="flex flex-row gap-5">
-                            <AdIconAndText icon="https://img.icons8.com/ios/50/000000/price-tag-euro.png" text={props.price} iconSize="h-5" textSize="text-xs"/>
+                            <AdIconAndText icon="https://img.icons8.com/ios/50/000000/price-tag-euro.png" text={props.price?.toString()} iconSize="h-5" textSize="text-xs"/>
                             <AdIconAndText icon="https://img.icons8.com/material-sharp/256/map-marker.png" text={props.location} iconSize="h-5" textSize="text-xs"/>
                         </div>
                     </div>

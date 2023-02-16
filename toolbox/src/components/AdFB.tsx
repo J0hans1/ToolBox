@@ -2,14 +2,7 @@ import { Avatar } from "@mui/material";
 import { amber } from "@mui/material/colors";
 import { useNavigate } from "react-router-dom";
 import { Ad } from "../types/types";
-import {
-    Card,
-    CardActionArea,
-    CardContent,
-    CardMedia,
-    ThemeProvider,
-    Typography,
-} from "@mui/material";
+
 
 interface AdProps {
     ad: Ad;
@@ -20,7 +13,7 @@ export default function AdFB({ad}: AdProps){
 
     const handleClick = () => {
         
-        let id = sessionStorage.setItem("ADID", ad.id);
+        sessionStorage.setItem("ADID", ad.id);
 
         if (ad.id !== null) {
             navigate(`/adinspector/${ad.id}`)

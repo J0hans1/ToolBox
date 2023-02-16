@@ -3,6 +3,7 @@ import { app } from "./firebase";
 import { NewUser } from "../types/types";
 
 
+
 const firestore = getFirestore(app);
 
 
@@ -33,13 +34,36 @@ export const getUser = async (id: string) => {
   console.log(`User with ID: ${id} found`);
   return user;
 };
-export const getAd = async (adId: string) => {
-  const userId = sessionStorage.getItem("userID"); // Get userId from sessionStorage
-  const document = doc(firestore, `users/${userId}/ads/${adId}`);
+
+// Get ad when clicking on ad
+export const getAd = async (adId: string, userID: string) => {
+  const document = doc(firestore, `users/${userID}/ads/${adId}`);
   const ad = await getDoc(document);
-  console.log(`Ad with ID: ${adId} found`);
   return ad;
 };
+
+// Get user associated with ad
+export const getUserFromAdId = async (adId: string) => {
+  console.log("Ad ID: " + adId)
+  //Loop through all users and find the one with the adId in the ads array
+  const querySnapshot = await getDocs(usersCollection);
+  querySnapshot.forEach((doc) => {
+    // get ads from doc
+    const adCollection = collection(firestore, `users/${doc.id}/ads`);
+    getDocs(adCollection).then((querySnapshot2) => {
+      querySnapshot2.forEach((doc2) => {
+        if (doc2.id === adId) {
+          console.log("User ID from ad: " + doc.id);
+          sessionStorage.setItem("userIDFromAd", doc.id);
+          return doc.id;
+        }
+      });
+    }
+  );
+  });
+};
+
+
 
 
 // UPDATE 
@@ -99,7 +123,7 @@ export const deleteAd = async ( adId: string ) => {
 export function addToSessionStorage(username: string) { // Brukes i loginpage og registerpage
   sessionStorage.setItem("username", username ); 
   console.log("Username sessionstorage set to: " + sessionStorage.getItem("username"));
-  const dummy = getDocs(query(usersCollection, where("username", "==", username))).then((querySnapshot) => {
+  getDocs(query(usersCollection, where("username", "==", username))).then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
       const userID = doc.id; // Itererer gjennom alle brukere i databasen og setter userID lik brukerens ID
       sessionStorage.setItem("userID", userID);
@@ -117,7 +141,7 @@ export function removeFromSessionStorage() { // Brukes i logoutbutton
 
 export async function validateUser(username: string, password: string) { // Brukes i loginpage
   let a = false;
-  const dummy = await getDocs(query(usersCollection, where("username", "==", username))).then((querySnapshot) => {
+  await getDocs(query(usersCollection, where("username", "==", username))).then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
       const userPassword = doc.data().password;
       if (password === userPassword && username === doc.data().username) {
@@ -132,7 +156,7 @@ export async function validateUser(username: string, password: string) { // Bruk
 
 export async function validateUsername(username: string) { // Brukes i registerpage
   let a = false;
-  const dummy = await getDocs(query(usersCollection, where("username", "==", username))).then((querySnapshot) => {
+  await getDocs(query(usersCollection, where("username", "==", username))).then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
       if (username === doc.data().username) {
         a = true;
