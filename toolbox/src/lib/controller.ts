@@ -25,9 +25,7 @@ export const addAd = async (adData: any) => {
 
 // READ
 export const usersCollection = collection(firestore, "users"); // USERS COLLECTION
-export const adsCollection = collectionGroup(firestore, "ads"); // ADDS COLLECTION
-
-
+export const adsCollection = collectionGroup(firestore, "ads"); // ADS COLLECTION
 
 // UPDATE 
 // UPDATE A USER

@@ -1,5 +1,6 @@
 import './App.css';
 import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 import LoginPage from './pages/Login';
 import RegisterPage from "./pages/Register";
 import ErrorPage from './pages/ErrorPage';
@@ -59,6 +60,13 @@ export default function App() {
 
 
         </Routes>
+
+        <div id="c_section" className='w-screen h-auto content-center bg-black text-white'>
+            <div id="c_container" className='flex m-auto w-full max-w-7xl p-10'>
+              <Footer />
+            </div>
+        </div>
+
       </HashRouter>
     </ThemeProvider>
 

@@ -1,4 +1,5 @@
 import { TextField, Button } from '@mui/material/';
+import { useEffect } from 'react';
 import Title from '../components/Title';
 
 interface StepContent {
@@ -19,6 +20,12 @@ const Step = (props: StepContent) => {
 }
 
 const LandingPage = () => {
+
+    useEffect(() => {
+        window.scrollTo(0, 0)
+      }, [])
+      
+
     return (
     <div>
         {/* <div id="c_section" className='fixed top-0 w-screen h-auto content-center z-20'>
