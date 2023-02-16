@@ -1,5 +1,5 @@
 import { ReactElement } from "react"
-import { Checkbox, TextField, Radio, FormControl, RadioGroup, FormControlLabel, FormGroup } from '@mui/material';
+import { Checkbox, TextField, FormControl , FormControlLabel, FormGroup } from '@mui/material';
 
 
 interface TitledChildren {
@@ -41,12 +41,12 @@ const AdFilter = () => {
 
             <FilterModuler title="Område" margin="my-8">
                 <FormControl>
-                    <RadioGroup>
-                        <FormControlLabel sx={{ m: -1 }} value="Bergen" control={<Radio />} label="Bergen" />
-                        <FormControlLabel sx={{ m: -1 }} value="Oslo" control={<Radio />} label="Oslo" />
-                        <FormControlLabel sx={{ m: -1 }} value="Fredrikstad" control={<Radio />} label="Fredrikstad" />
-                        <FormControlLabel sx={{ m: -1 }} value="Trondheim" control={<Radio />} label="Trondheim" />
-                    </RadioGroup>
+                    <FormGroup>
+                        <FormControlLabel sx={{ m: -1 }} value="Bergen" control={<Checkbox />} label="Bergen" />
+                        <FormControlLabel sx={{ m: -1 }} value="Oslo" control={<Checkbox />} label="Oslo" />
+                        <FormControlLabel sx={{ m: -1 }} value="Fredrikstad" control={<Checkbox />} label="Fredrikstad" />
+                        <FormControlLabel sx={{ m: -1 }} value="Trondheim" control={<Checkbox />} label="Trondheim" />
+                    </FormGroup>
                 </FormControl>
             </FilterModuler>
 
