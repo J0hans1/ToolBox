@@ -21,7 +21,6 @@ const AdInspectorPage = () => {
                console.log("getUserFromDatabase 1 " + sessionStorage.getItem("userIDFromAd"))
             });
         }
-        
     }
 
     async function setUserFromDatabase() {
@@ -48,18 +47,104 @@ const AdInspectorPage = () => {
     }
 
     useEffect(() => {
-        
         getUserFromDatabase();
-
         setTimeout(() => {
             setUserFromDatabase();
             getAdFromDatabase();
         }, 300); // 300ms delay 
         // Todo: Find a better way to do this.
-
-
     }, []);
-        
+
+
+
+
+    /*         async.series([getUserFromDatabase, setUserFromDatabase, getAdFromDatabase], function(err: any, results: any) {
+            console.log(results);
+        }); */
+
+/*         async function getUserFromDatabase() {
+            const adFromSessionStorage = sessionStorage.getItem("ADID");
+            if (adFromSessionStorage != null) {
+              await getUserFromAdId(adFromSessionStorage);
+              console.log("getUserFromDatabase 1 " + sessionStorage.getItem("userIDFromAd"));
+            }
+          }
+          
+          async function setUserAndAdFromDatabase() {
+            const userIDFromAd = sessionStorage.getItem("userIDFromAd");
+            console.log("setUserAndAdFromDatabase 2 " + userIDFromAd);
+            if (userIDFromAd != null) {
+              const userFromDatabase = await Promise.all([
+                getUser(userIDFromAd)
+              ]);
+              setUser(userFromDatabase);
+              const adFromDatabase = await Promise.all([
+                getAdFromDatabase(userIDFromAd)
+              ]);
+              if (adFromDatabase !== undefined) { // Add this check
+                setAd([adFromDatabase]);
+              }
+            }
+          }
+          
+          async function getAdFromDatabase(userID: string) {
+            const adFromSessionStorage = sessionStorage.getItem("ADID");
+            console.log("getAdFromDatabase 3 " + userID);
+            if (adFromSessionStorage != null && userID != null) {
+              //const adFromDatabase = await getAd(adFromSessionStorage, userID);
+              const adFromDatabase = await getAd(adFromSessionStorage, userID).then((doc) => {
+                return { id: doc.id, ...doc.data() }
+            });
+              //return adFromDatabase;
+            }
+          }
+          
+          useEffect(() => {
+            getUserFromDatabase()
+              .then(() => setUserAndAdFromDatabase())
+              .catch(error => console.log(error));
+          }, []);
+           */
+/*           const [user, setUser] = useState<User[]>([]);
+          const [ad, setAd] = useState<Ad[]>([]); */
+          
+/*           async function getUserFromDatabase() {
+            const adFromSessionStorage = sessionStorage.getItem("ADID");
+            if (adFromSessionStorage != null) {
+              await getUserFromAdId(adFromSessionStorage);
+            }
+          }
+          
+          async function setUserFromDatabase() {
+            const userIDFromAd = sessionStorage.getItem("userIDFromAd")
+            if (userIDFromAd != null) {
+              const userFromDatabase = await getUser(userIDFromAd).then((doc) => {
+                return { id: doc.id, ...doc.data() }
+              });
+              setUser([userFromDatabase]);
+            }
+          }
+          
+          async function getAdFromDatabase() {
+            const adFromSessionStorage = sessionStorage.getItem("ADID");
+            const userIDFromAd = sessionStorage.getItem("userIDFromAd")
+            if (adFromSessionStorage != null && userIDFromAd != null) {
+              const adFromDatabase = await getAd(adFromSessionStorage, userIDFromAd).then((doc) => {
+                return { id: doc.id, ...doc.data() }
+              });
+              setAd([adFromDatabase]);
+            }
+          }
+          
+          useEffect(() => {
+            async function fetchData() {
+              await getUserFromDatabase();
+              await setUserFromDatabase();
+              await getAdFromDatabase();
+            }
+            fetchData();
+          }, []); */
+
     //TODO: Mapper flere ganger nedover. Fungerer for nå, men må fikses.
     return (
     <div className="pt-40 pb-40 flex flex-col px-60">
