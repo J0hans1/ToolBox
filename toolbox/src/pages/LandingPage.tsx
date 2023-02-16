@@ -1,5 +1,6 @@
 import { TextField, Button } from '@mui/material/';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Title from '../components/Title';
 
 interface StepContent {
@@ -15,11 +16,11 @@ const Step = (props: StepContent) => {
             <h2 className='mb-3'>{props.icon}</h2>
             <p><span className='text-yellow-300'>{props.span}</span>{props.description}</p>
         </div>
-
     )
 }
 
 const LandingPage = () => {
+    let navigate = useNavigate();
 
     useEffect(() => {
         window.scrollTo(0, 0)
@@ -36,15 +37,23 @@ const LandingPage = () => {
 
         <div id="c_section" className='flex h-screen content-center bg-slate-100 overflow-hidden'>
             <div id="c_container" className='static flex flex-row mr-auto ml-auto mt-auto mb-auto w-full max-w-7xl p-10'>
-                <div id="c_wrapper" className='max-w-3xl text-left mt-64 mb-32 z-10 flex-row'>
-                    <h1 className='text-7xl mb-4'>Verktøyene du <span className="bg-yellow-300">trenger</span>, <span className="bg-yellow-300">når</span> du trenger dem.</h1>
-                    <p className="mb-2">Hos oss får du enkelt tilgang på verktøyet du trenger, når du trenger det. Lei verktøyet du ønsker, så lenge du trenger det, kun ved et par tastetrykk.</p>
 
+                <div id="c_wrapper" className='max-w-3xl text-left mt-64 mb-32 z-10 flex-row'>
+                    <Title 
+                        size="text-7xl"
+                        heading='Verktøyene du'
+                        span='trenger'
+                        mid=','
+                        span2='når'
+                        tail=' du trenger dem.'
+                        description='Hos oss får du enkelt tilgang på verktøyet du trenger, når du trenger det. Lei verktøyet du ønsker, så lenge du trenger det, kun ved et par tastetrykk.'
+                    />
                     <div className="flex place-content-between justify-between gap-5 my-5 w-11/12">
                         <TextField fullWidth id="outlined-search" label="Search field" type="search" />
-                        <Button sx={{ px: 5 }} variant='contained'>Se annonser</Button>
+                        <Button sx={{ px: 5 }} variant='contained' onClick={() => navigate("/ads")}>Se annonser</Button>
                     </div>
                 </div>
+
             </div>
 
             <div className='absolute top-0 right-0 w-5/12 h-full bg-slate-400 bg-cover overflow-hidden'>

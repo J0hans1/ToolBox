@@ -11,8 +11,9 @@ import { HashRouter, Route, Routes, } from "react-router-dom"
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { grey, amber } from '@mui/material/colors';
 import AdCreator from './pages/AdCreator';
+import ProfilePage from './pages/ProfilePage';
 import { Helmet } from "react-helmet";
-import AdInspectorPage from './pages/AdInspectorPage';
+import MyAds from './pages/MyAds';
 
 
 export default function App() {
@@ -56,9 +57,10 @@ export default function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="*" element={<ErrorPage/>} />
           <Route path="/adcreator" element={<AdCreator />} />
-          <Route path="/adinspector" element={<AdInspectorPage />} />
-
-
+{/*           <Route path="/adinspector" element={<AdInspectorPage />} /> */}
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path='/myAds' element={<MyAds /> }/>
+          <Route path='/adinspector/:id' element={<AdInspector />} />
         </Routes>
 
         <div id="c_section" className='w-screen h-auto content-center bg-black text-white'>

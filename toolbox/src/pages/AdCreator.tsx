@@ -3,17 +3,19 @@ import AdCreatorStep from "../components/AdCreatorStep";
 import { MenuItem, Select, TextField, Button, FormControl, InputLabel, ImageList, FormControlLabel, RadioGroup, Radio } from "@mui/material";
 import { useEffect, useState } from "react";
 import { addAd } from "../lib/controller";
-import {Ad} from "../types/types";
+import { Ad } from "../types/types";
+import Title from "../components/Title";
+import Step from "../components/Step";
 
 
-function writeAdToDatabase(props : Ad) {
+function writeAdToDatabase(props: Ad) {
     const ad = {
         title: props.title,
         description: props.description,
         category: props.category,
         price: props.price,
         rental: props.rental,
-        adress: props.address,
+        address: props.address,
         zip: props.zip,
         city: props.city
     }
@@ -33,10 +35,10 @@ const AdCreator = () => {
     const [zip, setZip] = useState("");
     const [city, setCity] = useState("");
 
-    
+
     const handleOnClick = () => {
         // check if user is logged in
-        if (localStorage.getItem("username") === null) {
+        if (sessionStorage.getItem("username") === null) {
             alert("Du må være logget inn for å opprette en annonse");
             return;
         }
@@ -46,13 +48,15 @@ const AdCreator = () => {
             return;
         }
 
+        console.log("Fakk");
+
         const adToDatabase = {
             title: title,
             description: description,
             category: category,
             price: parseInt(price),
             rental: rental,
-            adress: address,
+            address: address,
             zip: parseInt(zip),
             city: city
         }
@@ -71,179 +75,131 @@ const AdCreator = () => {
 
     useEffect(() => {
         window.scrollTo(0, 0)
-      }, [])
-      
+    }, [])
+
 
     return (
-        <div className="flex flex-col w-full">
-            <Textbox title="Opprett " title2="anonnse" >
-                <br />
-                <p>
-                    Start utlån allerede i dag. Følg stegene, så er annonsen din oppe og går i løpet av kort tid!
-                </p>
-                <br />
-            </Textbox>
-            <div className="flex w-full flex-col justify-center">
-                <AdCreatorStep step={1} title="Kategori">
-                    <p>Velg en passende kategori så brukere enkelt kan finne annonsen din. Sjekk gjerne at valgt kategori inneholder lignende produkter.</p>
-                    <br />
-                    <FormControl fullWidth>
-                        <InputLabel id="category">Kategori</InputLabel>
-                        <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            value={category}
-                            label="Kategori"
-                            onChange={(e) => { setCategory(e.target.value as string) }}
-                            variant="filled"
-                        >
-                            <MenuItem value="Håndverktøy">Håndverktøy</MenuItem>
-                            <MenuItem value="Hage">Hage</MenuItem>
-                            <MenuItem value="Henger">Henger</MenuItem>
-                            <MenuItem value="Elektronikk">Elektronikk</MenuItem>
-                            <MenuItem value="Bil">Bil og Motorsykkel</MenuItem>
-                            <MenuItem value="Sykkel">Sykkel</MenuItem>
-                            <MenuItem value="Stiger">Stiger</MenuItem>
-                            <MenuItem value="Maskineri">Maskineri</MenuItem>
-                            <MenuItem value="Rør">Rør</MenuItem>
-                        </Select>
-                    </FormControl>
-                </AdCreatorStep>
+        <div>
+            <div id="c_section" className='flex w-full h-full content-center bg-slate-100 overflow-hidden z-10'>
+                <div id="c_container" className='static flex flex-row mr-auto ml-auto mt-auto mb-auto w-full max-w-7xl p-10 gap-10 justify-center bg-white'>
+                    {/* <div className='flex flex-col justify-between w-1/4 bg-yellow-400 h-full'></div> */}
+                    <div className='flex flex-col w-10/12 text-left pt-32 mb-10'>
 
-                <AdCreatorStep step={2} title="Tittel og beskrivelse">
-                    <p> Velg en kort og beskrivende tittel. Legg til en mer detaljert beskrivelse så bruker kan få mer informasjon om produktet når de trykker på annonsen. </p>
-                    <br />
-                    <TextField
-                        value={title}
-                        onChange={(e) => { setTitle(e.target.value) }}
-                        label="Tittel"
-                        variant="filled"
-                        fullWidth
-                    />
-                    <br />
-                    <TextField
-                        multiline
-                        minRows={4}
-                        onChange={(e) => { setDescription(e.target.value) }}
-                        value={description}
-                        label="Beskrivelse"
-                        variant="filled"
-                        fullWidth
-                    />
-                </AdCreatorStep>
-                <AdCreatorStep step={3} title="Bilder">
-                    <p>Vis frem produktet så brukere kan se hva du leier ut. Vi anbefaler 3-5 bilder for best resultat. Trykk på boksene eller bruk knappen.</p>
-                    <br />
+                        <Title size={'text-7xl'} heading={'Opprett '} span={'annonse'} description={'Start utlån allerede i dag! Følg stegene, så er annonsen din oppe og går i løpet av kort tid!'} />
 
-                    <ImageList sx={{ width: 500, height: "auto" }} cols={3} rowHeight={164}>
-                        {/* {itemData.map((item) => (
-                <ImageListItem key={item.img}>
-                <img
-        src={`${item.img}?w=164&h=164&fit=crop&auto=format`}
-        srcSet={`${item.img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-        alt={item.title}
-        loading="lazy"
-      />
-    </ImageListItem>
-  ))} */}
-                    </ImageList>
-                    <Button
-                        variant="outlined"
-                        component="label"
-                        className="w-1/3"
-                        color="primary"
-                        sx={{
-                            ':hover': {
-                                bgcolor: 'black',
-                                color: 'white',
-                            },
-                        }}>Last opp bilder <input
-                        accept="image/"
-                        type="file"
-                        hidden
-                        id="select-image"
-                        // onChange={e => setSelectedImage(e.target.files[0])}
-                     /></Button>
-                </AdCreatorStep>
 
-                <AdCreatorStep step={4} title="Pris">
-                    <RadioGroup
-                        row
-                        aria-labelledby="demo-row-radio-buttons-group-label"
-                        name="row-radio-buttons-group"
-                        //defaultValue=""
-                        onChange={(e) => { setRental(e.target.value as string) }}
-                        value={rental}
-                    >
-                        <FormControlLabel value="utleie" control={<Radio />} label="utleie" />
-                        <FormControlLabel value="utlån" control={<Radio />} label="utlån" />
-                    </RadioGroup>
-                    <br />
-                    {/* ønsker å disable text-field dersom utlån er valgt */}
-                    <TextField
-                        id="pris"
-                        label="Velg pris per dag"
-                        variant="filled"
-                        type="number"
-                        fullWidth
-                        value={price}
-                        onChange={(e) => { setPrice(e.target.value) }}
-                    />
-                </AdCreatorStep>
-                <AdCreatorStep step={5} title="Sted"> <TextField
-                    label="Gateadresse"
-                    variant="filled"
-                    fullWidth
-                    value={address}
-                    onChange={(e) => { setAddress(e.target.value) }}
-                />
-                    <br />
-                    <TextField
-                        label="Postnr."
-                        variant="filled"
-                        className="w-1/2"
-                        value={zip}
-                        type="number"
-                        onChange={(e) => { setZip(e.target.value) }}
-                    />
-                    <TextField
-                        label="Sted"
-                        variant="filled"
-                        className="w-1/2"
-                        value={city}
-                        onChange={(e) => { setCity(e.target.value) }}
-                    /></AdCreatorStep>
+                        <div id="CATEGORY" className='flex flex-col my-5'>
+                            <Step nr={'01'} title={'Velg kategori'} />
+                            <p>Velg en passende kategori så brukere enkelt kan finne annonsen din. Sjekk gjerne at valgt kategori inneholder lignende produkter.</p>
+
+                            <div className='flex flex-row w-full gap-2 mt-5 my-2'>
+                                <FormControl fullWidth>
+                                    <InputLabel id="category">Kategori</InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        value={category}
+                                        label="Kategori"
+                                        onChange={(e) => { setCategory(e.target.value as string) }}
+                                        variant="outlined"
+                                    >
+                                        <MenuItem value="Håndverktøy">Håndverktøy</MenuItem>
+                                        <MenuItem value="Hage">Hage</MenuItem>
+                                        <MenuItem value="Henger">Henger</MenuItem>
+                                        <MenuItem value="Elektronikk">Elektronikk</MenuItem>
+                                        <MenuItem value="Bil">Bil og Motorsykkel</MenuItem>
+                                        <MenuItem value="Sykkel">Sykkel</MenuItem>
+                                        <MenuItem value="Stiger">Stiger</MenuItem>
+                                        <MenuItem value="Maskineri">Maskineri</MenuItem>
+                                        <MenuItem value="Rør">Rør</MenuItem>
+                                    </Select>
+                                </FormControl>
+                            </div>
+
+                        </div>
+
+
+                        <div id="TITLE_DESC" className='flex flex-col my-5'>
+                            <Step nr={'02'} title={'Tittel og beskrivelse'} />
+                            <p> Velg en kort og beskrivende tittel. Legg til en mer detaljert beskrivelse så bruker kan få mer informasjon om produktet når de trykker på annonsen. </p>
+
+                            <div className='flex flex-col w-full mt-5 gap-2 my-2'>
+                                <TextField fullWidth label="Tittel" variant="outlined" value={title} onChange={(e) => { setTitle(e.target.value) }} />
+                                <TextField fullWidth multiline minRows={4} label="Beskrivelse" variant="outlined" value={description} onChange={(e) => { setDescription(e.target.value) }} />                                
+                            </div>
+
+                        </div>
+
+                        <div id="IMAGES" className='flex flex-col my-5'>
+                            <Step nr={'03'} title={'Last opp bilder'} />
+                            <p>Vis frem produktet så brukere kan se hva du leier ut. Vi anbefaler 3-5 bilder for best resultat. Trykk på boksene eller bruk knappen.</p>
+
+                            <div className='flex flex-col w-full mt-5 gap-2'>
+                                <ImageList sx={{ width: 500, height: "auto" }} cols={3} rowHeight={164}>
+                                    {/* {itemData.map((item) => (
+                                        <ImageListItem key={item.img}>
+                                        <img
+                                src={`${item.img}?w=164&h=164&fit=crop&auto=format`}
+                                srcSet={`${item.img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                                alt={item.title}
+                                loading="lazy"
+                                    />
+                                    </ImageListItem>
+                                ))} */}
+                                </ImageList>
+                                <Button
+                                    variant="outlined"
+                                    component="label"
+                                    color="primary"
+                                    sx={{p: 2,
+                                        ':hover': {
+                                            bgcolor: 'black',
+                                            color: 'white',
+                                        },
+                                    }}>Last opp bilder <input
+                                        accept="image/"
+                                        type="file"
+                                        hidden
+                                        id="select-image"
+                                    // onChange={e => setSelectedImage(e.target.files[0])}
+                                    /></Button>
+                            </div>
+                        </div>
+
+                        <div id="ADDRESS_INFO" className='flex flex-col my-5'>
+                            <Step nr={'04'} title={'Sted og addresse'} />
+                            <p> Gi produktet en adresse. Dette vil gjøre annonsen din synlig for brukere i nærheten, og vil gi kjøpere mulighet til å hente produktet hos deg. Merk: adressen din blir kun synlig for andre brukere etter at utlån er avtalt og godkjent av deg.</p>
+                            
+                            <div className='flex flex-col w-full mt-5 gap-2'>
+                                <TextField label="Hjemmeadresse" variant="outlined" value={address} onChange={(e) => setAddress(e.target.value)} />
+
+                                <div className='flex flex-row w-full gap-2'>
+                                    <TextField label="Postnummer" variant="outlined" value={zip} onChange={(e) => setZip(e.target.value)} />
+                                    <TextField fullWidth label="By" variant="outlined" value={city} onChange={(e) => setCity(e.target.value)} />
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div id="PRICE" className='flex flex-col my-5'>
+                            <Step nr={'05'} title={'Velg pris'} />
+                            <p>Vi anbefaler at du sjekker prisen til tilsvarende produkter. En passende pris øker sannsynligheten for utlån.</p>
+
+                            <div className='flex flex-col w-full mt-5 gap-2'>
+                                <TextField label="Pris" type="number" InputLabelProps={{shrink: true,}} value={price} onChange={(e) => { setPrice(e.target.value) }} />
+                            </div>
+                        </div>
+
+                        <div className='flex flex-col w-full gap-2 my-2'>                              
+                            <Button variant="contained" color="primary"  sx={{p:2}} onClick={() => handleOnClick()}> Publiser annonse </Button>
+                            <Button variant="outlined" color="primary" sx={{p:2,':hover': {bgcolor: 'black',color: 'white',},}}> Forhåndsvisning </Button>
+                        </div>
+                        
+                    </div>
+                </div>
+
             </div>
-            <div className="flex-row ml-20">
-                <Button
-                    variant="outlined"
-                    className="w-1/6"
-                    color="primary"
-                    sx={{
-                        ':hover': {
-                            bgcolor: 'black',
-                            color: 'white',
-                        },
-                    }}
-                    onClick={() => handleOnClick()}>
-                    Publiser annonse
-                </Button>
-                <Button
-                    variant="outlined"
-                    className="w-1/6"
-                    color="primary"
-                    sx={{
-                        ':hover': {
-                            bgcolor: 'black',
-                            color: 'white',
-                        },
-                    }} >
-                        Forhåndsvisning            
-                    </Button>    
-                    <br />
-                    <br />    
-                </div>  
-            </div>
+        </div>
     );
 };
 
