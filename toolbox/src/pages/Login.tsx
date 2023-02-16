@@ -47,10 +47,6 @@ const LoginPage = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
-    useEffect(() => {
-        window.scrollTo(0, 0)
-      }, [])
-      
 
     return (
         <div className="w-screen h-screen" >

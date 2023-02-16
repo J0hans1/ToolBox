@@ -50,7 +50,7 @@ const AdUserInfo = (props: Info) => {
                 <img className="h-10 ml-5" src="https://img.icons8.com/ios/512/message-squared.png" />
                 <ButtonMailto label="Kontakt på mail" mailto={props.email} />
                 <img className="h-10 ml-5" src="https://img.icons8.com/ios/512/phone.png" />
-                <p className="ml-5 pr-5">Kontakt på telefon {props.phone} </p>
+                <p className="ml-5 pr-5">Kontakt på telefon: {props.phone} </p>
 
             </div>
 

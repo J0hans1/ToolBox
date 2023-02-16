@@ -14,6 +14,7 @@ import AdCreator from './pages/AdCreator';
 import ProfilePage from './pages/ProfilePage';
 import { Helmet } from "react-helmet";
 import MyAds from './pages/MyAds';
+import ScrollToTop from './components/ScrollToTop';
 
 
 export default function App() {
@@ -49,7 +50,7 @@ export default function App() {
               <Navbar />
             </div>
         </div>
-
+        <ScrollToTop />
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />

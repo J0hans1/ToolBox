@@ -10,8 +10,6 @@ import AdFB from '../components/AdFB';
 
 const Ads = () => {
     const [ads, setAds] = useState<Ad[]>([]);
-    
-    window.scrollTo(0, 0);
 
     useEffect(
         () =>

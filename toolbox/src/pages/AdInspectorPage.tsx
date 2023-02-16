@@ -11,10 +11,6 @@ const AdInspectorPage = () => {
     const [user, setUser] = useState<User[]>([]);
     const [ad, setAd] = useState<Ad[]>([]);
 
-    //const adFromSessionStorage = sessionStorage.getItem("ADID");
-    
-
-
     
     // Get user from database
     async function getUserFromDatabase() {
@@ -54,14 +50,17 @@ const AdInspectorPage = () => {
     useEffect(() => {
         
         getUserFromDatabase();
+
         setTimeout(() => {
             setUserFromDatabase();
             getAdFromDatabase();
-        }, 300);
+        }, 300); // 300ms delay 
+        // Todo: Find a better way to do this.
+
 
     }, []);
         
-    //TODO: Mapper flere ganger nedover. Må løse det på en mer elegant måte. Fungerer for nå
+    //TODO: Mapper flere ganger nedover. Fungerer for nå, men må fikses.
     return (
     <div className="pt-40 pb-40 flex flex-col px-60">
 
@@ -74,7 +73,7 @@ const AdInspectorPage = () => {
         >
             <div id="c_wrapper" className='w-auto justify-center bg-white rounded-tl-xl absolute right-0 bottom-0 '>
             {ad?.map((ad) => (
-                <Title size={"text-7xl ml-5 mr-5"} heading={ad.title} description={""} span={""} ></Title> 
+                <Title size={"text-7xl ml-5 mr-5"} heading={ad.title} description={""} span={""} key={ad.title} ></Title> 
             ))}
             </div>
         </div>
@@ -82,9 +81,9 @@ const AdInspectorPage = () => {
         <div className="w-full">
         {ad?.map((ad) => (
             <div className="flex flex-row p-10 h-32 w-full justify-between">
-                <AdIconAndText icon="https://img.icons8.com/ios/512/calendar--v1.png"  text={"Dato kommer her"} iconSize="h-full" textSize="text-4xl" />
-                <AdIconAndText icon="https://img.icons8.com/ios/50/000000/price-tag-euro.png"   text={ad.price?.toString()} iconSize="h-full" textSize="text-4xl" />
-                <AdIconAndText icon="https://img.icons8.com/material-sharp/256/map-marker.png" text={ad.city} iconSize="h-full" textSize="text-4xl" />
+                <AdIconAndText icon="https://img.icons8.com/ios/512/calendar--v1.png" key={69}  text={"Dato"} iconSize="h-full" textSize="text-4xl" />
+                <AdIconAndText icon="https://img.icons8.com/ios/50/000000/price-tag-euro.png"  key={ad.price} text={ad.price?.toString()} iconSize="h-full" textSize="text-4xl" />
+                <AdIconAndText icon="https://img.icons8.com/material-sharp/256/map-marker.png" key={ad.city} text={ad.city} iconSize="h-full" textSize="text-4xl" />
                 </div>    
             ))}    
         </div>
@@ -92,14 +91,14 @@ const AdInspectorPage = () => {
         <div className="flex flex-row">
             <div className='pt-24 w-1/2'>
                {user?.map((user) => (
-                    <AdUserInfo name={user.firstname} email={user.email} phone={user.phone} avatar={""} />
+                    <AdUserInfo name={user.firstname} email={user.email} phone={user.phone} avatar={""} key={user.id} />
                 ))} 
                 
             </div>
 
             <div className="p-10 text-2xl w-1/2 text-left" >
             {ad?.map((ad) => (
-                <p>
+                <p key={ad.description}>
                     {ad.description} 
                 </p>
             ))}

@@ -27,10 +27,6 @@ const LandingPage = () => {
     const [ads, setAds] = useState<Ad[]>([]);
     const threeAds = ads.slice(0, 3);
 
-    useEffect(() => {
-        window.scrollTo(0, 0)
-      }, 
-    []);
       
     useEffect(
         () =>
