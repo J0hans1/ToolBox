@@ -3,12 +3,12 @@ import AdCreatorStep from "../components/AdCreatorStep";
 import { MenuItem, Select, TextField, Button, FormControl, InputLabel, ImageList, FormControlLabel, RadioGroup, Radio } from "@mui/material";
 import { useEffect, useState } from "react";
 import { addAd } from "../lib/controller";
-import { Ad } from "../types/types";
+import { NewAd } from "../types/types";
 import Title from "../components/Title";
 import Step from "../components/Step";
 
 
-function writeAdToDatabase(props: Ad) {
+function writeAdToDatabase(props: NewAd) {
     const ad = {
         title: props.title,
         description: props.description,

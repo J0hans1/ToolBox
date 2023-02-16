@@ -7,9 +7,10 @@ import { DocumentData, onSnapshot, QuerySnapshot } from 'firebase/firestore';
 import { adsCollection } from '../lib/controller';
 import AdFB from '../components/AdFB';
 
+
 const Ads = () => {
     const [ads, setAds] = useState<Ad[]>([]);
-
+    
     window.scrollTo(0, 0);
 
     useEffect(
@@ -42,7 +43,7 @@ const Ads = () => {
                         </div>
                         <Button color="info" variant="contained" href="/#/adcreator">+</Button>
                     </div>
-                    <a href='/#/adinspector'>
+                    <a /* href='/#/adinspector' */>
                         <div className='flex m-auto w-full max-w-7xl p-10 text-current flex-wrap flex-row justify-center' >
                         {/* Not in use but can be used as testdata
                         <Ad 

@@ -2,9 +2,16 @@
 
 export interface User{
     id: string;
-    location?: string;
-    password?: string;
     username?: string;
+    password?: string;
+    password2?: string;
+    firstname?: string;
+    lastname?: string;
+    phone?: string;
+    email?: string;
+    address?: string;
+    zip?: string;
+    city?: string;
     Ads?: [Ad];
 }
 
@@ -23,6 +30,18 @@ export interface User{
 
 
 export interface Ad{
+    id: string;
+    title?: string;
+    description?: string;
+    category?: string;
+    price?: number;
+    rental?: string;
+    address?: string;
+    zip?: number;
+    city?: string;
+}
+
+export interface NewAd{
     id?: string;
     title?: string;
     description?: string;

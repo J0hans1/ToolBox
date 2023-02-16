@@ -33,6 +33,13 @@ export const getUser = async (id: string) => {
   console.log(`User with ID: ${id} found`);
   return user;
 };
+export const getAd = async (adId: string) => {
+  const userId = sessionStorage.getItem("userID"); // Get userId from sessionStorage
+  const document = doc(firestore, `users/${userId}/ads/${adId}`);
+  const ad = await getDoc(document);
+  console.log(`Ad with ID: ${adId} found`);
+  return ad;
+};
 
 
 // UPDATE 

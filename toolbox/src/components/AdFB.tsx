@@ -1,14 +1,36 @@
 import { Avatar } from "@mui/material";
 import { amber } from "@mui/material/colors";
+import { useNavigate } from "react-router-dom";
 import { Ad } from "../types/types";
+import {
+    Card,
+    CardActionArea,
+    CardContent,
+    CardMedia,
+    ThemeProvider,
+    Typography,
+} from "@mui/material";
 
 interface AdProps {
     ad: Ad;
 }
 
 export default function AdFB({ad}: AdProps){
+    let navigate = useNavigate();
+
+    const handleClick = () => {
+        
+        let id = sessionStorage.setItem("ADID", ad.id);
+
+        if (ad.id !== null) {
+            navigate(`/adinspector/${ad.id}`)
+        }
+        
+    }
+
     return (
-        <div className='rounded-lg w-80 h-80 shadow-lg overflow-hidden relative hover:scale-105 hover:shadow-2xl active:scale-100 duration-200 m-3'>
+
+        <div className='rounded-lg w-80 h-80 shadow-lg overflow-hidden relative hover:scale-105 hover:shadow-2xl active:scale-100 duration-200 m-3' onClick={() => handleClick()}>
         <div className="flex h-full w-full overflow-hidden bg-cover ">
             <img className="h-full w-full " src="https://static.bb.se/wcsstore/CAS/PIM/Luna/imgs/1151376.jpg" alt="ad" />
         </div>
@@ -16,7 +38,6 @@ export default function AdFB({ad}: AdProps){
         <div className="flex flex-row">
 
             <div className="flex flex-row bg-white rounded-lg h-auto absolute bottom-0 p-4 justify-between w-full">
-
                 <div className="w-1/5">
                     <Avatar sx={{bgcolor: amber[500]}}>TH</Avatar>
                 </div>
@@ -33,6 +54,7 @@ export default function AdFB({ad}: AdProps){
                             <p className="text-xs ml-1">{ad.city}</p>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
