@@ -4,8 +4,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 interface Mail{
-    mailto: string;
-    label: string;
+    mailto?: string;
+    label?: string;
 }
 
 const ButtonMailto = (props: Mail) => {
@@ -13,8 +13,10 @@ const ButtonMailto = (props: Mail) => {
         <Link
             to='#'
             onClick={(e) => {
+                if (props.mailto !== undefined) {
                 window.location.href = props.mailto;
                 e.preventDefault();
+            }
             }}
         >
             {props.label}
@@ -24,10 +26,10 @@ const ButtonMailto = (props: Mail) => {
 
 
 interface Info {
-    name: string;
-    email: string;
-    phone: string;
-    avatar: string;
+    name?: string;
+    email?: string;
+    phone?: string;
+    avatar?: string;
 }
 
 const AdUserInfo = (props: Info) => {
@@ -46,9 +48,9 @@ const AdUserInfo = (props: Info) => {
             </div>
             <div className="flex flex-row font-bold ">
                 <img className="h-10 ml-5" src="https://img.icons8.com/ios/512/message-squared.png" />
-                <ButtonMailto label="Kontakt på mail" mailto="mailto:no-reply@example.com" />
+                <ButtonMailto label="Kontakt på mail" mailto={props.email} />
                 <img className="h-10 ml-5" src="https://img.icons8.com/ios/512/phone.png" />
-                <p className="ml-5 pr-5">Kontakt på telefon</p>
+                <p className="ml-5 pr-5">Kontakt på telefon {props.phone} </p>
 
             </div>
 

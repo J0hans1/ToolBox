@@ -28,9 +28,9 @@ const ProfilePage = () => {
     
     return (
         <div className='flex h-screen w-screen text-current flex-wrap flex-row gap-20 bg-slate-100'>
-                {user?.map((user) => (
+{/*                 {user?.map((user) => (
                     <InformationUser key={user.id} user={user} />
-                ))}
+                ))} */}
 
                 <div className="bg-white h-full flex flex-col gap-20 p-10 justify-center">
                     <div className="flex flex-col justify-center gap-5">
