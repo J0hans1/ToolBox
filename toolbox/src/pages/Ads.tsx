@@ -63,7 +63,6 @@ const Ads = () => {
                             <AdFB key={ad.id} ad={ad} />
                         ))}
                     </div> 
-                </a>
                 </section>                
             </div>
         </div>
