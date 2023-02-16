@@ -1,14 +1,17 @@
 import { TextField, Button } from '@mui/material/';
-import { useEffect } from 'react';
+import { DocumentData, onSnapshot, QuerySnapshot } from 'firebase/firestore';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import AdFB from '../components/AdFB';
 import Title from '../components/Title';
+import { adsCollection } from '../lib/controller';
+import { Ad } from '../types/types';
 
 interface StepContent {
     icon: string
     span: string
     description: string
 }
-
 
 const Step = (props: StepContent) => {
     return (
@@ -21,11 +24,28 @@ const Step = (props: StepContent) => {
 
 const LandingPage = () => {
     let navigate = useNavigate();
+    const [ads, setAds] = useState<Ad[]>([]);
+    const threeAds = ads.slice(0, 3);
 
     useEffect(() => {
         window.scrollTo(0, 0)
-      }, [])
+      }, 
+    []);
       
+    useEffect(
+        () =>
+            onSnapshot(adsCollection, (snapshot: QuerySnapshot<DocumentData>) => {
+                setAds(
+                    snapshot.docs.map((doc) => {
+                        return {
+                            id: doc.id,
+                            ...doc.data(),
+                        };
+                    })
+                );
+            }),
+        []
+    );
 
     return (
     <div>
@@ -68,10 +88,10 @@ const LandingPage = () => {
                     <Title size='text-5xl' heading='Inspirasjon' description='La deg inspirere' />
                 </div>
 
-                <div className='flex flex-row w-full h-auto gap-1 place-content-between'>
-                    <div className='w-1/3 h-80 bg-slate-400'></div>
-                    <div className='w-96 h-80 bg-slate-400'></div>
-                    <div className='w-1/3 h-80 bg-slate-400'></div>
+                <div className='flex flex-row w-full h-auto gap-2'>
+                    {threeAds?.map((ad) => (
+                        <AdFB key={ad.id} ad={ad} />
+                    ))}
                 </div>
 
             </div>
@@ -105,4 +125,3 @@ const LandingPage = () => {
 }
 
 export default LandingPage;
-

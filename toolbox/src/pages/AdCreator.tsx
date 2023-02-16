@@ -43,12 +43,10 @@ const AdCreator = () => {
             return;
         }
         // check if all fields are filled
-        if (title === "" || description === "" || category === "" || price === "" || rental === "" || address === "" || zip === "" || city === "") {
+        if (title === "" || description === "" || category === "" || price === "" || address === "" || zip === "" || city === "") {
             alert("Alle felt må fylles ut");
             return;
         }
-
-        console.log("Fakk");
 
         const adToDatabase = {
             title: title,
