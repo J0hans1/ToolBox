@@ -1,7 +1,7 @@
 import { deleteUser } from "../lib/controller";
 import { User } from "../types/types";
 
-/* interface IProps{
+interface IProps{
     user: User;
 }
 
@@ -14,11 +14,11 @@ export default function InformationUser({user}: IProps){
     return (
         <div className="information">
             <br />
-            <h2>{user.username}</h2>
-            <h2>{user.password}</h2>
-            <h2>{user.location}</h2>
-            <button onClick={() => deleteUserButton(user.id)}>Delete user above</button>
+            <h2>Brukernavn: {user.username}</h2>
+            <h2>Passord: {user.password}</h2>
+            <h2>Sted: {user.location}</h2>
+            {/* <button onClick={() => deleteUserButton(user.id)}>Delete user above</button> */}
         </div>
         
     )
-} */
+}
