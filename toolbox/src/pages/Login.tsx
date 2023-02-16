@@ -3,7 +3,6 @@ import PEOPLE from '../img/people.svg';
 import { useNavigate } from "react-router-dom";
 import { removeFromSessionStorage, validateUser } from '../lib/controller';
 import { useEffect, useState } from 'react';
-import Step from '../components/Step';
 import Title from '../components/Title';
 
 
@@ -28,19 +27,6 @@ async function validation(username: string, password: string) {
     }
 }
 
-
-const Header = () => {
-    return (
-        <div id="c_section" className='flex h-1/4 content-center'>
-            <div id="c_container" className='flex mr-auto ml-auto mt-auto mb-auto w-full max-w-7xl'>
-                <div id="c_wrapper" className='max-w-3xl text-left'>
-                    <h1 className='text-7xl mb-4'>Logg <span className="bg-yellow-300">inn</span></h1>
-                </div>
-            </div>
-        </div>
-    );
-}
-
 const LoginPage = () => {
 
     let navigate = useNavigate();
@@ -54,7 +40,7 @@ const LoginPage = () => {
             <div id="c_section" className='flex w-full h-full content-center bg-slate-100 overflow-hidden z-10'>
                 <div id="c_container" className='static flex flex-row h-screen m-auto w-full max-w-7xl p-10 gap-10 justify-center bg-white'>
                     {/* <div className='flex flex-col justify-between w-1/4 bg-yellow-400 h-full'></div> */}
-                    <div className='flex flex-col w-10/12 text-left pt-40 mb-10'>
+                    <div className='flex flex-col w-10/12 text-left pt-32 mb-10'>
                         <div>
                             <img src={PEOPLE} className='h-10' alt="People icon" />
                         </div>

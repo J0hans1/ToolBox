@@ -49,9 +49,9 @@ const Ad = (props: AdProps) => {
                     <div className="flex flex-col w-4/5">
                         <h2 className="text-md font-bold">{props.title}</h2>
                         <p className="text-sm my-2">{props.description}</p>
-                        <div className="flex flex-row gap-5">
-                            <AdIconAndText icon="https://img.icons8.com/ios/50/000000/price-tag-euro.png" text={props.price?.toString()} iconSize="h-5" textSize="text-xs"/>
-                            <AdIconAndText icon="https://img.icons8.com/material-sharp/256/map-marker.png" text={props.location} iconSize="h-5" textSize="text-xs"/>
+                        <div className=" flex-row gap-5 hidden">
+                            <AdIconAndText icon="https://img.icons8.com/ios/50/000000/price-tag-euro.png" text={props.price} />
+                            <AdIconAndText icon="https://img.icons8.com/material-sharp/256/map-marker.png" text={props.location} />
                         </div>
                     </div>
 

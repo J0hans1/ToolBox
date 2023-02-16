@@ -27,22 +27,28 @@ const Ads = () => {
     );
 
     return (
-        <div className='w-full flex flex-col bg-slate-100 pt-40'>
-            <div className='flex flex-row w-full mx-20'>
-                <div className='pt-24'>
+        <div className='w-screen flex flex-col bg-pu-grunn pt-40'>
+            <div className='flex flex-row w-full lg:mx-10 xl:mx-20'>
+                <div className='pt-24 hidden lg:block'>
                     <AdFilter/>
                 </div>            
-
+    
                 <section className='flex flex-col h-auto'>
+                    {/* <Title heading="Våre " span='annonser' size='text-7xl'/> */}
                     <div className='w-full flex flex-row justify-center gap-5'>
-                        <div className='h-full gap-1 flex flex-row'>
-                            <TextField variant="filled" label="Ønsket produkt" />
+                        <div className='lg:hidden block'>
+                            <Button variant="contained">Filter</Button>
+                        </div>
+                        <div className='h-full w-2/5 lg:w-3/5 gap-1 flex flex-row'>
+                            <TextField sx={{
+                                width: '1',
+                            }} variant="filled" label="Ønsket produkt" />
                             <Button variant="contained">Søk</Button>
                         </div>
-                        <Button color="info" variant="contained" href="/#/adcreator">+</Button>
+                        <Button color="info" variant="contained" href="/#/adcreator">Opprett annonse</Button>
                     </div>
-                    <a /* href='/#/adinspector' */>
-                        <div className='flex m-auto w-full max-w-7xl p-10 text-current flex-wrap flex-row justify-center' >
+
+                    <div className='flex m-auto w-full max-w-7xl pt-10 text-current flex-wrap flex-row justify-center'>
                         {/* Not in use but can be used as testdata
                         <Ad 
                             src="https://static.bb.se/wcsstore/CAS/PIM/Luna/imgs/1151376.jpg"

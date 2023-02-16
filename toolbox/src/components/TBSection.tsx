@@ -12,7 +12,7 @@ interface section {
     height: string;
     bg_color: string;
     text_fill: string;
-    children?: ReactElement<any>
+    children: React.ReactNode;
 }
 
 const TBSection = (props: section) => {

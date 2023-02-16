@@ -50,8 +50,8 @@ const ProfilePage = () => {
               
                     </div>
                     <div className="flex flex-col gap-5">
-                        <Button variant="contained" >Mine annonser</Button>
-                        <Button variant="contained" >Likte annonser</Button>
+                        <Button variant="contained" >Mine anonnser</Button>
+                        <Button variant="contained" >Likte anonnser</Button>
                         <Button variant="contained" >Rediger profil</Button>
                     </div>
                 </div>
