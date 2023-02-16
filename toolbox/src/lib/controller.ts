@@ -31,7 +31,7 @@ export const adsCollection = collectionGroup(firestore, "ads"); // ADDS COLLECTI
 export const getUser = async (id: string) => {
   const document = doc(firestore, `users/${id}`);
   const user = await getDoc(document);
-  console.log(`User with ID: ${id} found`);
+  console.log(`getUser: User with ID: ${id}`);
   return user;
 };
 
@@ -46,22 +46,43 @@ export const getAd = async (adId: string, userID: string) => {
 export const getUserFromAdId = async (adId: string) => {
   console.log("Ad ID: " + adId)
   //Loop through all users and find the one with the adId in the ads array
-  const querySnapshot = await getDocs(usersCollection);
-  querySnapshot.forEach((doc) => {
-    // get ads from doc
-    const adCollection = collection(firestore, `users/${doc.id}/ads`);
-    getDocs(adCollection).then((querySnapshot2) => {
-      querySnapshot2.forEach((doc2) => {
-        if (doc2.id === adId) {
-          console.log("User ID from ad: " + doc.id);
-          sessionStorage.setItem("userIDFromAd", doc.id);
-          return doc.id;
-        }
+  const querySnapshot = await getDocs(usersCollection).then((querySnapshot) => {
+    querySnapshot.forEach((doc) => {
+      // get ads from doc
+      const adCollection = collection(firestore, `users/${doc.id}/ads`);
+      getDocs(adCollection).then((querySnapshot2) => {
+        for (const doc2 of querySnapshot2.docs) {
+            if (doc2.id === adId) {
+            sessionStorage.setItem("userIDFromAd", doc.id);
+            console.log("User ID after set backend: 2 " + doc.id);
+            return doc.id;
+          }
+        }});
       });
-    }
-  );
   });
 };
+
+/* // Get user associated with ad
+export const getUserFromAdId = async (adId: string) => {
+  console.log("Ad ID: " + adId)
+  //Loop through all users and find the one with the adId in the ads array
+  const querySnapshot = await getDocs(usersCollection).then((querySnapshot) => {
+    querySnapshot.forEach((doc) => {
+      // get ads from doc
+      const adCollection = collection(firestore, `users/${doc.id}/ads`);
+      getDocs(adCollection).then((querySnapshot2) => {
+        for (const doc2 of querySnapshot2.docs) {
+            if (doc2.id === adId) {
+            sessionStorage.setItem("userIDFromAd", doc.id);
+            console.log("User ID after set backend: 2 " + doc.id);
+            return doc.id;
+          }
+        }});
+      });
+  });
+}; */
+
+
 
 
 

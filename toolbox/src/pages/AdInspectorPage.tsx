@@ -11,11 +11,38 @@ const AdInspectorPage = () => {
     const [user, setUser] = useState<User[]>([]);
     const [ad, setAd] = useState<Ad[]>([]);
 
-    const adFromSessionStorage = sessionStorage.getItem("ADID");
-    const userIDFromAd = sessionStorage.getItem("userIDFromAd")
+    //const adFromSessionStorage = sessionStorage.getItem("ADID");
     
 
+
+    
+    // Get user from database
+    async function getUserFromDatabase() {
+        const adFromSessionStorage = sessionStorage.getItem("ADID");
+        if (adFromSessionStorage != null) {
+            // sets sessionstorage for user
+            await getUserFromAdId(adFromSessionStorage).then( () => {
+               console.log("getUserFromDatabase 1 " + sessionStorage.getItem("userIDFromAd"))
+            });
+        }
+        
+    }
+
+    async function setUserFromDatabase() {
+        const userIDFromAd = sessionStorage.getItem("userIDFromAd")
+        console.log("setUserFromDatabase 2 " + userIDFromAd)
+        if (userIDFromAd != null) {
+            const userFromDatabase = await getUser(userIDFromAd).then((doc) => {
+                return { id: doc.id, ...doc.data() }
+            });
+            setUser([userFromDatabase]);
+        }
+    }
+
     async function getAdFromDatabase() {
+        const adFromSessionStorage = sessionStorage.getItem("ADID");
+        const userIDFromAd = sessionStorage.getItem("userIDFromAd")
+        console.log("getAdFromDatabase 3 " + userIDFromAd)
         if (adFromSessionStorage != null && userIDFromAd != null) {
             const adFromDatabase = await getAd(adFromSessionStorage, userIDFromAd).then((doc) => {
                 return { id: doc.id, ...doc.data() }
@@ -23,24 +50,15 @@ const AdInspectorPage = () => {
             setAd([adFromDatabase]);
         }
     }
-    
-    // Get user from database
-    async function getUserFromDatabase() {
-        if (adFromSessionStorage != null) {
-            await getUserFromAdId(adFromSessionStorage) // sets sessionstorage
-            if (userIDFromAd != null) {
-                const userFromDatabase = await getUser(userIDFromAd).then((doc) => {
-                    return { id: doc.id, ...doc.data() }
-                });
-                setUser([userFromDatabase]);
-            }
-        }
-}
 
     useEffect(() => {
-        getUserFromDatabase().then(() => {
-        getAdFromDatabase();
-        });
+        
+        getUserFromDatabase();
+        setTimeout(() => {
+            setUserFromDatabase();
+            getAdFromDatabase();
+        }, 300);
+
     }, []);
         
     //TODO: Mapper flere ganger nedover. Må løse det på en mer elegant måte. Fungerer for nå

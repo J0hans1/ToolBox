@@ -12,7 +12,7 @@ export default function AdFB({ad}: AdProps){
     let navigate = useNavigate();
 
     const handleClick = () => {
-        
+        sessionStorage.removeItem("ADID");
         sessionStorage.setItem("ADID", ad.id);
 
         if (ad.id !== null) {
