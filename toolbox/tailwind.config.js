@@ -11,6 +11,7 @@ module.exports = {
           grunn : 'F7F7F7',
           svart : '#000000',
           ghost: '#64748B',
+          gray: '#212121'
         },
       },
     },
