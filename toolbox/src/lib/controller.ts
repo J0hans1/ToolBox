@@ -51,8 +51,8 @@ export const getUserFromAdId = async (adId: string) => {
       // get ads from doc
       const adCollection = collection(firestore, `users/${doc.id}/ads`);
       getDocs(adCollection).then((querySnapshot2) => {
-        for (const doc2 of querySnapshot2.docs) {
-            if (doc2.id === adId) {
+        for (const ads of querySnapshot2.docs) {
+            if (ads.id === adId) {
             sessionStorage.setItem("userIDFromAd", doc.id);
             console.log("User ID after set backend: 2 " + doc.id);
             return doc.id;
