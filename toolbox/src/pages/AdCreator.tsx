@@ -1,11 +1,12 @@
 import Textbox from "../components/Textbox";
 import AdCreatorStep from "../components/AdCreatorStep";
-import { MenuItem, Select, TextField, Button, FormControl, InputLabel, ImageList, FormControlLabel, RadioGroup, Radio } from "@mui/material";
+import { MenuItem, Select, TextField, Button, FormControl, InputLabel, ImageList } from "@mui/material";
 import { useEffect, useState } from "react";
 import { addAd } from "../lib/controller";
 import { NewAd } from "../types/types";
 import Title from "../components/Title";
 import Step from "../components/Step";
+import { validateAddress, validateCity, validateDescription, validatePrice, validateTitle, validateZip } from "../lib/validation";
 
 
 function writeAdToDatabase(props: NewAd) {
@@ -47,7 +48,31 @@ const AdCreator = () => {
             alert("Alle felt må fylles ut");
             return;
         }
-
+        if (!validateTitle(title)){
+            alert("Ikke gyldig tittel!");
+            return;
+        }
+        if (!validateDescription(description)){
+            alert("Ikke en gyldig beksrivelse!");
+            return;
+        }
+        if (!validateAddress(address)){
+            alert("Ikke en gyldig adresse!");
+            return;
+        }
+        if (!validateZip(zip)){
+            alert("Ikke et gyldig postnummer!");
+            return;
+        }
+        if (!validateCity(city)){
+            alert("Ikke gyldig navn på by!");
+            return;
+        }
+        if (!validatePrice(price)){
+            alert("Pris kan ikke være tom!");
+            return;
+        }
+        
         const adToDatabase = {
             title: title,
             description: description,

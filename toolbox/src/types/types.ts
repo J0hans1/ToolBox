@@ -56,7 +56,6 @@ export interface NewAd{
 export interface NewUser{
     username: string;
     password: string;
-    password2: string;
     firstname: string;
     lastname: string;
     phone: string;

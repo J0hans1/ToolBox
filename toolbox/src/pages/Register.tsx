@@ -1,29 +1,68 @@
 import { Button, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { addToSessionStorage, addUser, removeFromSessionStorage, validateUsername } from "../lib/controller"
+import { addToSessionStorage, addUser, removeFromSessionStorage, validateDuplicateUsername } from "../lib/controller"
 import PEOPLE from '../img/people.svg';
 import { useNavigate } from 'react-router-dom';
 import Title from '../components/Title';
 import Step from '../components/Step'
+import { validateAddress, validateCity, validateEmail, validatefirstName, validatelastName, validatePassword, validatePhoneNumber, validateSimilarPasswords, validateUserName, validateZip } from '../lib/validation';
 
 
-async function validation(username: string, password: string) {
+async function validation(firstname: string, lastname: string, 
+                            phone: string,email: string, username: string, 
+                            password: string, password2: string,
+                            address: string, zip: string, city: string) {
+
+    if (!validatefirstName(firstname)){
+        alert("Navn kan ikke inneholde tall!");
+        return false;
+    }
+    if (!validatelastName(lastname)){
+        alert("Navn kan ikke inneholde tall!");
+        return false;
+    }
+    if (!validatePhoneNumber(phone)){
+        alert("Ikke gyldig telefonnummer!");
+        return false;
+    }
+    if (!validateEmail(email)){
+        alert("Ikke gyldig epostadresse!");
+        return false;
+    }
+    if (!validateAddress(address)){
+        alert("Ikke en gyldig adresse!");
+        return false;
+    }
+    if (!validateZip(zip)){
+        alert("Ikke et gyldig postnummer!");
+        return false;
+    }
+    if (!validateCity(city)){
+        alert("Ikke en gyldig by!");
+        return false;
+    }
+
     if (sessionStorage.getItem("username") !== null) {
         removeFromSessionStorage(); // logger ut fra bruker man er pålogget som
     }
     // Check if the username exists in the database
-    if (await validateUsername(username)) {
+    if (await validateDuplicateUsername(username)) {
         alert("Brukernavn er allerede i bruk");
         return false;
     }
-    if (username.length < 3) {
-        alert("Brukernavn må være lengre enn 3 tegn");
+    if (!validateUserName(username)) {
+        alert("Ikke gyldig brukernavn");
         return false;
     }
-    if (password.length < 3) {
-        alert("Passord må være lengre enn 3 tegn");
+    if (!validatePassword(password)) {
+        alert("Ikke gyldig passord.\nPassord må være minst 4 bokstaver bestående\nav tall, store og små bokstaver!");
         return false;
     }
+    if (!validateSimilarPasswords(password, password2)){
+        alert("Passordene er ikke like!");
+        return false;
+    }
+
     return true;
 }
 
@@ -48,7 +87,6 @@ const RegisterPage = () => {
             email,
             username,
             password,
-            password2,
             address,
             zip,
             city,
@@ -106,11 +144,13 @@ const RegisterPage = () => {
                             variant="contained"
                             sx={{p: 2}}
                             onClick={async () => {
-                                if (await validation(username, password)) {
-                                    addNewUser();
-                                    addToSessionStorage(username); // lagrer brukernavn og brukerID til session storage
-                                    alert("Du er nå registrert og logget inn som " + username)
-                                    navigate("/"); /* navigerer fra registrersiden til hovedsiden */
+                                if (await validation(firstname,lastname,phone,
+                                        email, username, password, password2,
+                                        address, zip, city)) {
+                                            addNewUser();
+                                            addToSessionStorage(username); // lagrer brukernavn og brukerID til session storage
+                                            alert("Du er nå registrert og logget inn som " + username)
+                                            navigate("/"); /* navigerer fra registrersiden til hovedsiden */
                                 }
                             }}>Registrer
                         </Button>

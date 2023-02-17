@@ -175,7 +175,7 @@ export async function validateUser(username: string, password: string) { // Bruk
   return a;
 }
 
-export async function validateUsername(username: string) { // Brukes i registerpage
+export async function validateDuplicateUsername(username: string) { // Brukes i registerpage
   let a = false;
   await getDocs(query(usersCollection, where("username", "==", username))).then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
