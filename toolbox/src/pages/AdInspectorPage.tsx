@@ -51,7 +51,7 @@ const AdInspectorPage = () => {
         setTimeout(() => {
             setUserFromDatabase();
             getAdFromDatabase();
-        }, 300); // 300ms delay 
+        }, 400); // 400ms delay 
         // Todo: Find a better way to do this.
     }, []);
 
