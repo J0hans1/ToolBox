@@ -150,7 +150,7 @@ const AdInspectorPage = () => {
     <div className="pt-40 pb-40 flex flex-col px-60">
 
         <div 
-            className="bg-cover h-96 bg-slate-100 rounded-md bg-center relative" 
+            className="bg-cover h-52 bg-slate-100 rounded-md bg-center relative" 
             style={{ 
                 backgroundImage: `url("https://static.bb.se/wcsstore/CAS/PIM/Luna/imgs/1151376.jpg")`
             
@@ -158,7 +158,7 @@ const AdInspectorPage = () => {
         >
             <div id="c_wrapper" className='w-auto justify-center bg-white rounded-tl-xl absolute right-0 bottom-0 '>
             {ad?.map((ad) => (
-                <Title size={"text-7xl ml-5 mr-5"} heading={ad.title} description={""} span={""} key={ad.title} ></Title> 
+                <Title size={"text-4xl ml-5 mr-5"} heading={ad.title} description={""} span={""} key={ad.title} ></Title> 
             ))}
             </div>
         </div>
@@ -166,15 +166,15 @@ const AdInspectorPage = () => {
         <div className="w-full">
         {ad?.map((ad) => (
             <div className="flex flex-row p-10 h-32 w-full justify-between">
-                <AdIconAndText icon="https://img.icons8.com/ios/512/calendar--v1.png" key={69}  text={"Dato"} iconSize="h-full" textSize="text-4xl" />
-                <AdIconAndText icon="https://img.icons8.com/ios/50/000000/price-tag-euro.png"  key={ad.price} text={ad.price?.toString()} iconSize="h-full" textSize="text-4xl" />
-                <AdIconAndText icon="https://img.icons8.com/material-sharp/256/map-marker.png" key={ad.city} text={ad.city} iconSize="h-full" textSize="text-4xl" />
+                <AdIconAndText icon="https://img.icons8.com/ios/512/calendar--v1.png" key={69}  text={"Dato"} iconSize="h-full" textSize="text-3xl" />
+                <AdIconAndText icon="https://img.icons8.com/ios/50/000000/price-tag-euro.png"  key={ad.price} text={ad.price?.toString()+" kr/dag"} iconSize="h-full" textSize="text-3xl" />
+                <AdIconAndText icon="https://img.icons8.com/material-sharp/256/map-marker.png" key={ad.city} text={ad.city} iconSize="h-full" textSize="text-3xl" />
                 </div>    
             ))}    
         </div>
 
         <div className="flex flex-row">
-            <div className='pt-24 w-1/2'>
+            <div className='pt-0 w-1/2'>
                {user?.map((user) => (
                     <AdUserInfo name={user.firstname} email={user.email} phone={user.phone} avatar={""} key={user.id} />
                 ))} 

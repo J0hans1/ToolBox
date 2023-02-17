@@ -34,12 +34,12 @@ interface Info {
 
 const AdUserInfo = (props: Info) => {
     return (
-        <div className='rounded-lg w-auto h-96 shadow-lg hover:shadow-2xl justify-center'>
+        <div className='rounded-lg w-auto h-64 shadow-lg hover:shadow-2xl justify-center'>
 
-            <div className="flex flex-row w-3/4 h-1/4 ml-10 gap-10 mt-5 p-8" >
+            <div className="flex flex-row w-3/4 h-1/4 ml-2 gap-10 mt-5 p-8" >
                 <Avatar sx={{ bgcolor: amber[500], width: 70, height: 70 }}>AO</Avatar>
-                <div className="text-left justify-start pb-5 ">
-                    <h2 className="text-5xl mt-2 font-bold">{props.name}</h2>
+                <div className="text-left justify-start pb-5 flex-wrap">
+                    <h2 className="text-3xl mt-2 font-bold">{props.name}</h2>
                 </div>
             </div>
 
