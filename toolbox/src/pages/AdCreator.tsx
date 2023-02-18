@@ -10,7 +10,9 @@ import { validateAddress, validateCity, validateDescription, validatePrice, vali
 
 
 function writeAdToDatabase(props: NewAd) {
+    const userID = sessionStorage.getItem("userID")
     const ad = {
+        userid: userID,
         title: props.title,
         description: props.description,
         category: props.category,

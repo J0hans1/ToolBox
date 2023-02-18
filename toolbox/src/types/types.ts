@@ -31,6 +31,7 @@ export interface User{
 
 export interface Ad{
     id: string;
+    userid?: string;
     title?: string;
     description?: string;
     category?: string;
@@ -44,6 +45,7 @@ export interface Ad{
 
 export interface NewAd{
     id?: string;
+    userid?: string;
     title?: string;
     description?: string;
     category?: string;

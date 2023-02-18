@@ -1,7 +1,7 @@
 import AdUserInfo from "../components/AdUserInfo";
 import Title from "../components/Title";
 import {AdIconAndText} from "../components//Ad";
-import { getUser, getAd, getUserFromAdId } from "../lib/controller";
+import { getUser, getAd } from "../lib/controller";
 import { Ad, User } from "../types/types";
 import { useEffect, useState } from "react";
 
@@ -13,7 +13,7 @@ const AdInspectorPage = () => {
 
     
     // Get user from database
-    async function getUserFromDatabase() {
+/*     async function getUserFromDatabase() {
         const adFromSessionStorage = sessionStorage.getItem("ADID");
         if (adFromSessionStorage != null) {
             // sets sessionstorage for user
@@ -21,10 +21,10 @@ const AdInspectorPage = () => {
                console.log("getUserFromDatabase 1 " + sessionStorage.getItem("userIDFromAd"))
             });
         }
-    }
+    } */
 
-    async function setUserFromDatabase() {
-        const userIDFromAd = sessionStorage.getItem("userIDFromAd")
+/*     async function setUserFromDatabase() {
+        //const userIDFromAd = sessionStorage.getItem("userIDFromAd")
         console.log("setUserFromDatabase 2 " + userIDFromAd)
         if (userIDFromAd != null) {
             const userFromDatabase = await getUser(userIDFromAd).then((doc) => {
@@ -32,27 +32,52 @@ const AdInspectorPage = () => {
             });
             setUser([userFromDatabase]);
         }
-    }
+    } */
 
     async function getAdFromDatabase() {
         const adFromSessionStorage = sessionStorage.getItem("ADID");
-        const userIDFromAd = sessionStorage.getItem("userIDFromAd")
-        console.log("getAdFromDatabase 3 " + userIDFromAd)
-        if (adFromSessionStorage != null && userIDFromAd != null) {
-            const adFromDatabase = await getAd(adFromSessionStorage, userIDFromAd).then((doc) => {
+        if (adFromSessionStorage != null ) {
+            const adFromDatabase = await getAd(adFromSessionStorage).then((doc) => {
                 return { id: doc.id, ...doc.data() }
             });
             setAd([adFromDatabase]);
+            console.log("adFromDatabase " + adFromDatabase)
         }
     }
 
+    async function getUser2() {
+      const userIDFromAd = sessionStorage.getItem("userIDFromAd");
+      console.log("setUserFromDatabase 2 " + userIDFromAd);
+      if (userIDFromAd != null) {
+        const userFromDatabase = await getUser(userIDFromAd).then((doc) => {
+          return { id: doc.id, ...doc.data() }
+        });
+        setUser([userFromDatabase]);
+      }
+    }
+
+/*       ad.map((ad) => {
+        if (ad.userid != null && ad.userid !== undefined) {
+        getUser(ad.userid).then((doc) => {
+          return { id: doc.id, ...doc.data() }
+        }).then((user) => {
+          setUser([user]);
+        });
+      }}); */
+    
+
+
     useEffect(() => {
-        getUserFromDatabase();
+      getAdFromDatabase()
+      getUser2()
+/*       setTimeout(() => {
+        getUser2()
+      }, 500); */
+        /* getUserFromDatabase(); 
         setTimeout(() => {
             setUserFromDatabase();
             getAdFromDatabase();
-        }, 500); // 500ms delay 
-        // Todo: Find a better way to do this.
+        }, 500); // 500ms delay */
     }, []);
 
 

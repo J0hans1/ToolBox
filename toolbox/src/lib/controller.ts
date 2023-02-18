@@ -18,16 +18,25 @@ export const addUser = async (userData: NewUser) => {
 };
 
 // CREATE A NEW ADD
-export const addAd = async (adData: any) => {
+/* export const addAd = async (adData: any) => {
   const userId = sessionStorage.getItem("userID"); // Get userId from sessionStorage
   const newAd = await addDoc(collection(firestore, `users/${userId}/ads`), {...adData});
+  console.log(`New ad created${newAd.path}`)
+}; */
+
+// CREATE A NEW ADD
+export const addAd = async (adData: any) => {
+  //const userId = sessionStorage.getItem("userID"); // Get userId from sessionStorage
+  const newAd = await addDoc(collection(firestore, `adsCol`), {...adData});
   console.log(`New ad created${newAd.path}`)
 };
 
 
 // READ
 export const usersCollection = collection(firestore, "users"); // USERS COLLECTION
-export const adsCollection = collectionGroup(firestore, "ads"); // ADDS COLLECTION
+//export const adsCollection = collectionGroup(firestore, "ads"); // ADDS COLLECTION
+export const adsCollection = collection(firestore, "adsCol"); // ADDS COLLECTION
+export const adsCol = collection(firestore, "adsCol"); // ADDS COLLECTION
 // GET SPECIFIC USER
 export const getUser = async (id: string) => {
   const document = doc(firestore, `users/${id}`);
@@ -37,14 +46,26 @@ export const getUser = async (id: string) => {
 };
 
 // Get ad when clicking on ad
-export const getAd = async (adId: string, userID: string) => {
+/* export const getAd = async (adId: string, userID: string) => {
   const document = doc(firestore, `users/${userID}/ads/${adId}`);
   const ad = await getDoc(document);
+  return ad;
+}; */
+
+export const getAd = async (adId: string) => {
+  const document = doc(firestore, `adsCol/${adId}`);
+  const ad = await getDoc(document).then((ad) => {
+  if (ad.exists()) {
+    ad.data().userid !== undefined ? sessionStorage.setItem("userIDFromAd", ad.data().userid) : console.log("No user ID");
+    return ad;
+  }
+  return ad;
+  });
   return ad;
 };
 
 // Get user associated with ad
-export const getUserFromAdId = async (adId: string) => {
+/* export const getUserFromAdId = async (adId: string) => {
   console.log("Ad ID: " + adId)
   //Loop through all users and find the one with the adId in the ads array
   const querySnapshot = await getDocs(usersCollection).then((querySnapshot) => {
@@ -61,7 +82,7 @@ export const getUserFromAdId = async (adId: string) => {
         }});
       });
   });
-};
+}; */
 
 /* // Get user associated with ad
 export const getUserFromAdId = async (adId: string) => {
@@ -90,7 +111,7 @@ export const getUserFromAdId = async (adId: string) => {
 
 // UPDATE 
 // UPDATE A USER
-export const updateUser = async (id: string, userData: NewUser) => {
+/* export const updateUser = async (id: string, userData: NewUser) => {
   const document = doc(firestore, `users/${id}`);
   await updateDoc(document, {...userData});
   console.log(`Updated user with ID: ${id}`);
@@ -103,16 +124,24 @@ export const updateAd = async (adId: string, adData: any) => {
   await updateDoc(document, {...adData});
   console.log(`Updated ad with ID: ${adId}`);
 }
-
+ */
 
 
 // DELETE
 // HELP FUNCTION FOR DELETING ALL ADS IN USERS COLLECTION
-export const deleteUserAdsCollection = async (id: string) => {
+/* export const deleteUserAdsCollection = async (id: string) => {
     const querySnapshot = await getDocs(collection(firestore, `users/${id}/ads`));
     querySnapshot.forEach((doc) => {
         deleteDoc(doc.ref);
     });
+}; */
+export const deleteUserAdsCollection = async (id: string) => {
+  const querySnapshot = await getDocs(collection(firestore, `adsCol`));
+  querySnapshot.forEach((doc) => {
+      if (doc.data().userId === id) {
+        deleteDoc(doc.ref);
+      }
+  });
 };
 
 // DELETE A USER
@@ -127,7 +156,7 @@ export const deleteUser = async (id: string) => {
 
 
 // DELETE A AD
-export const deleteAd = async ( adId: string ) => { 
+/* export const deleteAd = async ( adId: string ) => { 
     const userID = sessionStorage.getItem("userID"); // Get userId from sessionStorage
     const adsDoc = doc(firestore, `users/${userID}/ads/${adId}`);
     if (adsDoc) { //TODO: Fiks denne if-setningen. Må sjekke om doc eksisterer i databasen på denne brukeren.  
@@ -136,6 +165,16 @@ export const deleteAd = async ( adId: string ) => {
       });
     } else {
       console.log(`No ad with ID: ${adId} found in user with ID: ${userID}`);
+    }
+  }; */
+  export const deleteAd = async ( adId: string ) => { 
+    const adsDoc = doc(firestore, `adsCol/${adId}`);
+    if (adsDoc) { //TODO: Fiks denne if-setningen. Må sjekke om doc eksisterer i databasen på denne brukeren.
+      await deleteDoc(adsDoc).then(() => {
+        console.log(`Deleted ad with ID: ${adId}`);
+      });
+    } else {
+      console.log(`No ad with ID: ${adId} found`);
     }
   };
   
