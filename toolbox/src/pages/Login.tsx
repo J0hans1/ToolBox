@@ -2,7 +2,7 @@ import { Button, TextField } from '@mui/material';
 import PEOPLE from '../img/people.svg';
 import { useNavigate } from "react-router-dom";
 import { removeFromSessionStorage, validateUser } from '../lib/controller';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Title from '../components/Title';
 
 

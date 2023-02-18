@@ -11,28 +11,6 @@ const AdInspectorPage = () => {
     const [user, setUser] = useState<User[]>([]);
     const [ad, setAd] = useState<Ad[]>([]);
 
-    
-    // Get user from database
-/*     async function getUserFromDatabase() {
-        const adFromSessionStorage = sessionStorage.getItem("ADID");
-        if (adFromSessionStorage != null) {
-            // sets sessionstorage for user
-            await getUserFromAdId(adFromSessionStorage).then( () => {
-               console.log("getUserFromDatabase 1 " + sessionStorage.getItem("userIDFromAd"))
-            });
-        }
-    } */
-
-/*     async function setUserFromDatabase() {
-        //const userIDFromAd = sessionStorage.getItem("userIDFromAd")
-        console.log("setUserFromDatabase 2 " + userIDFromAd)
-        if (userIDFromAd != null) {
-            const userFromDatabase = await getUser(userIDFromAd).then((doc) => {
-                return { id: doc.id, ...doc.data() }
-            });
-            setUser([userFromDatabase]);
-        }
-    } */
 
     async function getAdFromDatabase() {
         const adFromSessionStorage = sessionStorage.getItem("ADID");
@@ -41,11 +19,11 @@ const AdInspectorPage = () => {
                 return { id: doc.id, ...doc.data() }
             });
             setAd([adFromDatabase]);
-            console.log("adFromDatabase " + adFromDatabase)
         }
     }
 
     async function getUser2() {
+      // userIDFromAd is set in getAd() in controller
       const userIDFromAd = sessionStorage.getItem("userIDFromAd");
       console.log("setUserFromDatabase 2 " + userIDFromAd);
       if (userIDFromAd != null) {
@@ -56,119 +34,12 @@ const AdInspectorPage = () => {
       }
     }
 
-/*       ad.map((ad) => {
-        if (ad.userid != null && ad.userid !== undefined) {
-        getUser(ad.userid).then((doc) => {
-          return { id: doc.id, ...doc.data() }
-        }).then((user) => {
-          setUser([user]);
-        });
-      }}); */
-    
-
-
     useEffect(() => {
-      getAdFromDatabase()
-      getUser2()
-/*       setTimeout(() => {
+      getAdFromDatabase().then(() => {
         getUser2()
-      }, 500); */
-        /* getUserFromDatabase(); 
-        setTimeout(() => {
-            setUserFromDatabase();
-            getAdFromDatabase();
-        }, 500); // 500ms delay */
+      });
     }, []);
 
-
-
-
-    /*         async.series([getUserFromDatabase, setUserFromDatabase, getAdFromDatabase], function(err: any, results: any) {
-            console.log(results);
-        }); */
-
-/*         async function getUserFromDatabase() {
-            const adFromSessionStorage = sessionStorage.getItem("ADID");
-            if (adFromSessionStorage != null) {
-              await getUserFromAdId(adFromSessionStorage);
-              console.log("getUserFromDatabase 1 " + sessionStorage.getItem("userIDFromAd"));
-            }
-          }
-          
-          async function setUserAndAdFromDatabase() {
-            const userIDFromAd = sessionStorage.getItem("userIDFromAd");
-            console.log("setUserAndAdFromDatabase 2 " + userIDFromAd);
-            if (userIDFromAd != null) {
-              const userFromDatabase = await Promise.all([
-                getUser(userIDFromAd)
-              ]);
-              setUser(userFromDatabase);
-              const adFromDatabase = await Promise.all([
-                getAdFromDatabase(userIDFromAd)
-              ]);
-              if (adFromDatabase !== undefined) { // Add this check
-                setAd([adFromDatabase]);
-              }
-            }
-          }
-          
-          async function getAdFromDatabase(userID: string) {
-            const adFromSessionStorage = sessionStorage.getItem("ADID");
-            console.log("getAdFromDatabase 3 " + userID);
-            if (adFromSessionStorage != null && userID != null) {
-              //const adFromDatabase = await getAd(adFromSessionStorage, userID);
-              const adFromDatabase = await getAd(adFromSessionStorage, userID).then((doc) => {
-                return { id: doc.id, ...doc.data() }
-            });
-              //return adFromDatabase;
-            }
-          }
-          
-          useEffect(() => {
-            getUserFromDatabase()
-              .then(() => setUserAndAdFromDatabase())
-              .catch(error => console.log(error));
-          }, []);
-           */
-/*           const [user, setUser] = useState<User[]>([]);
-          const [ad, setAd] = useState<Ad[]>([]); */
-          
-/*           async function getUserFromDatabase() {
-            const adFromSessionStorage = sessionStorage.getItem("ADID");
-            if (adFromSessionStorage != null) {
-              await getUserFromAdId(adFromSessionStorage);
-            }
-          }
-          
-          async function setUserFromDatabase() {
-            const userIDFromAd = sessionStorage.getItem("userIDFromAd")
-            if (userIDFromAd != null) {
-              const userFromDatabase = await getUser(userIDFromAd).then((doc) => {
-                return { id: doc.id, ...doc.data() }
-              });
-              setUser([userFromDatabase]);
-            }
-          }
-          
-          async function getAdFromDatabase() {
-            const adFromSessionStorage = sessionStorage.getItem("ADID");
-            const userIDFromAd = sessionStorage.getItem("userIDFromAd")
-            if (adFromSessionStorage != null && userIDFromAd != null) {
-              const adFromDatabase = await getAd(adFromSessionStorage, userIDFromAd).then((doc) => {
-                return { id: doc.id, ...doc.data() }
-              });
-              setAd([adFromDatabase]);
-            }
-          }
-          
-          useEffect(() => {
-            async function fetchData() {
-              await getUserFromDatabase();
-              await setUserFromDatabase();
-              await getAdFromDatabase();
-            }
-            fetchData();
-          }, []); */
 
     //Todo: Component for slideshow of pictures
     return (
@@ -215,7 +86,6 @@ const AdInspectorPage = () => {
               </div>
           ))}
       </div>
-      
       );
   };
 

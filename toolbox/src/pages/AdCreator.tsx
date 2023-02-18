@@ -1,9 +1,7 @@
-import Textbox from "../components/Textbox";
-import AdCreatorStep from "../components/AdCreatorStep";
 import { MenuItem, Select, TextField, Button, FormControl, InputLabel, ImageList } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { addAd, uploadImages } from "../lib/controller";
-import { Ad, NewAd } from "../types/types";
+import { NewAd } from "../types/types";
 import Title from "../components/Title";
 import Step from "../components/Step";
 import { validateAddress, validateCity, validateDescription, validatePrice, validateTitle, validateZip } from "../lib/validation";
@@ -76,16 +74,6 @@ const AdCreator = () => {
             return;
         }
         await uploadImagesToBackend(images);
-        
-
-/* 
-        setTimeout(() => {
-            if (imageUrls !== undefined || imageUrls !== null) {
-                console.log("imageUrls timeout: " + imageUrls);
-                
-                resetStates();
-            }
-        }, 3000); */
     }
 
     async function uploadImagesToBackend( images: FileList | null) {
@@ -126,7 +114,6 @@ const AdCreator = () => {
         setImages(null); 
         setImageUrls([]);
     }
-
 
 
 
