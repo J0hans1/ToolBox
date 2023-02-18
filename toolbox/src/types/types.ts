@@ -39,6 +39,7 @@ export interface Ad{
     address?: string;
     zip?: number;
     city?: string;
+    pictures?: string[];
 }
 
 export interface NewAd{
@@ -51,6 +52,7 @@ export interface NewAd{
     address?: string;
     zip?: number;
     city?: string;
+    pictures?: string[];
 }
 
 export interface NewUser{

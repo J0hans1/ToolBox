@@ -2,8 +2,8 @@ import Textbox from "../components/Textbox";
 import AdCreatorStep from "../components/AdCreatorStep";
 import { MenuItem, Select, TextField, Button, FormControl, InputLabel, ImageList } from "@mui/material";
 import { useEffect, useState } from "react";
-import { addAd } from "../lib/controller";
-import { NewAd } from "../types/types";
+import { addAd, uploadImages } from "../lib/controller";
+import { Ad, NewAd } from "../types/types";
 import Title from "../components/Title";
 import Step from "../components/Step";
 import { validateAddress, validateCity, validateDescription, validatePrice, validateTitle, validateZip } from "../lib/validation";
@@ -18,7 +18,8 @@ function writeAdToDatabase(props: NewAd) {
         rental: props.rental,
         address: props.address,
         zip: props.zip,
-        city: props.city
+        city: props.city,
+        pictures: props.pictures
     }
     console.log(ad)
     addAd(ad); // Add ad to database
@@ -35,10 +36,10 @@ const AdCreator = () => {
     const [address, setAddress] = useState("");
     const [zip, setZip] = useState("");
     const [city, setCity] = useState("");
+    const [images, setImages] = useState<FileList | null>(null);
+    const [imageUrls, setImageUrls] = useState<string[]>([]);
 
-
-    const handleOnClick = () => {
-        // check if user is logged in
+    const handleOnClick = async () => {
         if (sessionStorage.getItem("username") === null) {
             alert("Du må være logget inn for å opprette en annonse");
             return;
@@ -72,6 +73,27 @@ const AdCreator = () => {
             alert("Pris kan ikke være tom!");
             return;
         }
+        await uploadImagesToBackend(images);
+        
+
+/* 
+        setTimeout(() => {
+            if (imageUrls !== undefined || imageUrls !== null) {
+                console.log("imageUrls timeout: " + imageUrls);
+                
+                resetStates();
+            }
+        }, 3000); */
+    }
+
+    async function uploadImagesToBackend( images: FileList | null) {
+        console.log("uploadImagesToBackend");
+        console.log("images: " + images);
+        if (images === null) {
+            return;
+        }
+        const imageUrls2 = await uploadImages(images);
+        console.log("imageUrls: " + imageUrls2); // alt ok til hit
         
         const adToDatabase = {
             title: title,
@@ -81,10 +103,15 @@ const AdCreator = () => {
             rental: rental,
             address: address,
             zip: parseInt(zip),
-            city: city
+            city: city,
+            pictures: imageUrls2
         }
         writeAdToDatabase(adToDatabase);
+        resetStates();
 
+    }
+
+    function resetStates() {
         // set states to default
         setTitle("");
         setDescription("");
@@ -94,6 +121,8 @@ const AdCreator = () => {
         setAddress("");
         setZip("");
         setCity("");
+        setImages(null); 
+        setImageUrls([]);
     }
 
 
@@ -182,7 +211,8 @@ const AdCreator = () => {
                                         type="file"
                                         hidden
                                         id="select-image"
-                                    // onChange={e => setSelectedImage(e.target.files[0])}
+                                        multiple
+                                     onChange={e => setImages(e.target.files)}
                                     /></Button>
                             </div>
                         </div>
