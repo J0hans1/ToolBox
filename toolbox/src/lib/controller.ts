@@ -1,6 +1,7 @@
 import { addDoc, collection, collectionGroup, deleteDoc, doc, getDoc, getDocs, getFirestore, query, updateDoc, where } from "firebase/firestore";
-import { app } from "./firebase";
+import { app, storage } from "./firebase";
 import { NewUser } from "../types/types";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 
 const firestore = getFirestore(app);
@@ -135,3 +136,26 @@ export async function validateDuplicateUsername(username: string) { // Brukes i 
   });
   return a;
 }
+
+
+// upload image to firebase storage
+export const uploadImage = async (file: any) => {
+  console.log("file backend: " + file);
+  console.log("Upload image backend")
+  const storageRef = ref(storage, `images/${file.name}`);
+  const response = await uploadBytes(storageRef, file);
+  const url = await getDownloadURL(response.ref);
+  return url;
+}
+
+// upload several images to firebase storage
+export const uploadImages = async (files: any) => {
+  const urls = [];
+  for (let i = 0; i < files.length; i++) {
+    const url = await uploadImage(files[i]);
+    urls.push(url);
+  }
+  console.log("urls backend " + urls);
+  return urls;
+}
+
