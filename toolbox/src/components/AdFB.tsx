@@ -9,13 +9,11 @@ interface AdProps {
     ad: Ad;
 }
 
-
 export default function AdFB({ad}: AdProps){
 
     let navigate = useNavigate();
     const [firstPicture, setFirstPicture] = useState<string>();
 
-    
     const handleClick = () => {
         sessionStorage.removeItem("ADID");
         sessionStorage.setItem("ADID", ad.id);
@@ -34,8 +32,7 @@ export default function AdFB({ad}: AdProps){
             getFirstPicture(ad.pictures);
         }
         else {
-            // default image if none is provided
-            setFirstPicture("http://www.sitech.co.id/assets/img/products/default.jpg")
+            setFirstPicture("http://www.sitech.co.id/assets/img/products/default.jpg") // default image if none is provided
             //setFirstPicture("https://static.bb.se/wcsstore/CAS/PIM/Luna/imgs/1151376.jpg") 
         }
     }, [])
@@ -73,7 +70,6 @@ export default function AdFB({ad}: AdProps){
                             <p className="text-xs text-pu-ghost ml-1">{ad.city}</p>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>

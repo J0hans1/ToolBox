@@ -37,7 +37,7 @@ const AdCreator = () => {
     const [zip, setZip] = useState("");
     const [city, setCity] = useState("");
     const [images, setImages] = useState<FileList | null>(null);
-    const [imageUrls, setImageUrls] = useState<string[]>([]);
+
 
     const handleOnClick = async () => {
         if (sessionStorage.getItem("username") === null) {
@@ -83,7 +83,6 @@ const AdCreator = () => {
             return;
         }
         const imageUrls2 = await uploadImages(images);
-        console.log("imageUrls: " + imageUrls2); // alt ok til hit
         
         const adToDatabase = {
             title: title,
@@ -98,7 +97,6 @@ const AdCreator = () => {
         }
         writeAdToDatabase(adToDatabase);
         resetStates();
-
     }
 
     function resetStates() {
@@ -112,7 +110,6 @@ const AdCreator = () => {
         setZip("");
         setCity("");
         setImages(null); 
-        setImageUrls([]);
     }
 
 

@@ -1,5 +1,5 @@
 import { Button, TextField } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { addToSessionStorage, addUser, removeFromSessionStorage, validateDuplicateUsername } from "../lib/controller"
 import PEOPLE from '../img/people.svg';
 import { useNavigate } from 'react-router-dom';
