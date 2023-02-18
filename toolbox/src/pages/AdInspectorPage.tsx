@@ -145,54 +145,54 @@ const AdInspectorPage = () => {
             fetchData();
           }, []); */
 
-    //TODO: Mapper flere ganger nedover. Fungerer for nå, men må fikses.
+    //Todo: Component for slideshow of pictures
     return (
-    <div className="pt-40 pb-40 flex flex-col px-60">
+      <div className="pt-40 pb-40 flex flex-col px-60">
+          {ad?.map((ad) => (
+              <div key={ad.id} className="flex flex-col">
+                <div 
+                    className="bg-cover h-52 bg-slate-100 rounded-md bg-center relative" 
+                    style={{ 
+                        backgroundImage: `url(http://www.sitech.co.id/assets/img/products/default.jpg)`
+                    
+                    }}
+                >
+                    <div id="c_wrapper" className='w-auto justify-center bg-white rounded-tl-xl absolute right-0 bottom-0 '>
 
-        <div 
-            className="bg-cover h-52 bg-slate-100 rounded-md bg-center relative" 
-            style={{ 
-                backgroundImage: `url("https://static.bb.se/wcsstore/CAS/PIM/Luna/imgs/1151376.jpg")`
-            
-            }}
-        >
-            <div id="c_wrapper" className='w-auto justify-center bg-white rounded-tl-xl absolute right-0 bottom-0 '>
-            {ad?.map((ad) => (
-                <Title size={"text-4xl ml-5 mr-5"} heading={ad.title} description={""} span={""} key={ad.title} ></Title> 
-            ))}
-            </div>
-        </div>
+                        <Title size={"text-4xl ml-5 mr-5"} heading={ad.title} description={""} span={""} key={ad.title} ></Title> 
 
-        <div className="w-full">
-        {ad?.map((ad) => (
-            <div className="flex flex-row p-10 h-32 w-full justify-between">
-                <AdIconAndText icon="https://img.icons8.com/ios/512/calendar--v1.png" key={69}  text={"Dato"} iconSize="h-full" textSize="text-3xl" />
-                <AdIconAndText icon="https://img.icons8.com/ios/50/000000/price-tag-euro.png"  key={ad.price} text={ad.price?.toString()+" kr/dag"} iconSize="h-full" textSize="text-3xl" />
-                <AdIconAndText icon="https://img.icons8.com/material-sharp/256/map-marker.png" key={ad.city} text={ad.city} iconSize="h-full" textSize="text-3xl" />
-                </div>    
-            ))}    
-        </div>
-
-        <div className="flex flex-row">
-            <div className='pt-0 w-1/2'>
-               {user?.map((user) => (
-                    <AdUserInfo name={user.firstname} email={user.email} phone={user.phone} avatar={""} key={user.id} />
-                ))} 
-                
-            </div>
-
-            <div className="p-10 text-2xl w-1/2 text-left" >
-            {ad?.map((ad) => (
-                <p key={ad.description}>
-                    {ad.description} 
-                </p>
-            ))}
-            </div>
-        </div>
-    </div>
-    
-    );
-};
+                    </div>
+                </div>
+                  
+                <div className="w-full">
+                    <div className="flex flex-row p-10 h-32 w-full justify-between">
+                        <AdIconAndText icon="https://img.icons8.com/ios/512/calendar--v1.png" key={69}  text={"Dato"} iconSize="h-full" textSize="text-3xl" />
+                        <AdIconAndText icon="https://img.icons8.com/ios/50/000000/price-tag-euro.png"  key={ad.price} text={ad.price?.toString()+" kr/dag"} iconSize="h-full" textSize="text-3xl" />
+                        <AdIconAndText icon="https://img.icons8.com/material-sharp/256/map-marker.png" key={ad.city} text={ad.city} iconSize="h-full" textSize="text-3xl" />
+                        </div>    
+                </div>
+                  
+                <div className="flex flex-row">
+                    <div className='pt-0 w-1/2'>
+                       {user?.map((user) => (
+                            <AdUserInfo name={user.firstname} email={user.email} phone={user.phone} avatar={""} key={user.id} />
+                        ))} 
+                    </div>
+                      
+                    <div className="p-10 text-2xl w-1/2 text-left" >
+                      
+                        <p key={ad.description}>
+                            {ad.description} 
+                        </p>
+                      
+                    </div>
+                </div>
+              </div>
+          ))}
+      </div>
+      
+      );
+  };
 
 export default AdInspectorPage;
 
