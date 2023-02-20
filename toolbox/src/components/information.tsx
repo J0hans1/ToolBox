@@ -14,9 +14,9 @@ export default function InformationUser({user}: IProps){
     return (
         <div className="information">
             <br />
-            <h2>Brukernavn: {user.username}</h2>
+            {/* <h2>Brukernavn: {user.username}</h2>
             <h2>Passord: {user.password}</h2>
-            <h2>Sted: {user.location}</h2>
+            <h2>Sted: {user.location}</h2> */}
             {/* <button onClick={() => deleteUserButton(user.id)}>Delete user above</button> */}
         </div>
         

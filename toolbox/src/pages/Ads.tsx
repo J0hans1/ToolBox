@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import { DocumentData, onSnapshot, QuerySnapshot } from 'firebase/firestore';
 import { adsCollection } from '../lib/controller';
 import AdFB from '../components/AdFB';
-import Title from '../components/Title';
+
 
 const Ads = () => {
     const [ads, setAds] = useState<Ad[]>([]);

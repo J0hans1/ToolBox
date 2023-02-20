@@ -1,6 +1,6 @@
 interface title {
     size: string;
-    heading: string;
+    heading?: string;
     span?: string;
     mid?: string;
     span2?: string;

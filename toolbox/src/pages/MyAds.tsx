@@ -1,30 +1,27 @@
 import {Ad} from "../types/types";
 import { useEffect, useState } from "react";
-import { collection, DocumentData, getFirestore, onSnapshot, QuerySnapshot } from "firebase/firestore";
 import AdFB from "../components/AdFB";
-import { app } from "../lib/firebase";
+import { getUserAds } from "../lib/controller";
 
-const firestore = getFirestore(app);
+
 
 const MyAds = () => {
-    const [myAds, setAds] = useState<Ad[]>([]);
-    const userID = sessionStorage.getItem("userID");
-    const myAdsCollection = collection(firestore, `users/${userID}/ads`); // MY ADS COLLECTION
 
-    useEffect(
-        () =>
-            onSnapshot(myAdsCollection, (snapshot: QuerySnapshot<DocumentData>) => {
-                setAds(
-                    snapshot.docs.map((doc) => {
-                        return {
-                            id: doc.id,
-                            ...doc.data(),
-                        };
-                    })
-                );
-            }),
-        []
-    );
+    const [myAds, setAds] = useState<Ad[]>([]);
+    
+    async function getMyAds() {
+        const userID = sessionStorage.getItem("userID");
+        if (userID != null) {
+            const adsFromDatabase = await getUserAds(userID);
+            setAds(adsFromDatabase);
+        }
+    }
+
+
+    useEffect( () => {
+            getMyAds();
+        },
+    []);
 
     return (
         <div className='w-full flex flex-col bg-slate-100 pt-40'>

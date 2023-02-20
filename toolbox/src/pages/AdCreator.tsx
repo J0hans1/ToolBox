@@ -1,16 +1,16 @@
-import Textbox from "../components/Textbox";
-import AdCreatorStep from "../components/AdCreatorStep";
 import { MenuItem, Select, TextField, Button, FormControl, InputLabel, ImageList } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { addAd, uploadImages } from "../lib/controller";
-import { Ad } from "../types/types";
+import { NewAd } from "../types/types";
 import Title from "../components/Title";
 import Step from "../components/Step";
 import { validateAddress, validateCity, validateDescription, validatePrice, validateTitle, validateZip } from "../lib/validation";
 
 
-function writeAdToDatabase(props: Ad) {
+function writeAdToDatabase(props: NewAd) {
+    const userID = sessionStorage.getItem("userID")
     const ad = {
+        userid: userID,
         title: props.title,
         description: props.description,
         category: props.category,
@@ -37,7 +37,7 @@ const AdCreator = () => {
     const [zip, setZip] = useState("");
     const [city, setCity] = useState("");
     const [images, setImages] = useState<FileList | null>(null);
-    const [imageUrls, setImageUrls] = useState<string[]>([]);
+
 
     const handleOnClick = async () => {
         if (sessionStorage.getItem("username") === null) {
@@ -74,16 +74,6 @@ const AdCreator = () => {
             return;
         }
         await uploadImagesToBackend(images);
-        
-
-/* 
-        setTimeout(() => {
-            if (imageUrls !== undefined || imageUrls !== null) {
-                console.log("imageUrls timeout: " + imageUrls);
-                
-                resetStates();
-            }
-        }, 3000); */
     }
 
     async function uploadImagesToBackend( images: FileList | null) {
@@ -93,7 +83,6 @@ const AdCreator = () => {
             return;
         }
         const imageUrls2 = await uploadImages(images);
-        console.log("imageUrls: " + imageUrls2); // alt ok til hit
         
         const adToDatabase = {
             title: title,
@@ -108,7 +97,6 @@ const AdCreator = () => {
         }
         writeAdToDatabase(adToDatabase);
         resetStates();
-
     }
 
     function resetStates() {
@@ -122,44 +110,8 @@ const AdCreator = () => {
         setZip("");
         setCity("");
         setImages(null); 
-        setImageUrls([]);
     }
 
-/*     function validation() {
-        if (sessionStorage.getItem("username") === null) {
-            alert("Du må være logget inn for å opprette en annonse");
-            return;
-        }
-        // check if all fields are filled
-        if (title === "" || description === "" || category === "" || price === "" || address === "" || zip === "" || city === "") {
-            alert("Alle felt må fylles ut");
-            return;
-        }
-        if (!validateTitle(title)){
-            alert("Ikke gyldig tittel!");
-            return;
-        }
-        if (!validateDescription(description)){
-            alert("Ikke en gyldig beksrivelse!");
-            return;
-        }
-        if (!validateAddress(address)){
-            alert("Ikke en gyldig adresse!");
-            return;
-        }
-        if (!validateZip(zip)){
-            alert("Ikke et gyldig postnummer!");
-            return;
-        }
-        if (!validateCity(city)){
-            alert("Ikke gyldig navn på by!");
-            return;
-        }
-        if (!validatePrice(price)){
-            alert("Pris kan ikke være tom!");
-            return;
-        }
-    } */
 
 
     return (

@@ -6,6 +6,7 @@ import RegisterPage from "./pages/Register";
 import ErrorPage from './pages/ErrorPage';
 import LandingPage from './pages/LandingPage';
 import Ads from './pages/Ads';
+import AdInspector from './pages/AdInspectorPage';
 import { HashRouter, Route, Routes, } from "react-router-dom"
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { grey, amber } from '@mui/material/colors';
@@ -13,6 +14,7 @@ import AdCreator from './pages/AdCreator';
 import ProfilePage from './pages/ProfilePage';
 import { Helmet } from "react-helmet";
 import MyAds from './pages/MyAds';
+import ScrollToTop from './components/ScrollToTop';
 
 
 export default function App() {
@@ -49,7 +51,7 @@ export default function App() {
             <div id="c_container" className='relative m-auto w-full max-w-7xl p-10 pt-2'>
             </div>
         </div>
-
+        <ScrollToTop />
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
@@ -57,8 +59,10 @@ export default function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="*" element={<ErrorPage/>} />
           <Route path="/adcreator" element={<AdCreator />} />
+{/*           <Route path="/adinspector" element={<AdInspectorPage />} /> */}
           <Route path="/profile" element={<ProfilePage />} />
           <Route path='/myAds' element={<MyAds /> }/>
+          <Route path='/adinspector/:id' element={<AdInspector />} />
         </Routes>
 
         <div id="c_section" className='w-screen h-auto content-center bg-black text-white'>
