@@ -33,6 +33,7 @@ export default function App() {
       },
     },
   });
+
   return (
     
     <div className="App">
@@ -61,6 +62,7 @@ export default function App() {
           <Route path="/adcreator" element={<AdCreator />} />
 {/*           <Route path="/adinspector" element={<AdInspectorPage />} /> */}
           <Route path="/profile" element={<ProfilePage />} />
+          {/* <Route path="/likedAds" element={<ProfilePage />} /> */}
           <Route path='/myAds' element={<MyAds /> }/>
           <Route path='/adinspector/:id' element={<AdInspector />} />
         </Routes>
