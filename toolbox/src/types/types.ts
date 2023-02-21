@@ -15,20 +15,6 @@ export interface User{
     Ads?: [Ad];
 }
 
-// slette denne?
-/* export interface Adds{
-    id: string;
-    title?: string;
-    description?: string;
-    category?: string;
-    price?: number;
-    fromDate?: Timestamp;
-    toDate?: Timestamp;
-    picture?: string;
-    location?: string;
-} */
-
-
 export interface Ad{
     id: string;
     userid?: string;
