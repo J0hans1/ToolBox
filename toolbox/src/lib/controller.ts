@@ -1,6 +1,6 @@
 import { addDoc, collection, collectionGroup, deleteDoc, doc, DocumentData, getDoc, getDocs, getFirestore, query, updateDoc, where } from "firebase/firestore";
 import { app, storage } from "./firebase";
-import { Ad, NewUser } from "../types/types";
+import { Ad, NewUser, User } from "../types/types";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 const firestore = getFirestore(app);
@@ -91,6 +91,11 @@ export const getUserAds = async (id: string) => {
 
 // UPDATE 
 // UPDATE A USER
+export const updateUser = async (id: string, userData: User) => {
+  const document = doc(firestore, `users/${id}`);
+  await updateDoc(document, {...userData});
+  console.log(`Updated user with ID: ${id}`);
+};
 
 
 // UPDATE A ADD
