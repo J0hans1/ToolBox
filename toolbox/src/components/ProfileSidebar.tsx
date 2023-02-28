@@ -28,8 +28,8 @@ const ProfileSidebar = (props: sidebarFace) => {
                 </div>
                 <div className="flex flex-col gap-2">
                     <Button variant="contained" sx={{p:2}} onClick={() => navigate("/profile")}>Min profil</Button>
-                    <Button variant="contained" sx={{p:2}} onClick={() => navigate("/myads")}>Mine annonser</Button> {/* //Todo  */}
-                    <Button variant="contained" sx={{p:2}}>Likte annonser</Button>
+                    <Button variant="contained" sx={{p:2}} onClick={() => navigate("/myads")}>Mine annonser</Button> 
+                    <Button variant="contained" sx={{p:2}} onClick={() => navigate("/savedads")}>Lagrede annonser</Button>
 
                 </div>
             </div>
