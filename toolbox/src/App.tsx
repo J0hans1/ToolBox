@@ -16,6 +16,7 @@ import { Helmet } from "react-helmet";
 import MyAds from './pages/MyAds';
 import ScrollToTop from './components/ScrollToTop';
 import SavedAds from './pages/SavedAds';
+import EditAdPage from './pages/EditAdPage';
 
 
 export default function App() {
@@ -60,6 +61,7 @@ export default function App() {
           <Route path="/adcreator" element={<AdCreator />} />
           <Route path='/adinspector/:id' element={<AdInspector />} />
           <Route path="/ads" element={<Ads />} />
+          <Route path="/editadpage/:id" element={<EditAdPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path='/myAds' element={<MyAds /> }/>
           <Route path="/profile" element={<ProfilePage />} />
