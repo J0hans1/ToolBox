@@ -33,7 +33,7 @@ export const addAd = async (adData: any) => {
 };
 
 
-// READ
+
 export const usersCollection = collection(firestore, "users"); // Get all users
 export const adsCollection = collection(firestore, "ads"); // Get all ads
 
@@ -143,7 +143,6 @@ export const getUserAds = async (id: string) => {
     const adResults = await Promise.all(adPromises);
     userAds.push(...adResults.filter((ad) => ad !== null));
   }
-
   return userAds;
 };
 
@@ -156,6 +155,7 @@ export const getUserAds = async (id: string) => {
 export const updateUser = async (id: string, userData: User) => {
   const document = doc(firestore, `users/${id}`);
   await updateDoc(document, { ...userData });
+  await updateDoc(document, { ...userData });
   console.log(`Updated user with ID: ${id}`);
 };
 
@@ -165,28 +165,6 @@ export const updateUser = async (id: string, userData: User) => {
 
 
 
-// DELETE
-// HELP FUNCTION FOR DELETING ALL ADS IN USERS COLLECTION
-/* export const deleteUserAdsCollection = async (id: string) => {
-  const user = await getUser(id);
-  if (user.exists() && user.data().myAds) {
-    const myAds = user.data().myAds;
-    myAds.forEach(async (adId: string) => {
-      await deleteAd(adId);
-    });
-  }
-};
-
-// DELETE A USER
-export const deleteUser = async (id: string) => {
-  const document = doc(firestore, `users/${id}`);
-  await deleteUserAdsCollection(id).then(() => {
-    console.log(`Deleted ads with userId: ${id}`)
-  });
-  await deleteDoc(document).then(() => {
-    console.log(`Deleted user with ID: ${id}`);
-  });
-}; */
 // Delete user's ads collection
 export const deleteUserAdsCollection = async (id: string) => {
   const userRef = doc(firestore, `users/${id}`);
@@ -231,6 +209,7 @@ export const deleteAd = async (adId: string) => {
 
 // HELP FUNCTIONS
 export function addToSessionStorage(username: string) { // Brukes i loginpage og registerpage
+  sessionStorage.setItem("username", username);
   sessionStorage.setItem("username", username);
   console.log("Username sessionstorage set to: " + sessionStorage.getItem("username"));
   getDocs(query(usersCollection, where("username", "==", username))).then((querySnapshot) => {
@@ -277,25 +256,6 @@ export async function validateDuplicateUsername(username: string) { // Brukes i 
   return a;
 }
 
-
-// upload image to firebase storage
-/* export const uploadImage = async (file: any) => {
-  const storageRef = ref(storage, `images/${file.name}`);
-  const response = await uploadBytes(storageRef, file);
-  const url = await getDownloadURL(response.ref);
-  return url;
-}
-
-// upload several images to firebase storage
-export const uploadImages = async (files: any) => {
-  const urls = [];
-  for (let i = 0; i < files.length; i++) {
-    const url = await uploadImage(files[i]);
-    urls.push(url);
-  }
-  return urls;
-} */
-
 export const uploadImage = async (file: File): Promise<string> => {
   try {
     const storageRef = ref(storage, `images/${file.name}`);
@@ -322,4 +282,80 @@ export const uploadImages = async (files: FileList): Promise<string[]> => {
     throw error;
   }
 }
+
+
+// HELP FUNCTIONS FOR SAVED ADS
+
+// check if ad is owned by user
+export async function isOwned(userId: string, adId: string) {
+  const userRef = doc(firestore, `users/${userId}`);
+  const userSnap = await getDoc(userRef);
+  const myAds = userSnap.data()?.myAds || [];
+  return myAds.includes(adId);
+}
+
+// boolean function: check if ad is saved by user
+export async function isSaved(userId: string, adId: string) {
+  const userRef = doc(firestore, `users/${userId}`);
+  const userSnap = await getDoc(userRef);
+  const savedAds = userSnap.data()?.savedAds || [];
+  return savedAds.includes(adId);
+}
+
+// remove ad from savedAds collection in user document
+export async function removeAdFromUser(userId: string, adId: string) {
+  const userRef = doc(firestore, `users/${userId}`);
+  const userSnap = await getDoc(userRef);
+  const savedAds = userSnap.data()?.savedAds || [];
+  if (savedAds.includes(adId)) {
+    const index = savedAds.indexOf(adId);
+    savedAds.splice(index, 1);
+    await updateDoc(userRef, { savedAds });
+  }
+}
+
+
+// save ad to savedAds collection in user document
+export async function saveAdToUser(userId: string, adId: string) {
+  const userRef = doc(firestore, `users/${userId}`);
+  const userSnap = await getDoc(userRef);
+  const savedAds = userSnap.data()?.savedAds || [];
+  if (!savedAds.includes(adId)) {
+    savedAds.push(adId);
+    await updateDoc(userRef, { savedAds });
+  }
+}
+
+// get all saved ads for user
+// Get all ads from a specific user
+export const getSavedAdsFromUser = async (id: string) => {
+  const user = await getUser(id);
+  const userAds: Ad[] = [];
+
+  if (user.exists() && user.data().savedAds) {
+    const savedAds = user.data().savedAds;
+    const adPromises = savedAds.map(async (adId: string) => {
+      const ad = await getAd(adId);
+      if (ad.exists()) {
+        return {
+          id: ad.id,
+          userid: ad.data().userid,
+          title: ad.data().title,
+          description: ad.data().description,
+          category: ad.data().category,
+          price: ad.data().price,
+          address: ad.data().address,
+          zip: ad.data().zip,
+          city: ad.data().city,
+          pictures: ad.data().pictures,
+        };
+      }
+      return null;
+    });
+    const adResults = await Promise.all(adPromises);
+    userAds.push(...adResults.filter((ad) => ad !== null));
+  }
+
+  return userAds;
+};
 
