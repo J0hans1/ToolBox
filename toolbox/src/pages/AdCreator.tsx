@@ -15,7 +15,6 @@ function writeAdToDatabase(props: NewAd) {
         description: props.description,
         category: props.category,
         price: props.price,
-        rental: props.rental,
         address: props.address,
         zip: props.zip,
         city: props.city,
@@ -32,7 +31,6 @@ const AdCreator = () => {
     const [title, setTitle] = useState("");
     const [category, setCategory] = useState("");
     const [price, setPrice] = useState("");
-    const [rental, setRental] = useState("");
     const [address, setAddress] = useState("");
     const [zip, setZip] = useState("");
     const [city, setCity] = useState("");
@@ -89,7 +87,6 @@ const AdCreator = () => {
             description: description,
             category: category,
             price: parseInt(price),
-            rental: rental,
             address: address,
             zip: parseInt(zip),
             city: city,
@@ -105,7 +102,6 @@ const AdCreator = () => {
         setDescription("");
         setCategory("");
         setPrice("");
-        setRental("");
         setAddress("");
         setZip("");
         setCity("");
