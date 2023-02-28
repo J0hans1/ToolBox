@@ -1,6 +1,6 @@
 import { addDoc, collection, deleteDoc, doc, DocumentData, getDoc, getDocs, getFirestore, Query, query, updateDoc, where } from "firebase/firestore";
 import { app, storage } from "./firebase";
-import { Ad, NewUser, User } from "../types/types";
+import { Ad, NewUser, UpdateAd, User } from "../types/types";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 const firestore = getFirestore(app);
@@ -33,7 +33,7 @@ export const addAd = async (adData: any) => {
 };
 
 
-
+// READ
 export const usersCollection = collection(firestore, "users"); // Get all users
 export const adsCollection = collection(firestore, "ads"); // Get all ads
 
@@ -119,7 +119,6 @@ export const getAd = async (adId: string) => {
 export const getUserAds = async (id: string) => {
   const user = await getUser(id);
   const userAds: Ad[] = [];
-
   if (user.exists() && user.data().myAds) {
     const myAds = user.data().myAds;
     const adPromises = myAds.map(async (adId: string) => {
@@ -155,28 +154,30 @@ export const getUserAds = async (id: string) => {
 export const updateUser = async (id: string, userData: User) => {
   const document = doc(firestore, `users/${id}`);
   await updateDoc(document, { ...userData });
-  await updateDoc(document, { ...userData });
   console.log(`Updated user with ID: ${id}`);
 };
 
 
 // UPDATE A ADD
+export const updateAd = async (adId: string, adData: UpdateAd) => {
+  const document = doc(firestore, `ads/${adId}`);
+  await updateDoc(document, { ...adData });
+  console.log(`Updated ad with ID: ${adId}`);
+};
 
 
 
 
 // Delete user's ads collection
+// Delete user's ads collection
 export const deleteUserAdsCollection = async (id: string) => {
   const userRef = doc(firestore, `users/${id}`);
   const userSnap = await getDoc(userRef);
-
   if (userSnap.exists() && userSnap.data()?.myAds) {
     const myAds = userSnap.data().myAds;
-
     await Promise.all(myAds.map(async (adId: string) => {
       await deleteAd(adId);
     }));
-
     console.log(`Deleted ads with userId: ${id}`);
   }
 };
@@ -195,21 +196,20 @@ export const deleteUser = async (id: string) => {
 
 // DELETE AN AD
 export const deleteAd = async (adId: string) => {
-  const adsDoc = doc(firestore, `ads/${adId}`);
-  if (adsDoc) {
-    await deleteDoc(adsDoc).then(() => {
-      console.log(`Deleted ad with ID: ${adId}`);
-    });
-  } else {
-    console.log(`No ad with ID: ${adId} found`);
+  try {
+    const adRef = doc(firestore, `ads/${adId}`);
+    await deleteDoc(adRef);
+    console.log(`Deleted ad with ID: ${adId}`);
+  } catch (error) {
+    console.error(`Error deleting ad with ID: ${adId}`, error);
   }
 };
 
 
 
+
 // HELP FUNCTIONS
 export function addToSessionStorage(username: string) { // Brukes i loginpage og registerpage
-  sessionStorage.setItem("username", username);
   sessionStorage.setItem("username", username);
   console.log("Username sessionstorage set to: " + sessionStorage.getItem("username"));
   getDocs(query(usersCollection, where("username", "==", username))).then((querySnapshot) => {
@@ -268,7 +268,7 @@ export const uploadImage = async (file: File): Promise<string> => {
   }
 }
 
-// upload several images to firebase storage
+
 export const uploadImages = async (files: FileList): Promise<string[]> => {
   try {
     const urls = [];

@@ -28,6 +28,19 @@ export interface Ad{
     pictures?: string[];
 }
 
+export interface UpdateAd {
+    id?: string;
+    userid?: string;
+    title: string;
+    description: string;
+    category: string;
+    price: number;
+    address: string;
+    zip: number;
+    city: string;
+    pictures: string[];
+}
+
 export interface NewAd{
     id?: string;
     userid?: string;

@@ -1,13 +1,15 @@
 import AdUserInfo from "../components/AdUserInfo";
 import Title from "../components/Title";
 import { AdIconAndText } from "../components//Ad";
-import { getUser, getAd, isSaved, isOwned, removeAdFromUser, saveAdToUser } from "../lib/controller";
+import { getUser, getAd, isSaved, isOwned, removeAdFromUser, saveAdToUser, deleteAd } from "../lib/controller";
 import { Ad, User } from "../types/types";
 import { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
+import { useNavigate } from "react-router-dom";
 
 
 const AdInspectorPage = () => {
+    const navigate = useNavigate();
 
     const [user, setUser] = useState<User[]>([]);
     const [ad, setAd] = useState<Ad[]>([]);
@@ -15,13 +17,18 @@ const AdInspectorPage = () => {
     const [isAdSaved, setIsAdSaved] = useState(false);
 
 
-    // check if ad is owned by user, if so, show edit button and delete button instead of save button
     const handleEditAd = async () => {
-        // TODO: Add button for redirect to edit ad page 
+        const adIDFromSessionStorage = sessionStorage.getItem("ADID");
+        navigate(`/editadpage/${adIDFromSessionStorage}`)
     };
 
     const handleDeleteAd = async () => {
-        // TODO: delete ad from database
+        const adIDFromSessionStorage = sessionStorage.getItem("ADID");
+        if (adIDFromSessionStorage != null) {
+            await deleteAd(adIDFromSessionStorage);
+            alert("Annonse slettet");
+            navigate("/ads");
+        }
     };
 
     const handleSaveAd = async () => {
@@ -47,6 +54,7 @@ const AdInspectorPage = () => {
             setAd([adFromDatabase]);
         }
     }
+
 
     async function getUserFromDatabase() {
         const userIDFromAd = sessionStorage.getItem("userIDFromAd");
@@ -97,6 +105,8 @@ const AdInspectorPage = () => {
         }
     };
 
+
+
     const checkIfAdIsSaved = async () => {
         const userID = sessionStorage.getItem("userID");
         const adID = sessionStorage.getItem("ADID");
@@ -108,6 +118,22 @@ const AdInspectorPage = () => {
     };
 
     useEffect(() => {
+        getAdFromDatabase().then(() => {
+            getUserFromDatabase().then(() => {
+                const checkIsOwned = async () => {
+                    const userID = sessionStorage.getItem("userID");
+                    const adID = sessionStorage.getItem("ADID");
+                    if (userID && adID) {
+                        const result = await isOwned(userID, adID);
+                        setIsOwnedAd(result);
+                    }
+                };
+                checkIsOwned().then(async () => {
+                    const saved = await checkIfAdIsSaved();
+                    setIsAdSaved(saved);
+                });
+            });
+        });
         getAdFromDatabase().then(() => {
             getUserFromDatabase().then(() => {
                 const checkIsOwned = async () => {
@@ -140,9 +166,7 @@ const AdInspectorPage = () => {
                         }}
                     >
                         <div id="c_wrapper" className='w-auto justify-center bg-white rounded-tl-xl absolute right-0 bottom-0 '>
-
                             <Title size={"text-4xl ml-5 mr-5"} heading={ad.title} description={""} span={""} key={ad.title} ></Title>
-
                         </div>
                     </div>
 
@@ -151,7 +175,6 @@ const AdInspectorPage = () => {
                             <AdIconAndText icon="https://img.icons8.com/ios/512/calendar--v1.png" key={69} text={"Dato"} iconSize="h-full" textSize="text-3xl" />
                             <AdIconAndText icon="https://img.icons8.com/ios/50/000000/price-tag-euro.png" key={ad.price} text={ad.price?.toString() + " kr/dag"} iconSize="h-full" textSize="text-3xl" />
                             <AdIconAndText icon="https://img.icons8.com/material-sharp/256/map-marker.png" key={ad.city} text={ad.city} iconSize="h-full" textSize="text-3xl" />
-
                         </div>
                         <div className="flex flex-col items-center">
                             {/* Render ad details */}
