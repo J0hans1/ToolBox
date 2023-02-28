@@ -1,8 +1,9 @@
-import { updateUser } from "../lib/controller";
+import { updateUser, deleteUser } from "../lib/controller";
 import { User } from "../types/types";
 import {TextField, Button} from '@mui/material';
 import { useState } from "react";
 import { validateSimilarPasswords } from "../lib/validation";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -10,13 +11,10 @@ interface IProps{
     user: User;
 }
 
-/* function deleteUserButton(user: string){
-    if (user != null)
-        deleteUser(user);
-} */
 
 
 export default function EditUser({user}: IProps){
+    let navigate = useNavigate();
     const [editMode, setEditMode] = useState(false);
 
     // states for all the textfields
@@ -30,6 +28,16 @@ export default function EditUser({user}: IProps){
     const [username, setUsername] = useState(user.username);
     const [password, setPassword] = useState(user.password);
     const [password2, setPassword2] = useState(user.password);
+
+    function deleteUserButton(){
+        const userIDFromSessionStorage = sessionStorage.getItem("userID");
+        if (userIDFromSessionStorage != null){
+            deleteUser(userIDFromSessionStorage);
+            alert("Brukeren ble slettet");
+            navigate("/");
+        }
+    }
+
 
     function updateUserButton(){
         if (firstname != null && lastname != null && email != null && phone != null && address != null && zip != null && city != null && username != null && password != null && password2 != null){
@@ -119,6 +127,18 @@ export default function EditUser({user}: IProps){
                         variant="outlined"
                     >
                         Lagre endringer
+                    </Button>
+                </div>
+
+                <div style={{display: editMode ? 'block' : 'none'}}>
+                    <Button 
+                        sx={{p:2}}
+                        onClick={
+                            () => deleteUserButton()
+                        } 
+                        variant="outlined"
+                    >
+                        Slett bruker
                     </Button>
                 </div>
             </div>
