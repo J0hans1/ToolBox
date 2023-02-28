@@ -90,6 +90,8 @@ const RegisterPage = () => {
             address,
             zip,
             city,
+            myAds: [],
+            savedAds: [],
         })
     }
 

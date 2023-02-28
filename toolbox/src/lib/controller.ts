@@ -1,4 +1,4 @@
-import { addDoc, collection, collectionGroup, deleteDoc, doc, DocumentData, getDoc, getDocs, getFirestore, query, updateDoc, where } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, DocumentData, getDoc, getDocs, getFirestore, Query, query, updateDoc, where } from "firebase/firestore";
 import { app, storage } from "./firebase";
 import { Ad, NewUser, User } from "../types/types";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
@@ -11,20 +11,79 @@ const firestore = getFirestore(app);
 // CREATE
 // CREATE A NEW USER
 export const addUser = async (userData: NewUser) => {
-  const newUser = await addDoc(usersCollection, {...userData});
+  const newUser = await addDoc(usersCollection, { ...userData });
   console.log(`New user created${newUser.path}`)
 };
 
 // CREATE A NEW ADD
 export const addAd = async (adData: any) => {
-  const newAd = await addDoc(collection(firestore, `adsCol`), {...adData});
+  const newAd = await addDoc(collection(firestore, `ads`), { ...adData });
+  // add string adId to user's myAds array
+  const userDoc = doc(firestore, `users/${adData.userid}`);
+  const user = await getDoc(userDoc);
+  if (user.exists()) {
+    const userData = user.data();
+    const myAds = userData.myAds || []; // use default empty array if myAds is undefined
+    myAds.push(newAd.id);
+    await updateDoc(userDoc, { myAds });
+  } else {
+    console.log("No such user!");
+  }
   console.log(`New ad created${newAd.path}`)
 };
 
 
 // READ
-export const usersCollection = collection(firestore, "users"); // USERS COLLECTION
-export const adsCollection = collection(firestore, "adsCol"); // ADDS COLLECTION
+export const usersCollection = collection(firestore, "users"); // Get all users
+export const adsCollection = collection(firestore, "ads"); // Get all ads
+
+// Query for filtering ads by category, price (min, max), location (zip) and search term
+export const getAdsQuery = async (
+  category: string = "",
+  priceMin: number = 0,
+  priceMax: number = Number.MAX_SAFE_INTEGER,
+  zip: number = 0,
+  searchTerm: string = ""
+) => {
+  let q: Query<DocumentData> = adsCollection;
+  if (category) {
+    q = query(q, where("category", "==", category));
+  }
+  if (priceMin) {
+    q = query(q, where("price", ">=", priceMin));
+  }
+  if (priceMax) {
+    q = query(q, where("price", "<=", priceMax));
+  }
+  if (zip) {
+    q = query(q, where("zip", "==", zip));
+  }
+  if (searchTerm) {
+    q = query(q, 
+      where("title", ">=", searchTerm), 
+      where("title", "<=", searchTerm + "\uf8ff"),
+      where("description", ">=", searchTerm),
+      where("description", "<=", searchTerm + "\uf8ff"));
+  }
+  const querySnapshot = await getDocs(q);
+  const ads: Ad[] = [];
+  querySnapshot.forEach((doc) => {
+    ads.push({
+      id: doc.id,
+      userid: doc.data().userid,
+      title: doc.data().title,
+      description: doc.data().description,
+      category: doc.data().category,
+      price: doc.data().price,
+      address: doc.data().address,
+      zip: doc.data().zip,
+      city: doc.data().city,
+      pictures: doc.data().pictures,
+    });
+  });
+  return ads;
+};
+
 
 
 // GET SPECIFIC USER
@@ -37,53 +96,56 @@ export const getUser = async (id: string) => {
 
 // Get ad when clicking on ad
 export const getAd = async (adId: string) => {
-  const document = doc(firestore, `adsCol/${adId}`);
-  const ad = await getDoc(document).then((ad) => {
-  if (ad.exists()) {
-    ad.data().userid !== undefined ? sessionStorage.setItem("userIDFromAd", ad.data().userid) : console.log("No user ID");
-    return ad;
+  const document = doc(firestore, `ads/${adId}`);
+  try {
+    const ad = await getDoc(document);
+    if (ad.exists()) {
+      if (ad.data().userid) {
+        sessionStorage.setItem("userIDFromAd", ad.data().userid);
+      } else {
+        console.log("No user ID");
+      }
+      return ad;
+    } else {
+      throw new Error(`Ad with ID ${adId} does not exist`);
+    }
+  } catch (error) {
+    console.error(`Error getting ad with ID ${adId}: ${error}`);
+    throw error;
   }
-  return ad;
-  });
-  return ad;
 };
 
 // Get all ads from a specific user
 export const getUserAds = async (id: string) => {
-  const querySnapshot = await getDocs(collection(firestore, `adsCol`));
+  const user = await getUser(id);
+  const userAds: Ad[] = [];
 
-  const userAds: DocumentData[] = [];
-  const userAds2: Ad[] = [];
-  const documentID: string[] = [];
-
-  querySnapshot.forEach((doc) => {
-    if (doc.data().userid === id) {
-      // push id for doc
-      documentID.push(doc.id);
-      userAds.push(doc.data());
-    }
-  });
-
-  userAds.forEach((ad, index) => {
-    userAds2.push({
-      id: documentID[index],
-      userid: ad.userid,
-      title: ad.title,
-      description: ad.description,
-      category: ad.category,
-      price: ad.price,
-      rental: ad.rental,
-      address: ad.address,
-      zip: ad.zip,
-      city: ad.city,
-      pictures: ad.pictures,
+  if (user.exists() && user.data().myAds) {
+    const myAds = user.data().myAds;
+    const adPromises = myAds.map(async (adId: string) => {
+      const ad = await getAd(adId);
+      if (ad.exists()) {
+        return {
+          id: ad.id,
+          userid: ad.data().userid,
+          title: ad.data().title,
+          description: ad.data().description,
+          category: ad.data().category,
+          price: ad.data().price,
+          address: ad.data().address,
+          zip: ad.data().zip,
+          city: ad.data().city,
+          pictures: ad.data().pictures,
+        };
+      }
+      return null;
     });
-  });
-  return userAds2;
+    const adResults = await Promise.all(adPromises);
+    userAds.push(...adResults.filter((ad) => ad !== null));
+  }
+
+  return userAds;
 };
-
-
-
 
 
 
@@ -93,7 +155,7 @@ export const getUserAds = async (id: string) => {
 // UPDATE A USER
 export const updateUser = async (id: string, userData: User) => {
   const document = doc(firestore, `users/${id}`);
-  await updateDoc(document, {...userData});
+  await updateDoc(document, { ...userData });
   console.log(`Updated user with ID: ${id}`);
 };
 
@@ -105,43 +167,71 @@ export const updateUser = async (id: string, userData: User) => {
 
 // DELETE
 // HELP FUNCTION FOR DELETING ALL ADS IN USERS COLLECTION
-export const deleteUserAdsCollection = async (id: string) => {
-  const querySnapshot = await getDocs(collection(firestore, `adsCol`));
-  querySnapshot.forEach((doc) => {
-      if (doc.data().userId === id) {
-        deleteDoc(doc.ref);
-      }
-  });
+/* export const deleteUserAdsCollection = async (id: string) => {
+  const user = await getUser(id);
+  if (user.exists() && user.data().myAds) {
+    const myAds = user.data().myAds;
+    myAds.forEach(async (adId: string) => {
+      await deleteAd(adId);
+    });
+  }
 };
 
 // DELETE A USER
 export const deleteUser = async (id: string) => {
-    const document = doc(firestore, `users/${id}`);
-    await deleteUserAdsCollection(id).then(() => {
-      console.log(`Deleted ads with userId: ${id}`)});
-    await deleteDoc(document).then(() => {
-      console.log(`Deleted user with ID: ${id}`);
+  const document = doc(firestore, `users/${id}`);
+  await deleteUserAdsCollection(id).then(() => {
+    console.log(`Deleted ads with userId: ${id}`)
+  });
+  await deleteDoc(document).then(() => {
+    console.log(`Deleted user with ID: ${id}`);
+  });
+}; */
+// Delete user's ads collection
+export const deleteUserAdsCollection = async (id: string) => {
+  const userRef = doc(firestore, `users/${id}`);
+  const userSnap = await getDoc(userRef);
+
+  if (userSnap.exists() && userSnap.data()?.myAds) {
+    const myAds = userSnap.data().myAds;
+
+    await Promise.all(myAds.map(async (adId: string) => {
+      await deleteAd(adId);
+    }));
+
+    console.log(`Deleted ads with userId: ${id}`);
+  }
+};
+
+// Delete user
+export const deleteUser = async (id: string) => {
+  try {
+    await deleteUserAdsCollection(id);
+    const userRef = doc(firestore, `users/${id}`);
+    await deleteDoc(userRef);
+    console.log(`Deleted user with ID: ${id}`);
+  } catch (error) {
+    console.error(`Error deleting user with ID: ${id}`, error);
+  }
+};
+
+// DELETE AN AD
+export const deleteAd = async (adId: string) => {
+  const adsDoc = doc(firestore, `ads/${adId}`);
+  if (adsDoc) {
+    await deleteDoc(adsDoc).then(() => {
+      console.log(`Deleted ad with ID: ${adId}`);
     });
-  };
+  } else {
+    console.log(`No ad with ID: ${adId} found`);
+  }
+};
 
-
-// DELETE A AD
-  export const deleteAd = async ( adId: string ) => { 
-    const adsDoc = doc(firestore, `adsCol/${adId}`);
-    if (adsDoc) { //TODO: Fiks denne if-setningen. Må sjekke om doc eksisterer i databasen på denne brukeren.
-      await deleteDoc(adsDoc).then(() => {
-        console.log(`Deleted ad with ID: ${adId}`);
-      });
-    } else {
-      console.log(`No ad with ID: ${adId} found`);
-    }
-  };
-  
 
 
 // HELP FUNCTIONS
 export function addToSessionStorage(username: string) { // Brukes i loginpage og registerpage
-  sessionStorage.setItem("username", username ); 
+  sessionStorage.setItem("username", username);
   console.log("Username sessionstorage set to: " + sessionStorage.getItem("username"));
   getDocs(query(usersCollection, where("username", "==", username))).then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
@@ -189,7 +279,7 @@ export async function validateDuplicateUsername(username: string) { // Brukes i 
 
 
 // upload image to firebase storage
-export const uploadImage = async (file: any) => {
+/* export const uploadImage = async (file: any) => {
   const storageRef = ref(storage, `images/${file.name}`);
   const response = await uploadBytes(storageRef, file);
   const url = await getDownloadURL(response.ref);
@@ -204,5 +294,32 @@ export const uploadImages = async (files: any) => {
     urls.push(url);
   }
   return urls;
+} */
+
+export const uploadImage = async (file: File): Promise<string> => {
+  try {
+    const storageRef = ref(storage, `images/${file.name}`);
+    const response = await uploadBytes(storageRef, file);
+    const url = await getDownloadURL(response.ref);
+    return url;
+  } catch (error) {
+    console.error('Error uploading image:', error);
+    throw error;
+  }
+}
+
+// upload several images to firebase storage
+export const uploadImages = async (files: FileList): Promise<string[]> => {
+  try {
+    const urls = [];
+    for (let i = 0; i < files.length; i++) {
+      const url = await uploadImage(files[i]);
+      urls.push(url);
+    }
+    return urls;
+  } catch (error) {
+    console.error('Error uploading images:', error);
+    throw error;
+  }
 }
 

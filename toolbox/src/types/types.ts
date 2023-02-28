@@ -1,4 +1,3 @@
-//import { Timestamp } from "@firebase/firestore";
 
 export interface User{
     id: string;
@@ -12,7 +11,8 @@ export interface User{
     address?: string;
     zip?: string;
     city?: string;
-    Ads?: [Ad];
+    myAds?: string[];
+    savedAds?: string[];
 }
 
 export interface Ad{
@@ -22,7 +22,6 @@ export interface Ad{
     description?: string;
     category?: string;
     price?: number;
-    rental?: string;
     address?: string;
     zip?: number;
     city?: string;
@@ -36,7 +35,6 @@ export interface NewAd{
     description?: string;
     category?: string;
     price?: number;
-    rental?: string;
     address?: string;
     zip?: number;
     city?: string;
@@ -53,5 +51,7 @@ export interface NewUser{
     address: string;
     zip: string;
     city: string;
+    myAds: string[];
+    savedAds: string[];
 }
 
