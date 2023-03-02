@@ -2,7 +2,7 @@ import { TextField, Button } from '@mui/material/';
 import { DocumentData, onSnapshot, QuerySnapshot } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import AdFB from '../components/AdFB';
+import AdComponent from '../components/Ad';
 import Title from '../components/Title';
 import { adsCollection } from '../lib/controller';
 import { Ad } from '../types/types';
@@ -14,51 +14,12 @@ import SALES from '../img/sales.png';
 import CHOOSE from '../img/choose.png';
 import CLOCK from '../img/clock.png';
 import CIRCLES from '../img/circles.png';
+import Category from '../components/Category';
+import UserStep from '../components/UserStep';
+import TitledIcon from '../components/TitledIcon';
 import { useDispatch, useSelector } from "react-redux";
 import { selectFilters, setFilter } from "../store/FiltersReducer";
 
-interface StepContent {
-    icon: string
-    span: string
-    description: string
-}
-
-interface Reason {
-    icon: string
-    slogan: string
-}
-
-interface Category {
-    name: string
-    outlineColor: string
-    textColor: string
-}
-
-const Step = (props: StepContent) => {
-    return (
-        <div className='w-72 h-auto pr-10 my-5'>
-            <img src={props.icon} className="w-11 h-11 bg-contain mb-5" alt="" />
-            <p><span className='text-pu-gul font-semibold'>{props.span}</span>{props.description}</p>
-        </div>
-    )
-}
-
-const Reason = (props: Reason) => {
-    return (
-        <div className='w-auto flex flex-row h-auto gap-4'>
-            <img src={props.icon} className="w-11 h-11 bg-contain" alt="" />
-            <p className='mt-1 text-lg'>{props.slogan}</p>
-        </div>
-    )
-}
-
-const Category = (props: Category) => {
-    return (
-        <div className={`w-auto h-auto py-1 px-4 flex rounded-full border border-solid ${props.outlineColor} ${props.textColor}`}>
-            <p>{props.name}</p>
-        </div>
-    )
-}
 
 const LandingPage = () => {
     let navigate = useNavigate();
@@ -131,9 +92,9 @@ const LandingPage = () => {
             <div id="c_section" className='absolute bottom-0 right-0 flex h-auto w-full content-center bg-pu-gul'>
             <div id="c_container" className='flex flex-col m-auto w-full max-w-7xl p-5'>
                 <div className='flex flex-row w-full gap-20 align-middle pl-5'>
-                        <Reason icon={CHOOSE} slogan={'Enkelt'} />
-                        <Reason icon={CLOCK} slogan={'Effektivt'} />
-                        <Reason icon={SALES} slogan={'Bærekraftig'} />
+                        <TitledIcon icon={CHOOSE} iconSize='h-11' text='Enkelt' textSize='text-lg' />
+                        <TitledIcon icon={CLOCK} iconSize='h-11' text='Effektivt' textSize='text-lg' />
+                        <TitledIcon icon={SALES} iconSize='h-11' text='Bærekraftig' textSize='text-lg' />
                     </div>
                 </div>
         </div>
@@ -165,7 +126,7 @@ const LandingPage = () => {
 
                 <div className='flex flex-row w-full h-auto gap-2 '>
                     {threeAds?.map((ad) => (
-                        <AdFB key={ad.id} ad={ad} />
+                        <AdComponent key={ad.id} ad={ad} />
                     ))}
                 </div>
 
@@ -178,10 +139,10 @@ const LandingPage = () => {
                     <Title size='text-5xl' heading='Steg-for-steg' description='Hvordan funker det?' />
 
                     <div className='h-auto flex flex-row w-1/2 text-left gap-1 flex-wrap'>
-                        <Step icon={SEARCH} span={'01: '} description={'Bruk kategori eller søkefunksjon for å finne verktøyet du leter etter.'} />
-                        <Step icon={TOOLS} span={'02: '} description={'Finn en passende annonse. Velg leieperioden du ønsker verktøyet.'} />
-                        <Step icon={AGREEMENT} span={'03: '} description={'Ta kontakt med utleier og fullfør bestillingen. Verktøyet kan hentes hos utleier.'} />
-                        <Step icon={VALUE} span={'04: '} description={'Bruk verkøyet til å fullføre ditt prosjekt, og lever tilbake når ferdig.'} />
+                        <UserStep icon={SEARCH} span={'01: '} description={'Bruk kategori eller søkefunksjon for å finne verktøyet du leter etter.'} />
+                        <UserStep icon={TOOLS} span={'02: '} description={'Finn en passende annonse. Velg leieperioden du ønsker verktøyet.'} />
+                        <UserStep icon={AGREEMENT} span={'03: '} description={'Ta kontakt med utleier og fullfør bestillingen. Verktøyet kan hentes hos utleier.'} />
+                        <UserStep icon={VALUE} span={'04: '} description={'Bruk verkøyet til å fullføre ditt prosjekt, og lever tilbake når ferdig.'} />
                     </div>
 
                 </div>

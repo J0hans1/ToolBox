@@ -1,9 +1,9 @@
 //import Ad from '../components/Ad';
-import AdFilter from '../components/AdFilter';
+import Filter from '../components/Filter';
 import { Button, TextField } from '@mui/material';
 import { Ad } from '../types/types';
 import { useState, useEffect } from 'react';
-import AdFB from '../components/AdFB';
+import AdComponent from '../components/Ad';
 import { AdsQuery } from '../lib/controller';
 import { useDispatch, useSelector } from "react-redux";
 import { selectFilters, setFilter } from "../store/FiltersReducer";
@@ -51,9 +51,9 @@ const Ads = () => {
         <div className='w-screen flex flex-col bg-pu-grunn pt-40'>
             <div className='flex flex-row w-full lg:mx-10 xl:mx-20'>
                 <div className='pt-24 hidden lg:block'>
-                    <AdFilter />
-                </div>
-
+                    <Filter/>
+                </div>            
+    
                 <section className='flex flex-col h-auto'>
                     {/* <Title heading="Våre " span='annonser' size='text-7xl'/> */}
                     <div className='w-full flex flex-row justify-center gap-5'>
@@ -83,7 +83,7 @@ const Ads = () => {
                         />
                         */}
                         {ads?.map((ad) => (
-                            <AdFB key={ad.id} ad={ad} />
+                            <AdComponent key={ad.id} ad={ad} />
                         ))}
                     </div>
                 </section>

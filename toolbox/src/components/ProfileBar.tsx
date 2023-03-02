@@ -5,7 +5,7 @@ import { Avatar, Button } from "@mui/material";
 interface sidebarFace{
     user: User;
 }
-const ProfileSidebar = (props: sidebarFace) => {
+const ProfileBar = (props: sidebarFace) => {
         let navigate = useNavigate();
 
         return(
@@ -36,4 +36,4 @@ const ProfileSidebar = (props: sidebarFace) => {
     );
 }
 
-export default ProfileSidebar;
+export default ProfileBar;

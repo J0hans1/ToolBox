@@ -5,13 +5,9 @@ import { useState } from "react";
 import { validateSimilarPasswords } from "../lib/validation";
 import { useNavigate } from "react-router-dom";
 
-
-
 interface IProps{
     user: User;
 }
-
-
 
 export default function EditUser({user}: IProps){
     let navigate = useNavigate();

@@ -9,7 +9,7 @@ const Footer = () => {
                     <p>Mail: kontakt@toolbox.no</p>
                     <p>Telefon: +47 412 36 689</p>
                 </div>
-
+  
                 <div id="ROW_RIGHT" className="flex flex-col text-left max-w-1/2">
                     <h2 className="text-2xl mb-2">Sider:</h2>
                     <a href="/#/Ads">Annonser</a>
@@ -20,11 +20,11 @@ const Footer = () => {
                     <a href="/#/Register">Registrer bruker</a>
                 </div>
             </div>
-
+  
             <p>© ToolBox AS 2022</p>
-
+  
         </div>
     );
-}
+  }
 
 export default Footer;

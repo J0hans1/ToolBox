@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import { selectFilters, setFilter } from "../store/FiltersReducer";
 
-
 const Navbar = () => {
     let navigate = useNavigate();
     const dispatch = useDispatch();

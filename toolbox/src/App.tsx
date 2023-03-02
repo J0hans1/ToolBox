@@ -1,6 +1,4 @@
 import './App.css';
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
 import LoginPage from './pages/Login';
 import RegisterPage from "./pages/Register";
 import ErrorPage from './pages/ErrorPage';
@@ -14,9 +12,13 @@ import AdCreator from './pages/AdCreator';
 import ProfilePage from './pages/ProfilePage';
 import { Helmet } from "react-helmet";
 import MyAds from './pages/MyAds';
-import ScrollToTop from './components/ScrollToTop';
+import ScrollToTop from './components/functions/ScrollToTop';
 import SavedAds from './pages/SavedAds';
 import EditAdPage from './pages/EditAdPage';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+
+
 
 
 export default function App() {
