@@ -1,7 +1,7 @@
 import { MenuItem, Select, TextField, Button, FormControl, InputLabel, ImageList } from "@mui/material";
 import { useEffect, useState } from "react";
 import { getAd, updateAd, uploadImages } from "../lib/controller";
-import { NewAd, UpdateAd } from "../types/types";
+import { UpdateAd } from "../types/types";
 import Title from "../components/Title";
 import Step from "../components/Step";
 import { validateAddress, validateCity, validateDescription, validatePrice, validateTitle, validateZip } from "../lib/validation";

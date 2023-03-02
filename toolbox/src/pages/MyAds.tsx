@@ -1,8 +1,8 @@
 import {Ad, User} from "../types/types";
 import { useEffect, useState } from "react";
-import AdFB from "../components/AdFB";
+import AdFB from "../components/Ad";
 import { getUser, getUserAds } from "../lib/controller";
-import ProfileSidebar from "../components/ProfileSidebar";
+import ProfileSidebar from "../components/ProfileBar";
 import Title from "../components/Title";
 
 

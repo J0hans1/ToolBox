@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { User } from '../types/types';
 import { useNavigate } from "react-router-dom";
-import InformationUser2 from "../components/userInf";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 

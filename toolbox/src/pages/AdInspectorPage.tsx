@@ -1,12 +1,44 @@
-import AdUserInfo from "../components/AdUserInfo";
 import Title from "../components/Title";
-import { AdIconAndText } from "../components//Ad";
+import TitledIcon from "../components/TitledIcon";
 import { getUser, getAd, isSaved, isOwned, removeAdFromUser, saveAdToUser, deleteAd } from "../lib/controller";
 import { Ad, User } from "../types/types";
 import { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
+import { Avatar } from "@mui/material";
+import { amber } from "@mui/material/colors";
+import LinkButton from "../components/LinkButton";
 
+
+
+interface Info {
+    name?: string;
+    email?: string;
+    phone?: string;
+    avatar?: string;
+}
+
+const AdUserInfo = (props: Info) => {
+    return (
+        <div className='rounded-lg w-auto h-72 shadow-lg hover:shadow-2xl justify-center'>
+
+            <div className="flex flex-row w-3/4 h-1/4 ml-2 gap-10 mt-5 p-8" >
+                <Avatar sx={{ bgcolor: amber[500], width: 70, height: 70 }}>AO</Avatar>
+                <div className="text-left justify-start pb-5 flex-wrap">
+                    <h2 className="text-3xl mt-2 font-bold">{props.name}</h2>
+                </div>
+            </div>
+
+           <div className="font-bold text-left p-8 pt-20 flex-wrap justify-center">
+            <p>Kontakt utleier for å avtale leie eller utlån: </p>
+            </div>
+            <div className="flex flex-row font-bold ">                
+                <LinkButton label={props.email} href={props.email} type="mail" />
+                <LinkButton label={props.phone} href={props.phone} type="phone" />
+            </div>
+        </div>
+    )
+}
 
 const AdInspectorPage = () => {
     const navigate = useNavigate();
@@ -172,9 +204,9 @@ const AdInspectorPage = () => {
 
                     <div className="w-full">
                         <div className="flex flex-row p-10 h-32 w-full justify-between">
-                            <AdIconAndText icon="https://img.icons8.com/ios/512/calendar--v1.png" key={69} text={"Dato"} iconSize="h-full" textSize="text-3xl" />
-                            <AdIconAndText icon="https://img.icons8.com/ios/50/000000/price-tag-euro.png" key={ad.price} text={ad.price?.toString() + " kr/dag"} iconSize="h-full" textSize="text-3xl" />
-                            <AdIconAndText icon="https://img.icons8.com/material-sharp/256/map-marker.png" key={ad.city} text={ad.city} iconSize="h-full" textSize="text-3xl" />
+                            <TitledIcon icon="https://img.icons8.com/ios/512/calendar--v1.png" key={69} text={"Dato"} iconSize="h-full" textSize="text-3xl" />
+                            <TitledIcon icon="https://img.icons8.com/ios/50/000000/price-tag-euro.png" key={ad.price} text={ad.price?.toString() + " kr/dag"} iconSize="h-full" textSize="text-3xl" />
+                            <TitledIcon icon="https://img.icons8.com/material-sharp/256/map-marker.png" key={ad.city} text={ad.city} iconSize="h-full" textSize="text-3xl" />
                         </div>
                         <div className="flex flex-col items-center">
                             {/* Render ad details */}

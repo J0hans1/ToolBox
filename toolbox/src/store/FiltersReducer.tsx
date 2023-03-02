@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from './Store';
 
+
 interface IAction {
     type: string
     payload: IFiltersSlice

@@ -1,3 +1,4 @@
+import FilterModule from './atoms/FilterModule';
 import { ReactElement } from "react"
 import { Checkbox, TextField, FormControl, FormControlLabel, FormGroup, Radio, RadioGroup, Button } from '@mui/material';
 import { useDispatch, useSelector } from "react-redux";
@@ -9,22 +10,13 @@ interface TitledChildren {
     children?: ReactElement<any>
 }
 
-const FilterModuler = (props: TitledChildren) => {
-    return (
-        <div className={`h-auto w-fit ${props.margin}`}>
-            <h1 className="font-bold text-lg mb-3">{props.title}</h1>
-            {props.children}
-        </div>
-    );
-}
-
-const AdFilter = () => {
+    const Filter = () => {
     const dispatch = useDispatch();
     const filters = useSelector(selectFilters);
 
     return ( 
         <div className="m-4 h-auto rounded-2xl border-2 w-fit bg-white p-5 shadow-lg" >
-            <FilterModuler title="Kategori" margin="mt-4" >
+            <FilterModule title="Kategori" margin="mt-4" >
                 <RadioGroup value={filters.category || ""} >
                     <Button onClick={() => dispatch(setFilter({ field: "category", value: "" }))}>Fjern kategori</Button>
 
@@ -56,9 +48,9 @@ const AdFilter = () => {
                         dispatch(setFilter({ field: "category", value: "Stiger" }));
                     }} />
                 </RadioGroup>
-            </FilterModuler>
+            </FilterModule>
 
-            <FilterModuler title="Pris" margin="mt-6">
+            <FilterModule title="Pris" margin="mt-6">
                 <div className="mt-5 flex flex-col justify-between h-auto gap-2">
                     <TextField label="Min pris" type="number" variant="outlined" value={filters.minPrice} onChange={(event: any) => {
                         dispatch(setFilter({ field: "minPrice", value: event.target.value }));
@@ -67,9 +59,9 @@ const AdFilter = () => {
                         dispatch(setFilter({ field: "maxPrice", value: event.target.value }));
                     }} />
                 </div>
-            </FilterModuler>
+            </FilterModule>
 
-            <FilterModuler title="Område" margin="my-8">
+            <FilterModule title="Område" margin="my-8">
                 <FormControl>
                     <FormGroup>
                         <FormControlLabel sx={{ m: -1 }} value="Bergen" control={<Checkbox />} label="Bergen" />
@@ -78,13 +70,10 @@ const AdFilter = () => {
                         <FormControlLabel sx={{ m: -1 }} value="Trondheim" control={<Checkbox />} label="Trondheim" />
                     </FormGroup>
                 </FormControl>
-            </FilterModuler>
+            </FilterModule>
 
         </div>
     );
 }
 
-
-
-
-export default AdFilter;
+export default Filter;

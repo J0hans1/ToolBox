@@ -1,7 +1,5 @@
 // Documentation: use for setup of sections.
 
-import { ReactElement } from "react";
-
 // @Properties:
 // height = section heigt. Insert 'h-screen' or 'h-auto'
 // bg_color = section fill background. Insert 'bg-(...)'
@@ -15,7 +13,7 @@ interface section {
     children: React.ReactNode;
 }
 
-const TBSection = (props: section) => {
+const Wrapper = (props: section) => {
     return (
     <section className={`flex content-center ${props.height} ${props.bg_color} ${props.text_fill}`}>
         <div className='flex m-auto w-full max-w-7xl p-10 text-current'>
@@ -25,10 +23,4 @@ const TBSection = (props: section) => {
     )
 }
 
-<section className={'flex content-center h-auto'}>
-    <div className='flex m-auto w-full max-w-7xl p-10 text-current'>
-
-    </div> 
-</section>
-
-export default TBSection;
+export default Wrapper;
