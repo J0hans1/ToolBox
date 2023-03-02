@@ -3,36 +3,57 @@ import AdFilter from '../components/AdFilter';
 import { Button, TextField } from '@mui/material';
 import { Ad } from '../types/types';
 import { useState, useEffect } from 'react';
-import { DocumentData, onSnapshot, QuerySnapshot } from 'firebase/firestore';
-import { adsCollection } from '../lib/controller';
 import AdFB from '../components/AdFB';
+import { AdsQuery } from '../lib/controller';
+import { useDispatch, useSelector } from "react-redux";
+import { selectFilters, setFilter } from "../store/FiltersReducer";
 
 
 const Ads = () => {
     const [ads, setAds] = useState<Ad[]>([]);
+    const dispatch = useDispatch();
+    const filters = useSelector(selectFilters);
 
-    useEffect(
-        () =>
-            onSnapshot(adsCollection, (snapshot: QuerySnapshot<DocumentData>) => {
-                setAds(
-                    snapshot.docs.map((doc) => {
-                        return {
-                            id: doc.id,
-                            ...doc.data(),
-                        };
-                    })
-                );
-            }),
-        []
-    );
+
+    // query backend for ads with filters
+    useEffect(() => {
+        AdsQuery(
+            filters.search,
+            filters.category,
+            filters.minPrice,
+            filters.maxPrice
+        ).then((ads) => {
+            setAds(ads);
+        });
+    }, [filters]);
+
+
+
+    /*     useEffect(
+            () =>
+                onSnapshot(adsCollection, (snapshot: QuerySnapshot<DocumentData>) => {
+                    setAds(
+                        snapshot.docs.map((doc) => {
+                            return {
+                                id: doc.id,
+                                ...doc.data(),
+                            };
+                        })
+                    );
+                }),
+            []
+        ); */
+
+
+
 
     return (
         <div className='w-screen flex flex-col bg-pu-grunn pt-40'>
             <div className='flex flex-row w-full lg:mx-10 xl:mx-20'>
                 <div className='pt-24 hidden lg:block'>
-                    <AdFilter/>
-                </div>            
-    
+                    <AdFilter />
+                </div>
+
                 <section className='flex flex-col h-auto'>
                     {/* <Title heading="Våre " span='annonser' size='text-7xl'/> */}
                     <div className='w-full flex flex-row justify-center gap-5'>
@@ -42,8 +63,10 @@ const Ads = () => {
                         <div className='h-full w-2/5 lg:w-3/5 gap-1 flex flex-row'>
                             <TextField sx={{
                                 width: '1',
-                            }} variant="filled" label="Ønsket produkt" />
-                            <Button variant="contained">Søk</Button>
+                            }} variant="filled" label="Ønsket produkt" value={filters.search} onChange={(event: any) => {
+                                dispatch(setFilter({ field: "search", value: event.target.value }));
+                            }} />
+                            {/* <Button variant="contained" >Søk</Button> */}
                         </div>
                         <Button color="info" variant="contained" href="/#/adcreator">Opprett annonse</Button>
                     </div>
@@ -62,8 +85,8 @@ const Ads = () => {
                         {ads?.map((ad) => (
                             <AdFB key={ad.id} ad={ad} />
                         ))}
-                    </div> 
-                </section>                
+                    </div>
+                </section>
             </div>
         </div>
     );

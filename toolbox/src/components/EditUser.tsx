@@ -1,4 +1,4 @@
-import { updateUser, deleteUser } from "../lib/controller";
+import { updateUser, deleteUser, removeFromSessionStorage } from "../lib/controller";
 import { User } from "../types/types";
 import {TextField, Button} from '@mui/material';
 import { useState } from "react";
@@ -33,6 +33,7 @@ export default function EditUser({user}: IProps){
         const userIDFromSessionStorage = sessionStorage.getItem("userID");
         if (userIDFromSessionStorage != null){
             deleteUser(userIDFromSessionStorage);
+            removeFromSessionStorage();
             alert("Brukeren ble slettet");
             navigate("/");
         }
