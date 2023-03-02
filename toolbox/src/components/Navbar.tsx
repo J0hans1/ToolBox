@@ -1,10 +1,15 @@
-import { Button, styled, TextField } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from "react-redux";
+import { selectFilters, setFilter } from "../store/FiltersReducer";
 
 
 const Navbar = () => {
     let navigate = useNavigate();
-    return(
+    const dispatch = useDispatch();
+    const filters = useSelector(selectFilters);
+
+    return (
         <div id="c_section" className='fixed top-0 bg-white text-black w-screen h-auto content-center z-20 shadow-md'>
             <div id="c_container" className='relative flex flex-col m-auto w-full max-w-7xl pt-5 px-10 justify-between'>
                 <div className='flex flex-row justify-between'>
@@ -12,9 +17,11 @@ const Navbar = () => {
 
                     <div className='flex flex-col w-4/5'>
                         <div className='flex flex-row justify-between'>
-                            <div className='flex flex-row gap-1 w-3/5'> 
-                                <TextField fullWidth label={'Søk'} type={'search'}/>
-                                <Button color="primary" variant="contained" sx={{p: 2}}> Søk </Button>
+                            <div className='flex flex-row gap-1 w-3/5'>
+                                <TextField fullWidth label={'Søk'} type={'search'} value={filters.search} onChange={(event: any) => {
+                                    dispatch(setFilter({ field: "search", value: event.target.value }));
+                                }} />
+                                <Button color="primary" variant="contained" sx={{ p: 2 }} onClick={() => navigate("/ads")} > Søk </Button> 
                             </div>
 
                             <div className='flex flex-row gap-1 w-auto'>

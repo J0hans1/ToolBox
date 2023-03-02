@@ -37,38 +37,53 @@ export const addAd = async (adData: any) => {
 export const usersCollection = collection(firestore, "users"); // Get all users
 export const adsCollection = collection(firestore, "ads"); // Get all ads
 
+
+
 // Query for filtering ads by category, price (min, max), location (zip) and search term
-export const getAdsQuery = async (
-  category: string = "",
-  priceMin: number = 0,
-  priceMax: number = Number.MAX_SAFE_INTEGER,
-  zip: number = 0,
-  searchTerm: string = ""
+export const AdsQuery = async (
+  search: string | undefined = undefined,
+  category: string | undefined = undefined,
+  minPrice: number | undefined = undefined,
+  maxPrice: number | undefined = undefined,
 ) => {
-  let q: Query<DocumentData> = adsCollection;
+  let qTitle: Query<DocumentData> = adsCollection;
+  let qPrice: Query<DocumentData> = adsCollection;
+  let qCategory: Query<DocumentData> = adsCollection;
+  let qDescription: Query<DocumentData> = adsCollection;
+
+  if (search) {
+    qTitle = query(qTitle, where("title", ">=", search));
+    qTitle = query(qTitle, where("title", "<=", search + "\uf8ff"));
+    qDescription = query(qDescription, where("description", ">=", search));
+    qDescription = query(qDescription, where("description", "<=", search + "\uf8ff"));
+  }
+
+  minPrice = Number(minPrice)
+  maxPrice = Number(maxPrice)
+  if (minPrice) {
+    qPrice = query(qPrice, where("price", ">=", minPrice));
+  }
+  if (maxPrice) {
+    qPrice = query(qPrice, where("price", "<=", maxPrice));
+  }
+
   if (category) {
-    q = query(q, where("category", "==", category));
+    qTitle = query(qTitle, where("category", "==", category));
+    qPrice = query(qPrice, where("category", "==", category));
+    qCategory = query(qCategory, where("category", "==", category));
+    qDescription = query(qDescription, where("category", "==", category));
   }
-  if (priceMin) {
-    q = query(q, where("price", ">=", priceMin));
-  }
-  if (priceMax) {
-    q = query(q, where("price", "<=", priceMax));
-  }
-  if (zip) {
-    q = query(q, where("zip", "==", zip));
-  }
-  if (searchTerm) {
-    q = query(q, 
-      where("title", ">=", searchTerm), 
-      where("title", "<=", searchTerm + "\uf8ff"),
-      where("description", ">=", searchTerm),
-      where("description", "<=", searchTerm + "\uf8ff"));
-  }
-  const querySnapshot = await getDocs(q);
-  const ads: Ad[] = [];
-  querySnapshot.forEach((doc) => {
-    ads.push({
+
+  const [titleSnapshot, descriptionSnapshot, priceSnapshot, categorySnapshot] = await Promise.all([
+    getDocs(qTitle),
+    getDocs(qDescription),
+    getDocs(qPrice),
+    getDocs(qCategory),
+  ]);
+
+  const titleAds: Ad[] = [];
+  titleSnapshot.forEach((doc) => {
+    titleAds.push({
       id: doc.id,
       userid: doc.data().userid,
       title: doc.data().title,
@@ -81,8 +96,67 @@ export const getAdsQuery = async (
       pictures: doc.data().pictures,
     });
   });
+
+  const descriptionAds: Ad[] = [];
+  descriptionSnapshot.forEach((doc) => {
+    descriptionAds.push({
+      id: doc.id,
+      userid: doc.data().userid,
+      title: doc.data().title,
+      description: doc.data().description,
+      category: doc.data().category,
+      price: doc.data().price,
+      address: doc.data().address,
+      zip: doc.data().zip,
+      city: doc.data().city,
+      pictures: doc.data().pictures,
+    });
+  });
+
+  const priceAds: Ad[] = [];
+  priceSnapshot.forEach((doc) => {
+    priceAds.push({
+      id: doc.id,
+      userid: doc.data().userid,
+      title: doc.data().title,
+      description: doc.data().description,
+      category: doc.data().category,
+      price: doc.data().price,
+      address: doc.data().address,
+      zip: doc.data().zip,
+      city: doc.data().city,
+      pictures: doc.data().pictures,
+    });
+  });
+
+  const categoryAds: Ad[] = [];
+  categorySnapshot.forEach((doc) => {
+    categoryAds.push({
+      id: doc.id,
+      userid: doc.data().userid,
+      title: doc.data().title,
+      description: doc.data().description,
+      category: doc.data().category,
+      price: doc.data().price,
+      address: doc.data().address,
+      zip: doc.data().zip,
+      city: doc.data().city,
+      pictures: doc.data().pictures,
+    });
+  });
+
+
+  let ads = categoryAds.filter((ad) =>
+    priceAds.find((priceAd) => priceAd.id === ad.id)
+  );
+  ads = ads.filter((ad) => 
+    titleAds.find((titleAd) => titleAd.id === ad.id) || descriptionAds.find((descriptionAd) => descriptionAd.id === ad.id)
+  );
+
   return ads;
 };
+
+
 
 
 

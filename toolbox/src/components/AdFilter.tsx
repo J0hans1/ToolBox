@@ -1,6 +1,7 @@
 import { ReactElement } from "react"
-import { Checkbox, TextField, FormControl , FormControlLabel, FormGroup } from '@mui/material';
-
+import { Checkbox, TextField, FormControl, FormControlLabel, FormGroup, Radio, RadioGroup, Button } from '@mui/material';
+import { useDispatch, useSelector } from "react-redux";
+import { selectFilters, setFilter } from "../store/FiltersReducer";
 
 interface TitledChildren {
     title: string
@@ -18,24 +19,53 @@ const FilterModuler = (props: TitledChildren) => {
 }
 
 const AdFilter = () => {
-    return (
-        <div className="m-4 h-auto rounded-2xl border-2 w-fit bg-white p-5 shadow-lg">
-            <FilterModuler title="Kategori" margin="mt-4">
-                <FormGroup>
-                    <FormControlLabel sx={{ m: -1 }} control={<Checkbox />} label="Elektronikk" />
-                    <FormControlLabel sx={{ m: -1 }} control={<Checkbox />} label="Bygg" />
-                    <FormControlLabel sx={{ m: -1 }} control={<Checkbox />} label="Hageredskap" />
-                    <FormControlLabel sx={{ m: -1 }} control={<Checkbox />} label="Håndverktøy" />
-                    <FormControlLabel sx={{ m: -1 }} control={<Checkbox />} label="Maskineri" />
-                    <FormControlLabel sx={{ m: -1 }} control={<Checkbox />} label="Bil" />
-                    <FormControlLabel sx={{ m: -1 }} control={<Checkbox />} label="Sykkel" />
-                </FormGroup>
+    const dispatch = useDispatch();
+    const filters = useSelector(selectFilters);
+
+    return ( 
+        <div className="m-4 h-auto rounded-2xl border-2 w-fit bg-white p-5 shadow-lg" >
+            <FilterModuler title="Kategori" margin="mt-4" >
+                <RadioGroup value={filters.category || ""} >
+                    <Button onClick={() => dispatch(setFilter({ field: "category", value: "" }))}>Fjern kategori</Button>
+
+                    <FormControlLabel sx={{ m: -1 }} control={<Radio />} label="Elektronikk" value="Elektronikk" onChange={(event: any) => {
+                        dispatch(setFilter({ field: "category", value: "Elektronikk" }));
+                    }} />
+                    <FormControlLabel sx={{ m: -1 }} control={<Radio />} label="Hage" value="Hage" onChange={(event: any) => {
+                        dispatch(setFilter({ field: "category", value: "Hage" }));
+                    }} />
+                    <FormControlLabel sx={{ m: -1 }} control={<Radio />} label="Håndverktøy" value="Håndverktøy" onChange={(event: any) => {
+                        dispatch(setFilter({ field: "category", value: "Håndverktøy" }));
+                    }} />
+                    <FormControlLabel sx={{ m: -1 }} control={<Radio />} label="Maskineri" value="Maskineri" onChange={(event: any) => {
+                        dispatch(setFilter({ field: "category", value: "Maskineri" }));
+                    }} />
+                    <FormControlLabel sx={{ m: -1 }} control={<Radio />} label="Bil og motorsykkel" value="Bil og motorsykkel" onChange={(event: any) => {
+                        dispatch(setFilter({ field: "category", value: "Bil og motorsykkel" }));
+                    }} />
+                    <FormControlLabel sx={{ m: -1 }} control={<Radio />} label="Sykkel" value="Sykkel" onChange={(event: any) => {
+                        dispatch(setFilter({ field: "category", value: "Sykkel" }));
+                    }} />
+                    <FormControlLabel sx={{ m: -1 }} control={<Radio />} label="Henger" value="Henger" onChange={(event: any) => {
+                        dispatch(setFilter({ field: "category", value: "Henger" }));
+                    }} />
+                    <FormControlLabel sx={{ m: -1 }} control={<Radio />} label="Rør" value="Rør" onChange={(event: any) => {
+                        dispatch(setFilter({ field: "category", value: "Rør" }));
+                    }} />
+                    <FormControlLabel sx={{ m: -1 }} control={<Radio />} label="Stiger" value="Stiger" onChange={(event: any) => {
+                        dispatch(setFilter({ field: "category", value: "Stiger" }));
+                    }} />
+                </RadioGroup>
             </FilterModuler>
 
             <FilterModuler title="Pris" margin="mt-6">
                 <div className="mt-5 flex flex-col justify-between h-auto gap-2">
-                    <TextField label="Min pris" type="number" variant="outlined"/>
-                    <TextField label="Max pris" type="number" variant="outlined"/>
+                    <TextField label="Min pris" type="number" variant="outlined" value={filters.minPrice} onChange={(event: any) => {
+                        dispatch(setFilter({ field: "minPrice", value: event.target.value }));
+                    }} />
+                    <TextField label="Max pris" type="number" variant="outlined" value={filters.maxPrice} onChange={(event: any) => {
+                        dispatch(setFilter({ field: "maxPrice", value: event.target.value }));
+                    }} />
                 </div>
             </FilterModuler>
 

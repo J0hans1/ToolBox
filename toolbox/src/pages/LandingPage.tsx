@@ -14,6 +14,8 @@ import SALES from '../img/sales.png';
 import CHOOSE from '../img/choose.png';
 import CLOCK from '../img/clock.png';
 import CIRCLES from '../img/circles.png';
+import { useDispatch, useSelector } from "react-redux";
+import { selectFilters, setFilter } from "../store/FiltersReducer";
 
 interface StepContent {
     icon: string
@@ -60,6 +62,8 @@ const Category = (props: Category) => {
 
 const LandingPage = () => {
     let navigate = useNavigate();
+    const dispatch = useDispatch();
+    const filters = useSelector(selectFilters);
     const [ads, setAds] = useState<Ad[]>([]);
     const threeAds = ads.slice(0, 3);
 
@@ -102,8 +106,10 @@ const LandingPage = () => {
                     />
 
                     <div className="flex place-content-between justify-between gap-5 my-5 w-11/12">
-                        <TextField fullWidth id="outlined-search" label="Søk i våre annonser!" type="search" />
-                        <Button sx={{ px: 5 }} variant='contained'>Søk</Button>
+                        <TextField fullWidth id="outlined-search" label="Søk i våre annonser!" type="search" value={filters.search} onChange={(event: any) => {
+                                dispatch(setFilter({ field: "search", value: event.target.value }));
+                            }} />
+                        <Button sx={{ px: 5 }} variant='contained' onClick={() => navigate("/ads")}>Søk</Button>
                     </div>
 
                     <div className='mt-20 flex w-3/4 justify-end'> 
