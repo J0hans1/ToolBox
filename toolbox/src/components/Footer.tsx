@@ -7,7 +7,7 @@ const Footer = () => {
                     <h2 className="text-2xl mb-2">Kontakt oss:</h2>
                     <p>Adressegaten 23B, 7069, Trondheim</p>
                     <p>Mail: kontakt@toolbox.no</p>
-                    <p>Telefon: +47 690 69 690</p>
+                    <p>Telefon: +47 412 36 689</p>
                 </div>
 
                 <div id="ROW_RIGHT" className="flex flex-col text-left max-w-1/2">

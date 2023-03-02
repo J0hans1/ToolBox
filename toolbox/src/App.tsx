@@ -38,7 +38,7 @@ export default function App() {
 
   return (
     
-    <div className="App">
+    <div className="App w-screen overflow-hidden">
     <Helmet>
       <meta charSet="utf-8" />
       <title>ToolBox</title>
@@ -49,12 +49,8 @@ export default function App() {
     <ThemeProvider theme={theme}>
       <HashRouter>
         <Navbar />
-
-        <div id="c_section" className='absolute top-0 w-screen h-auto content-center z-20'>
-            <div id="c_container" className='relative m-auto w-full max-w-7xl p-10 pt-2'>
-            </div>
-        </div>
         <ScrollToTop />
+
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="*" element={<ErrorPage/>} />

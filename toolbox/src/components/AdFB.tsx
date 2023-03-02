@@ -37,17 +37,15 @@ export default function AdFB({ad}: AdProps){
         }
     }, [])
 
+    function truncate(str: any ) {
+        return (str.length > 30) ? str.substring(0, 30 - 1) + '...' : str;
+    };
 
     return (
         <div onClick={() => handleClick()} className='rounded-lg w-40 h-40 md:w-60 md:h-60 lg:w-80 lg:h-80 shadow-lg overflow-hidden relative hover:scale-105 hover:shadow-2xl active:scale-100 duration-200 m-3'>
-        <div className="flex h-full w-full overflow-hidden bg-cover ">
-            <img className="h-40 w-full " src={firstPicture} alt="ad" /> {/* med h-full vil deler av bildet bli dekket av tekst */}
-        </div>
-
+        <div className="flex h-full w-full overflow-hidden bg-cover bg-center" style={{backgroundImage: `url(${firstPicture})`}}></div>
         <div className="flex flex-row">
-
-            <div className="flex flex-row bg-white rounded-lg h-auto absolute bottom-0 p-4 justify-between w-full">
-
+            <div className="flex flex-row bg-white rounded-lg h-auto absolute bottom-0 p-4 justify-between w-full shadow-inner ">
                 <div className="w-1/5 hidden md:block">
                     <Avatar sx={{bgcolor: amber[500]}}>TH</Avatar>
                 </div>
@@ -59,7 +57,7 @@ export default function AdFB({ad}: AdProps){
                             <p className="md:text-lg text-pu-ghost ml-1">{ad.price}kr/dag</p>
                         </div>
                     </div>
-                    <p className="text-sm text-left my-2 hidden lg:block">{ad.description}</p>
+                    <p className="text-sm text-left my-2 hidden lg:block">{truncate(ad.description)}</p>
                     <div className=" flex-row gap-5 hidden lg:flex">
                         <div className="flex flex-row h-5">
                             <img alt="bilde" className="h-full" src="https://img.icons8.com/ios/50/000000/price-tag-euro.png" />

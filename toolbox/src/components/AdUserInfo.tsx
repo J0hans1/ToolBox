@@ -26,7 +26,7 @@ interface Info {
 
 const AdUserInfo = (props: Info) => {
     return (
-        <div className='rounded-lg w-auto h-72 shadow-lg hover:shadow-2xl justify-center'>
+        <div className='rounded-lg w-3/4 h-72 shadow-lg hover:shadow-2xl justify-center duration-200'>
 
             <div className="flex flex-row w-3/4 h-1/4 ml-2 gap-10 mt-5 p-8" >
                 <Avatar sx={{ bgcolor: amber[500], width: 70, height: 70 }}>AO</Avatar>
@@ -41,9 +41,11 @@ const AdUserInfo = (props: Info) => {
             <div className="flex flex-row font-bold ">
                 <img className="h-10 ml-5" src="https://img.icons8.com/ios/512/message-squared.png" />
                 
-                <ButtonMailto label="Kontakt på mail" mailto={props.email} />
-                <img className="h-10 ml-5" src="https://img.icons8.com/ios/512/phone.png" />
-                <p className="ml-5 pr-5">Kontakt på telefon: {props.phone} </p>
+                <ButtonMailto label={props.email} mailto={props.email} />
+                <a href={"tel:" + props.phone}>
+                    <img className="h-10 ml-5" src="https://img.icons8.com/ios/512/phone.png" />
+                </a>
+                <p className="ml-5 pr-5">{props.phone} </p>
 
             </div>
 

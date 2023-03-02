@@ -11,8 +11,11 @@ module.exports = {
           grunn : 'F7F7F7',
           svart : '#000000',
           ghost: '#64748B',
-          gray: '#212121'
+          gray: '#212121',
         },
+      },
+      boxShadow: {
+        'special': 'inset 0 0 0 1px hsla(0,0%,0%, 0.1))',
       },
     },
   },
