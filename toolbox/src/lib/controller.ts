@@ -45,11 +45,17 @@ export const AdsQuery = async (
   category: string | undefined = undefined,
   minPrice: number | undefined = undefined,
   maxPrice: number | undefined = undefined,
+  zipCode: number | undefined = undefined,
 ) => {
   let qTitle: Query<DocumentData> = adsCollection;
   let qPrice: Query<DocumentData> = adsCollection;
   let qCategory: Query<DocumentData> = adsCollection;
   let qDescription: Query<DocumentData> = adsCollection;
+  let qZipCode: Query<DocumentData> = adsCollection;
+
+  minPrice = Number(minPrice)
+  maxPrice = Number(maxPrice)
+  zipCode = Number(zipCode)
 
   if (search) {
     qTitle = query(qTitle, where("title", ">=", search));
@@ -58,8 +64,6 @@ export const AdsQuery = async (
     qDescription = query(qDescription, where("description", "<=", search + "\uf8ff"));
   }
 
-  minPrice = Number(minPrice)
-  maxPrice = Number(maxPrice)
   if (minPrice) {
     qPrice = query(qPrice, where("price", ">=", minPrice));
   }
@@ -73,12 +77,19 @@ export const AdsQuery = async (
     qCategory = query(qCategory, where("category", "==", category));
     qDescription = query(qDescription, where("category", "==", category));
   }
+  
+  if (zipCode) {
+    // range query for zip codes within 50 
+    qZipCode = query(qZipCode, where("zip", ">=", zipCode - 50));
+    qZipCode = query(qZipCode, where("zip", "<=", zipCode + 50));
+  }
 
-  const [titleSnapshot, descriptionSnapshot, priceSnapshot, categorySnapshot] = await Promise.all([
+  const [titleSnapshot, descriptionSnapshot, priceSnapshot, categorySnapshot, zipCodeSnapshot] = await Promise.all([
     getDocs(qTitle),
     getDocs(qDescription),
     getDocs(qPrice),
     getDocs(qCategory),
+    getDocs(qZipCode),
   ]);
 
   const titleAds: Ad[] = [];
@@ -145,12 +156,31 @@ export const AdsQuery = async (
     });
   });
 
+  const zipCodeAds: Ad[] = [];
+  zipCodeSnapshot.forEach((doc) => {
+    zipCodeAds.push({
+      id: doc.id,
+      userid: doc.data().userid,
+      title: doc.data().title,
+      description: doc.data().description,
+      category: doc.data().category,
+      price: doc.data().price,
+      address: doc.data().address,
+      zip: doc.data().zip,
+      city: doc.data().city,
+      pictures: doc.data().pictures,
+    });
+  });
+
 
   let ads = categoryAds.filter((ad) =>
     priceAds.find((priceAd) => priceAd.id === ad.id)
   );
   ads = ads.filter((ad) => 
     titleAds.find((titleAd) => titleAd.id === ad.id) || descriptionAds.find((descriptionAd) => descriptionAd.id === ad.id)
+  );
+  ads = ads.filter((ad) =>
+    zipCodeAds.find((zipCodeAd) => zipCodeAd.id === ad.id)
   );
 
   return ads;

@@ -21,7 +21,8 @@ const Ads = () => {
             filters.search,
             filters.category,
             filters.minPrice,
-            filters.maxPrice
+            filters.maxPrice,
+            filters.zipCode
         ).then((ads) => {
             setAds(ads);
         });

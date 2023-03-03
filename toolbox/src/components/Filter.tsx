@@ -1,20 +1,14 @@
 import FilterModule from './atoms/FilterModule';
-import { ReactElement } from "react"
-import { Checkbox, TextField, FormControl, FormControlLabel, FormGroup, Radio, RadioGroup, Button } from '@mui/material';
+import { TextField, FormControl, FormControlLabel, Radio, RadioGroup, Button } from '@mui/material';
 import { useDispatch, useSelector } from "react-redux";
 import { selectFilters, setFilter } from "../store/FiltersReducer";
 
-interface TitledChildren {
-    title: string
-    margin: string
-    children?: ReactElement<any>
-}
 
-    const Filter = () => {
+const Filter = () => {
     const dispatch = useDispatch();
     const filters = useSelector(selectFilters);
 
-    return ( 
+    return (
         <div className="m-4 h-auto rounded-2xl border-2 w-fit bg-white p-5 shadow-lg" >
             <FilterModule title="Kategori" margin="mt-4" >
                 <RadioGroup value={filters.category || ""} >
@@ -52,23 +46,20 @@ interface TitledChildren {
 
             <FilterModule title="Pris" margin="mt-6">
                 <div className="mt-5 flex flex-col justify-between h-auto gap-2">
-                    <TextField label="Min pris" type="number" variant="outlined" value={filters.minPrice} onChange={(event: any) => {
+                    <TextField label="Fra kr" type="number" variant="outlined" value={filters.minPrice} onChange={(event: any) => {
                         dispatch(setFilter({ field: "minPrice", value: event.target.value }));
                     }} />
-                    <TextField label="Max pris" type="number" variant="outlined" value={filters.maxPrice} onChange={(event: any) => {
+                    <TextField label="Til kr" type="number" variant="outlined" value={filters.maxPrice} onChange={(event: any) => {
                         dispatch(setFilter({ field: "maxPrice", value: event.target.value }));
                     }} />
                 </div>
             </FilterModule>
 
-            <FilterModule title="Område" margin="my-8">
+            <FilterModule title="Postnummer (± 50)" margin="my-8">
                 <FormControl>
-                    <FormGroup>
-                        <FormControlLabel sx={{ m: -1 }} value="Bergen" control={<Checkbox />} label="Bergen" />
-                        <FormControlLabel sx={{ m: -1 }} value="Oslo" control={<Checkbox />} label="Oslo" />
-                        <FormControlLabel sx={{ m: -1 }} value="Fredrikstad" control={<Checkbox />} label="Fredrikstad" />
-                        <FormControlLabel sx={{ m: -1 }} value="Trondheim" control={<Checkbox />} label="Trondheim" />
-                    </FormGroup>
+                    <TextField label="Postnummer" type="number" variant="outlined" value={filters.zipCode} onChange={(event: any) => {
+                        dispatch(setFilter({ field: "zipCode", value: event.target.value })); // filterer på ± 50 
+                    }} />
                 </FormControl>
             </FilterModule>
 
