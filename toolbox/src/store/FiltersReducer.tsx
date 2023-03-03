@@ -15,19 +15,20 @@ interface SetFilterAction {
     }
 }
 
-// Define a type for the slice state
 interface IFiltersSlice {
     search: string | undefined;
     category: string;
     minPrice: number | undefined;
     maxPrice: number | undefined;
+    zipCode: number | undefined;
 }
 
 const initialState: IFiltersSlice = {
     search: "",
     category: "",
     minPrice: undefined,
-    maxPrice: undefined, // 9007199254740991
+    maxPrice: undefined, 
+    zipCode: undefined,
 }
 
 export const filtersSlice = createSlice({
