@@ -138,6 +138,76 @@ const AdInspectorPage = () => {
     };
 
 
+    const renderPageControll = () => {
+        if (isOwnedAd) {
+            return (
+                <div className="flex flex-row items-center">
+                    <div className="flex flex-row gap-1 w-4/5">
+                        <Button variant="contained" onClick={handleEditAd}>
+                            Rediger annonse
+                        </Button>
+                        <Button variant="outlined" color="primary" onClick={handleDeleteAd}>
+                            Slett annonse
+                        </Button>
+                    </div> 
+                    <div className="p-10 text-2xl text-left" >
+                        {ad?.map((ad) =>
+                        <div>
+                            <Title size={"text-4xl ml-5 mr-5"} heading={ad.title} description={""} span={""} key={ad.title} ></Title>
+                            <p key={ad.description}>
+                                {ad.description}
+                            </p>
+
+                            <div className="flex flex-row p-10 h-28 w-full justify-between">
+                                <TitledIcon icon="https://img.icons8.com/ios/512/calendar--v1.png" key={69} text={"Dato"} iconSize="h-full" textSize="text-3xl" />
+                                <TitledIcon icon="https://img.icons8.com/ios/50/000000/price-tag-euro.png" key={ad.price} text={ad.price?.toString() + " kr/dag"} iconSize="h-full" textSize="text-3xl" />
+                                <TitledIcon icon="https://img.icons8.com/material-sharp/256/map-marker.png" key={ad.city} text={ad.city} iconSize="h-full" textSize="text-3xl" />
+                            </div>
+                        </div>
+    
+                        )}
+                    </div>
+
+                </div>
+            )
+        }
+        else {
+            return (
+                <div className="flex flex-row items-center">
+                    <div className="flex flex-row gap-1 w-4/5 text-center">
+                        <h2>Placeholder for calendar</h2>
+                    </div>
+
+                    <div className="p-10 text-2xl text-left" >
+                        {ad?.map((ad) =>
+                        <div>
+                            <Title size={"text-4xl"} heading={ad.title} description={""} span={""} key={ad.title} ></Title>
+                            <p key={ad.description}>
+                                {ad.description}
+                            </p>
+
+                            <div className="flex flex-row h-28 w-full justify-between text-left">
+                                <TitledIcon icon="https://img.icons8.com/ios/512/calendar--v1.png" key={69} text={"Dato"} iconSize="h-full" textSize="text-3xl" />
+                                <TitledIcon icon="https://img.icons8.com/ios/50/000000/price-tag-euro.png" key={ad.price} text={ad.price?.toString() + " kr/dag"} iconSize="h-full" textSize="text-3xl" />
+                                <TitledIcon icon="https://img.icons8.com/material-sharp/256/map-marker.png" key={ad.city} text={ad.city} iconSize="h-full" textSize="text-3xl" />
+                            </div>
+                        </div>
+
+                        )}
+
+                        <div className="flex flex-row gap-1 w-4/5">
+                            <Button variant="contained" sx={{p:2}}>
+                                Lagre annonse
+                            </Button>
+                            <Button variant="outlined" color="primary">
+                                Kontakt utleier
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            )
+        }
+    }
 
     const checkIfAdIsSaved = async () => {
         const userID = sessionStorage.getItem("userID");
@@ -197,24 +267,24 @@ const AdInspectorPage = () => {
 
                         }}
                     >
-                        <div id="c_wrapper" className='w-auto justify-center bg-white rounded-tl-xl absolute right-0 bottom-0 '>
-                            <Title size={"text-4xl ml-5 mr-5"} heading={ad.title} description={""} span={""} key={ad.title} ></Title>
-                        </div>
+    
                     </div>
 
                     <div className="w-full">
-                        <div className="flex flex-row p-10 h-32 w-full justify-between">
+                        {/* <div className="flex flex-row p-10 h-32 w-full justify-between">
                             <TitledIcon icon="https://img.icons8.com/ios/512/calendar--v1.png" key={69} text={"Dato"} iconSize="h-full" textSize="text-3xl" />
                             <TitledIcon icon="https://img.icons8.com/ios/50/000000/price-tag-euro.png" key={ad.price} text={ad.price?.toString() + " kr/dag"} iconSize="h-full" textSize="text-3xl" />
                             <TitledIcon icon="https://img.icons8.com/material-sharp/256/map-marker.png" key={ad.city} text={ad.city} iconSize="h-full" textSize="text-3xl" />
-                        </div>
-                        <div className="flex flex-col items-center">
+                        </div> */}
+
+
+                        <div>
                             {/* Render ad details */}
-                            {renderAdControls()}
+                            {renderPageControll()}
                         </div>
                     </div>
 
-                    <div className="flex flex-row">
+                    {/* <div className="flex flex-row">
                         <div className='pt-0 w-1/2'>
                             {user?.map((user) => (
                                 <AdUserInfo name={user.firstname} email={user.email} phone={user.phone} avatar={""} key={user.id} />
@@ -228,7 +298,7 @@ const AdInspectorPage = () => {
                             </p>
 
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             ))}
         </div>
