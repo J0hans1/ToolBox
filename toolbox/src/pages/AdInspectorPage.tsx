@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { Avatar } from "@mui/material";
 import { amber } from "@mui/material/colors";
 import LinkButton from "../components/LinkButton";
+import Map from "../components/Map";
 
 
 
@@ -16,6 +17,9 @@ interface Info {
     email?: string;
     phone?: string;
     avatar?: string;
+    address?: string;
+    city?: string;
+    zip?:number;
 }
 
 const AdUserInfo = (props: Info) => {
@@ -36,6 +40,15 @@ const AdUserInfo = (props: Info) => {
                 <LinkButton label={props.email} href={props.email} type="mail" />
                 <LinkButton label={props.phone} href={props.phone} type="phone" />
             </div>
+            <div className ="flex h-1/3">
+           
+            </div>
+            <a href={`https://www.google.com/maps/dir/?api=1&destination=${props.address} ${props.zip} ${props.city}`} target="_blank" rel="noopener noreferrer">
+      Get Directions
+    </a>
+        <div className="w-100 h-100">
+    <Map start={[51.505, -0.09]} end={[51.5, -0.1]} /></div>
+
         </div>
     )
 }
@@ -217,7 +230,7 @@ const AdInspectorPage = () => {
                     <div className="flex flex-row">
                         <div className='pt-0 w-1/2'>
                             {user?.map((user) => (
-                                <AdUserInfo name={user.firstname} email={user.email} phone={user.phone} avatar={""} key={user.id} />
+                                <AdUserInfo name={user.firstname} email={user.email} phone={user.phone} avatar={""} key={user.id} address={ad.address} zip={ad.zip} city={ad.city} />
                             ))}
                         </div>
 
