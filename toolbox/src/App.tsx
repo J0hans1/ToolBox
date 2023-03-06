@@ -15,6 +15,7 @@ import MyAds from './pages/MyAds';
 import ScrollToTop from './components/functions/ScrollToTop';
 import SavedAds from './pages/SavedAds';
 import EditAdPage from './pages/EditAdPage';
+import FAQ from './pages/FAQ';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 
@@ -65,6 +66,7 @@ export default function App() {
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/savedads" element={<SavedAds />} />   
+          <Route path="/faq" element={<FAQ />} />   
         </Routes>
 
         <div id="c_section" className='w-screen h-auto content-center bg-black text-white'>
