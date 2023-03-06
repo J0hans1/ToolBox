@@ -36,6 +36,7 @@ const Navbar = () => {
                             <a href="/#/profile">Min side</a>
                             <a href="/#/">Kategorier</a>
                             <a href="/#/">Avtalevilkår</a>
+                            <a href="/#/FAQ">FAQ</a>
                         </div>
                     </div>
                 </div>
