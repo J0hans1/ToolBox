@@ -19,6 +19,7 @@ const EditAd = () => {
     const [address, setAddress] = useState("");
     const [zip, setZip] = useState("");
     const [city, setCity] = useState("");
+    const [pictures, setPictures] = useState<string[]>([]);
     const [images, setImages] = useState<FileList | null>(null);
 
 
@@ -37,6 +38,7 @@ const EditAd = () => {
                     setAddress(adFromDatabase.address);
                     setZip(adFromDatabase.zip.toString());
                     setCity(adFromDatabase.city);
+                    setPictures(adFromDatabase.pictures);
                 }
             }
         }
@@ -58,21 +60,27 @@ const EditAd = () => {
             const ad = {
                 id: adID,
                 userid: userID,
-                title: title,
-                description: description,
-                category: category,
-                price: parseInt(price),
-                address: address,
-                zip: parseInt(zip),
-                city: city,
-                pictures: [],
+                title: props.title,
+                description: props.description,
+                category: props.category,
+                price: props.price,
+                address: props.address,
+                zip: props.zip,
+                city: props.city,
+                pictures: props.pictures,
             } as UpdateAd;
 
-            // add the old pictures to the ad object
-            if (ad.pictures && ad.pictures.length > 0) {
-                ad.pictures.push(...props.pictures);
-            } else {
-                ad.pictures = props.pictures;
+
+            if (ad.pictures.length > 0) {
+                for (let i = 0; i < ad.pictures.length; i++) {
+                    if (ad.pictures[i] === 'http://www.sitech.co.id/assets/img/products/default.jpg') {
+                        ad.pictures.splice(i, 1); // remove default image if other images are provided
+                    }
+                }
+            }
+
+            if (ad.pictures.length === 0) {
+                ad.pictures = ['http://www.sitech.co.id/assets/img/products/default.jpg']; // default image if none is provided
             }
 
             console.log(ad)
@@ -121,25 +129,40 @@ const EditAd = () => {
     }
 
     async function uploadImagesToBackend(images: FileList | null) {
-        console.log("uploadImagesToBackend");
-        console.log("images: " + images);
-        if (images === null) {
-            return;
-        }
-        const imageUrls2 = await uploadImages(images);
+        if (images !== null) {
+            const imageUrls2 = await uploadImages(images);
 
-        const adToDatabase = {
-            title: title,
-            description: description,
-            category: category,
-            price: parseInt(price),
-            address: address,
-            zip: parseInt(zip),
-            city: city,
-            pictures: imageUrls2
+            // Add existing images to ad
+            if (pictures !== null) {
+                if (pictures.length > 0) {
+                    imageUrls2.push(...pictures);
+                }
+            }
+
+            const adToDatabase = {
+                title: title,
+                description: description,
+                category: category,
+                price: parseInt(price),
+                address: address,
+                zip: parseInt(zip),
+                city: city,
+                pictures: imageUrls2
+            } as UpdateAd;
+            updateAdToDatabase(adToDatabase);
+        } else {
+            const adToDatabase = {
+                title: title,
+                description: description,
+                category: category,
+                price: parseInt(price),
+                address: address,
+                zip: parseInt(zip),
+                city: city,
+                pictures: ad?.pictures
+            } as UpdateAd;
+            updateAdToDatabase(adToDatabase);
         }
-        console.log("hei")
-        updateAdToDatabase(adToDatabase);
     }
 
 
@@ -149,7 +172,6 @@ const EditAd = () => {
         <div>
             <div id="c_section" className='flex w-full h-full content-center bg-slate-100 overflow-hidden z-10'>
                 <div id="c_container" className='static flex flex-row mr-auto ml-auto mt-auto mb-auto w-full max-w-7xl p-10 gap-10 justify-center bg-white'>
-                    {/* <div className='flex flex-col justify-between w-1/4 bg-yellow-400 h-full'></div> */}
                     <div className='flex flex-col w-10/12 text-left pt-32 mb-10'>
 
                         <Title size={'text-7xl'} heading={'Rediger '} span={'annonse'} description={'Start utlån allerede i dag! Følg stegene, så er annonsen din oppe og går i løpet av kort tid!'} />
@@ -203,16 +225,6 @@ const EditAd = () => {
 
                             <div className='flex flex-col w-full mt-5 gap-2'>
                                 <ImageList sx={{ width: 500, height: "auto" }} cols={3} rowHeight={164}>
-                                    {/* {itemData.map((item) => (
-                                        <ImageListItem key={item.img}>
-                                        <img
-                                src={`${item.img}?w=164&h=164&fit=crop&auto=format`}
-                                srcSet={`${item.img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-                                alt={item.title}
-                                loading="lazy"
-                                    />
-                                    </ImageListItem>
-                                ))} */}
                                 </ImageList>
                                 <Button
                                     variant="outlined"
@@ -232,6 +244,16 @@ const EditAd = () => {
                                         multiple
                                         onChange={e => setImages(e.target.files)}
                                     /></Button>
+                                {images && images.length > 0 && (
+                                    <div>
+                                        <p>Selected files:</p>
+                                        <ul>
+                                            {Array.from(images).map((file, index) => (
+                                                <li key={index}>{file.name}</li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
                             </div>
                         </div>
 

@@ -11,41 +11,39 @@ interface AdProps {
 
 export default function AdComponent({ad}: AdProps){
 
+    let navigate = useNavigate();
+    const [picture, setPicture] = useState<string>("");
+
     function truncate(str: any ) {
         return (str.length > 30) ? str.substring(0, 30 - 1) + '...' : str;
     };
 
-    let navigate = useNavigate();
-    const [firstPicture, setFirstPicture] = useState<string>();
-
     const handleClick = () => {
         sessionStorage.removeItem("ADID");
         sessionStorage.setItem("ADID", ad.id);
-
         if (ad.id !== null) {
             navigate(`/adinspector/${ad.id}`)
         }
     }
 
-    function getFirstPicture(pictures: string[]) {
-        setFirstPicture(pictures[0]);
+    function getAdPicture() {
+        if (ad.pictures !== undefined && ad.pictures.length > 0) {
+            setPicture(ad.pictures[0]);
+            return ad.pictures[0];
+        } else {
+            return "https://img.icons8.com/ios/50/000000/price-tag-euro.png";
+        }
     }
 
     useEffect(() => {
-        if (ad.pictures !== undefined && ad.pictures.length > 0) {
-            getFirstPicture(ad.pictures);
-        }
-        else {
-            setFirstPicture("http://www.sitech.co.id/assets/img/products/default.jpg") // default image if none is provided
-            //setFirstPicture("https://static.bb.se/wcsstore/CAS/PIM/Luna/imgs/1151376.jpg") 
-        }
+        getAdPicture();
     }, [])
 
 
     return (
         <div onClick={() => handleClick()} className='rounded-lg w-40 h-40 md:w-60 md:h-60 lg:w-80 lg:h-80 shadow-lg overflow-hidden relative hover:scale-105 hover:shadow-2xl active:scale-100 duration-200 m-3'>
-        <div className="flex h-full w-full overflow-hidden bg-cover bg-center" style={{backgroundImage: `url(${firstPicture})`}}>
-            <img className="h-40 w-full " src={firstPicture} alt="ad" /> {/* med h-full vil deler av bildet bli dekket av tekst */}
+        <div className="flex h-full w-full overflow-hidden bg-cover bg-center" style={{backgroundImage: `url(${picture})`}}>
+            <img className="h-40 w-full " src={picture} alt="AdPicture" /> {/* med h-full vil deler av bildet bli dekket av tekst */}
         </div>
 
         <div className="flex flex-row">
