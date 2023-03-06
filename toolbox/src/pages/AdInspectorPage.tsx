@@ -17,9 +17,7 @@ interface Info {
     email?: string;
     phone?: string;
     avatar?: string;
-    address?: string;
-    city?: string;
-    zip?:number;
+
 }
 
 const AdUserInfo = (props: Info) => {
@@ -33,21 +31,16 @@ const AdUserInfo = (props: Info) => {
                 </div>
             </div>
 
-           <div className="font-bold text-left p-8 pt-20 flex-wrap justify-center">
-            <p>Kontakt utleier for å avtale leie eller utlån: </p>
+            <div className="font-bold text-left p-8 pt-20 flex-wrap justify-center">
+                <p>Kontakt utleier for å avtale leie eller utlån: </p>
             </div>
-            <div className="flex flex-row font-bold ">                
+            <div className="flex flex-row font-bold ">
                 <LinkButton label={props.email} href={props.email} type="mail" />
                 <LinkButton label={props.phone} href={props.phone} type="phone" />
             </div>
-            <div className ="flex h-1/3">
-           
-            </div>
-            <a href={`https://www.google.com/maps/dir/?api=1&destination=${props.address} ${props.zip} ${props.city}`} target="_blank" rel="noopener noreferrer">
-      Get Directions
-    </a>
-        <div className="w-100 h-100">
-    <Map start={[51.505, -0.09]} end={[51.5, -0.1]} /></div>
+            <div className="flex h-1/3">
+
+            </div >
 
         </div>
     )
@@ -85,7 +78,7 @@ const AdInspectorPage = () => {
                 await saveAdToUser(userIDFromSessionStorage, adIDFromSessionStorage);
                 alert("Annonse lagret til lagrede annonser");
                 setIsAdSaved(true);
-            } 
+            }
         }
     };
 
@@ -121,7 +114,7 @@ const AdInspectorPage = () => {
                 await removeAdFromUser(userIDFromSessionStorage, adIDFromSessionStorage);
                 alert("Annonse fjernet fra lagrede annonser");
                 setIsAdSaved(false);
-            } 
+            }
         }
     };
 
@@ -140,13 +133,13 @@ const AdInspectorPage = () => {
         } else {
             return (
                 <div>
-                  {isAdSaved ? (
-                    <Button onClick={handleRemoveAd}>Fjern annonse fra lagrede annonser</Button>
-                  ) : (
-                    <Button onClick={handleSaveAd}>Lagre annonse</Button>
-                  )}
+                    {isAdSaved ? (
+                        <Button onClick={handleRemoveAd}>Fjern annonse fra lagrede annonser</Button>
+                    ) : (
+                        <Button onClick={handleSaveAd}>Lagre annonse</Button>
+                    )}
                 </div>
-              );
+            );
         }
     };
 
@@ -230,7 +223,7 @@ const AdInspectorPage = () => {
                     <div className="flex flex-row">
                         <div className='pt-0 w-1/2'>
                             {user?.map((user) => (
-                                <AdUserInfo name={user.firstname} email={user.email} phone={user.phone} avatar={""} key={user.id} address={ad.address} zip={ad.zip} city={ad.city} />
+                                <AdUserInfo name={user.firstname} email={user.email} phone={user.phone} avatar={""} key={user.id} />
                             ))}
                         </div>
 
@@ -242,6 +235,21 @@ const AdInspectorPage = () => {
 
                         </div>
                     </div>
+                    <div className="w-100 h-100 flex flex-col">
+                        <a href={`https://www.google.com/maps/dir/?api=1&destination=${ad.address} ${ad.zip} ${ad.city}`} target="_blank" rel="noopener noreferrer">
+
+                            <div className="absolute justify-center pl-10 pr-10 text-6xl">
+
+                                Trykk her for veibeskrivelse
+                            </div>
+                            <div className="opacity-50 justify-center relative ">
+                                <Map address={`${ad.address} ${ad.zip} ${ad.city}`} /></div>
+
+
+
+                        </a>
+                    </div>
+
                 </div>
             ))}
         </div>
