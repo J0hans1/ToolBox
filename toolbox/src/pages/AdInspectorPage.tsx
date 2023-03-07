@@ -235,20 +235,27 @@ const AdInspectorPage = () => {
 
                         </div>
                     </div>
-                    <div className="w-100 h-100 flex flex-col">
-                        <a href={`https://www.google.com/maps/dir/?api=1&destination=${ad.address} ${ad.zip} ${ad.city}`} target="_blank" rel="noopener noreferrer">
 
-                            <div className="absolute justify-center pl-10 pr-10 text-6xl">
 
+                    <div className="w-50 h-50 flex flex-col justify-center">
+
+                        <div className="ml-0  bg-white text-3xl w-full">
+                                {`${ad.address} ${ad.zip} ${ad.city}`}
+                            </div>
+                            <a href={`https://www.google.com/maps/dir/?api=1&destination=${ad.address} ${ad.zip} ${ad.city}`} target="_blank" rel="noopener noreferrer">
+
+                            <div className=" ml-56 text-4xl absolute w-auto pt-40 z-10  opacity-80">
                                 Trykk her for veibeskrivelse
                             </div>
-                            <div className="opacity-50 justify-center relative ">
-                                <Map address={`${ad.address} ${ad.zip} ${ad.city}`} /></div>
-
+                            
+                            <div className="opacity-50 justify-center relative z-0 ">
+                                <Map address={`${ad.address} ${ad.zip} ${ad.city}`} />
+                            </div>
 
 
                         </a>
                     </div>
+
 
                 </div>
             ))}
