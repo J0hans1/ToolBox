@@ -2,30 +2,12 @@ import { Button, TextField } from '@mui/material';
 import PEOPLE from '../img/people.svg';
 import { useNavigate } from "react-router-dom";
 import { removeFromSessionStorage, validateUser } from '../lib/controller';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import Title from '../components/Title';
+import { Snack, SnackbarContext } from '../context/SnackbarContext';
 
 
 // Check for valid input on Login
-async function validation(username: string, password: string) {
-    // Check if user is already logged in
-    if (sessionStorage.getItem("username") !== null) {
-        alert("Du er allerede logget inn");
-        return false;
-    }
-    // Check if username and password is longer than 3 characters
-    if (username.length < 3 || password.length < 3) {
-        alert("Brukernavn og passord må være lengre enn 3 tegn");
-        return false;
-    }
-    // Check if user exists in database
-    if (await validateUser(username, password)) {
-        return true;
-    } else {
-        alert("Brukernavn eller passord er feil");
-        return false;
-    }
-}
 
 const LoginPage = () => {
 
@@ -33,6 +15,27 @@ const LoginPage = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
+    const {setSnack} = useContext(SnackbarContext);
+
+    async function validation(username: string, password: string) {
+        // Check if user is already logged in
+        if (sessionStorage.getItem("username") !== null) {
+            setSnack(new Snack({message: 'Du er allerede logget inn!', color:'warning', autoHideDuration:5000, open: true}));
+            return false;
+        }
+        // Check if username and password is longer than 3 characters
+        if (username.length < 3 || password.length < 3) {
+            setSnack(new Snack({message: 'Brukernavn og passord må være lengre enn 3 tegn!', color:'warning', autoHideDuration:5000, open: true}));
+            return false;
+        }
+        // Check if user exists in database
+        if (await validateUser(username, password)) {
+            return true;
+        } else {
+            setSnack(new Snack({message: 'Brukernavn eller passord er feil!', color:'error', autoHideDuration:5000, open: true}));
+            return false;
+        }
+    }
 
     return (
         <div className="w-screen h-screen" >
@@ -58,7 +61,7 @@ const LoginPage = () => {
                                     sx={{ p: 2 }}
                                     onClick={async () => {
                                         if (await validation(username, password)) {
-                                            alert("Du er nå logget inn på bruker: " + username);
+                                            setSnack(new Snack({message: 'Du er nå logget inn på bruker: ' + username, color:'success', autoHideDuration:5000, open: true}));
                                             navigate("/");  /* navigerer fra loginpage til hovedsiden */
                                         }
                                     }}>Logg inn
@@ -79,13 +82,11 @@ const LoginPage = () => {
                                     onClick={() => {
                                         removeFromSessionStorage(); // fjerner brukernavn og brukerID fra session storage
                                         console.log("Logged out");
-                                        alert("Du er nå logget ut");
+                                        setSnack(new Snack({message: 'Du er nå logget ut!', color:'success', autoHideDuration:5000, open: true}));
                                     }}>Logg ut
                                 </Button>
                             </div>
                         </div>
-
-
 
                     </div>
                 </div>

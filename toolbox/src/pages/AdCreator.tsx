@@ -1,31 +1,16 @@
 import { MenuItem, Select, TextField, Button, FormControl, InputLabel, ImageList } from "@mui/material";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { addAd, uploadImages } from "../lib/controller";
 import { NewAd } from "../types/types";
 import Title from "../components/Title";
 import Step from "../components/Step";
 import { validateAddress, validateCity, validateDescription, validatePrice, validateTitle, validateZip } from "../lib/validation";
+import { useNavigate } from "react-router-dom";
+import { Snack, SnackbarContext } from "../context/SnackbarContext";
 
-
-function writeAdToDatabase(props: NewAd) {
-    const userID = sessionStorage.getItem("userID")
-    const ad = {
-        userid: userID,
-        title: props.title,
-        description: props.description,
-        category: props.category,
-        price: props.price,
-        address: props.address,
-        zip: props.zip,
-        city: props.city,
-        pictures: props.pictures
-    }
-    console.log(ad)
-    addAd(ad); // Add ad to database
-    alert("Annonse opprettet");
-}
 
 const AdCreator = () => {
+    let navigate = useNavigate();
 
     const [description, setDescription] = useState("");
     const [title, setTitle] = useState("");
@@ -36,85 +21,101 @@ const AdCreator = () => {
     const [city, setCity] = useState("");
     const [images, setImages] = useState<FileList | null>(null);
 
+    const {setSnack} = useContext(SnackbarContext);
 
     const handleOnClick = async () => {
         if (sessionStorage.getItem("username") === null) {
-            alert("Du må være logget inn for å opprette en annonse");
+            setSnack(new Snack({message: 'Du må være logget inn for å opprette en annonse!', color:'warning', autoHideDuration:5000, open: true}));
             return;
         }
         // check if all fields are filled
         if (title === "" || description === "" || category === "" || price === "" || address === "" || zip === "" || city === "") {
-            alert("Alle felt må fylles ut");
+            setSnack(new Snack({message: 'Alle felt må fylles ut!', color:'warning', autoHideDuration:5000, open: true}));
             return;
         }
-        if (!validateTitle(title)){
-            alert("Ikke gyldig tittel!");
+        if (!validateTitle(title)) {
+            setSnack(new Snack({message: 'Ikke gyldig tittel!', color:'warning', autoHideDuration:5000, open: true}));
             return;
         }
-        if (!validateDescription(description)){
-            alert("Ikke en gyldig beksrivelse!");
+        if (!validateDescription(description)) {
+            setSnack(new Snack({message: 'Ikke en gyldig beksrivelse!', color:'warning', autoHideDuration:5000, open: true}));
             return;
         }
-        if (!validateAddress(address)){
-            alert("Ikke en gyldig adresse!");
+        if (!validateAddress(address)) {
+            setSnack(new Snack({message: 'Ikke en gyldig adresse!', color:'warning', autoHideDuration:5000, open: true}));
             return;
         }
-        if (!validateZip(zip)){
-            alert("Ikke et gyldig postnummer!");
+        if (!validateZip(zip)) {
+            setSnack(new Snack({message: 'Ikke et gyldig postnummer!', color:'warning', autoHideDuration:5000, open: true}));
             return;
         }
-        if (!validateCity(city)){
-            alert("Ikke gyldig navn på by!");
+        if (!validateCity(city)) {
+            setSnack(new Snack({message: 'Ikke gyldig navn på by!', color:'warning', autoHideDuration:5000, open: true}));
             return;
         }
-        if (!validatePrice(price)){
-            alert("Pris kan ikke være tom!");
+        if (!validatePrice(price)) {
+            setSnack(new Snack({message: 'Pris kan ikke være tom!', color:'warning', autoHideDuration:5000, open: true}));
             return;
         }
         await uploadImagesToBackend(images);
     }
 
-    async function uploadImagesToBackend( images: FileList | null) {
-        console.log("uploadImagesToBackend");
-        console.log("images: " + images);
-        if (images === null) {
-            return;
+    function writeAdToDatabase(props: NewAd) {
+        const userID = sessionStorage.getItem("userID")
+        const ad = {
+            userid: userID,
+            title: props.title,
+            description: props.description,
+            category: props.category,
+            price: props.price,
+            address: props.address,
+            zip: props.zip,
+            city: props.city,
+            pictures: props.pictures || ['http://www.sitech.co.id/assets/img/products/default.jpg'] // default image if none is provided
         }
-        const imageUrls2 = await uploadImages(images);
-        
-        const adToDatabase = {
-            title: title,
-            description: description,
-            category: category,
-            price: parseInt(price),
-            address: address,
-            zip: parseInt(zip),
-            city: city,
-            pictures: imageUrls2
-        }
-        writeAdToDatabase(adToDatabase);
-        resetStates();
+        console.log(ad)
+        addAd(ad); // Add ad to database
+        setSnack(new Snack({message: 'Annonse er opprettet!', color:'success', autoHideDuration:5000, open: true}));        
     }
 
-    function resetStates() {
-        // set states to default
-        setTitle("");
-        setDescription("");
-        setCategory("");
-        setPrice("");
-        setAddress("");
-        setZip("");
-        setCity("");
-        setImages(null); 
-    }
+    async function uploadImagesToBackend(images: FileList | null) {
+        if (images !== null) {
+            const imageUrls2 = await uploadImages(images);
 
+            const adToDatabase = {
+                title: title,
+                description: description,
+                category: category,
+                price: parseInt(price),
+                address: address,
+                zip: parseInt(zip),
+                city: city,
+                pictures: imageUrls2
+            } as NewAd;
+            writeAdToDatabase(adToDatabase);
+            navigate("/ads");
+        }
+        else {
+            const adToDatabase = {
+                title: title,
+                description: description,
+                category: category,
+                price: parseInt(price),
+                address: address,
+                zip: parseInt(zip),
+                city: city,
+                pictures: ['http://www.sitech.co.id/assets/img/products/default.jpg'] // default image if none is provided
+            } as NewAd;
+            writeAdToDatabase(adToDatabase);
+            navigate("/ads");
+        }
+    }
 
 
     return (
         <div>
             <div id="c_section" className='flex w-full h-full content-center bg-slate-100 overflow-hidden z-10'>
                 <div id="c_container" className='static flex flex-row mr-auto ml-auto mt-auto mb-auto w-full max-w-7xl p-10 gap-10 justify-center bg-white'>
-                    {/* <div className='flex flex-col justify-between w-1/4 bg-yellow-400 h-full'></div> */}
                     <div className='flex flex-col w-10/12 text-left pt-32 mb-10'>
 
                         <Title size={'text-7xl'} heading={'Opprett '} span={'annonse'} description={'Start utlån allerede i dag! Følg stegene, så er annonsen din oppe og går i løpet av kort tid!'} />
@@ -157,7 +158,7 @@ const AdCreator = () => {
 
                             <div className='flex flex-col w-full mt-5 gap-2 my-2'>
                                 <TextField fullWidth label="Tittel" variant="outlined" value={title} onChange={(e) => { setTitle(e.target.value) }} />
-                                <TextField fullWidth multiline minRows={4} label="Beskrivelse" variant="outlined" value={description} onChange={(e) => { setDescription(e.target.value) }} />                                
+                                <TextField fullWidth multiline minRows={4} label="Beskrivelse" variant="outlined" value={description} onChange={(e) => { setDescription(e.target.value) }} />
                             </div>
 
                         </div>
@@ -168,22 +169,13 @@ const AdCreator = () => {
 
                             <div className='flex flex-col w-full mt-5 gap-2'>
                                 <ImageList sx={{ width: 500, height: "auto" }} cols={3} rowHeight={164}>
-                                    {/* {itemData.map((item) => (
-                                        <ImageListItem key={item.img}>
-                                        <img
-                                src={`${item.img}?w=164&h=164&fit=crop&auto=format`}
-                                srcSet={`${item.img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-                                alt={item.title}
-                                loading="lazy"
-                                    />
-                                    </ImageListItem>
-                                ))} */}
                                 </ImageList>
                                 <Button
                                     variant="outlined"
                                     component="label"
                                     color="primary"
-                                    sx={{p: 2,
+                                    sx={{
+                                        p: 2,
                                         ':hover': {
                                             bgcolor: 'black',
                                             color: 'white',
@@ -194,15 +186,25 @@ const AdCreator = () => {
                                         hidden
                                         id="select-image"
                                         multiple
-                                     onChange={e => setImages(e.target.files)}
+                                        onChange={e => setImages(e.target.files)}
                                     /></Button>
+                                {images && images.length > 0 && (
+                                    <div>
+                                        <p>Selected files:</p>
+                                        <ul>
+                                            {Array.from(images).map((file, index) => (
+                                                <li key={index}>{file.name}</li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
                             </div>
                         </div>
 
                         <div id="ADDRESS_INFO" className='flex flex-col my-5'>
                             <Step nr={'04'} title={'Sted og addresse'} />
                             <p> Gi produktet en adresse. Dette vil gjøre annonsen din synlig for brukere i nærheten, og vil gi kjøpere mulighet til å hente produktet hos deg. Merk: adressen din blir kun synlig for andre brukere etter at utlån er avtalt og godkjent av deg.</p>
-                            
+
                             <div className='flex flex-col w-full mt-5 gap-2'>
                                 <TextField label="Hjemmeadresse" variant="outlined" value={address} onChange={(e) => setAddress(e.target.value)} />
 
@@ -219,15 +221,15 @@ const AdCreator = () => {
                             <p>Vi anbefaler at du sjekker prisen til tilsvarende produkter. En passende pris øker sannsynligheten for utlån.</p>
 
                             <div className='flex flex-col w-full mt-5 gap-2'>
-                                <TextField label="Pris" type="number" InputLabelProps={{shrink: true,}} value={price} onChange={(e) => { setPrice(e.target.value) }} />
+                                <TextField label="Pris" type="number" InputLabelProps={{ shrink: true, }} value={price} onChange={(e) => { setPrice(e.target.value) }} />
                             </div>
                         </div>
 
-                        <div className='flex flex-col w-full gap-2 my-2'>                              
-                            <Button variant="contained" color="primary"  sx={{p:2}} onClick={() => handleOnClick()}> Publiser annonse </Button>
-                            <Button variant="outlined" color="primary" sx={{p:2,':hover': {bgcolor: 'black',color: 'white',},}}> Forhåndsvisning </Button>
+                        <div className='flex flex-col w-full gap-2 my-2'>
+                            <Button variant="contained" color="primary" sx={{ p: 2 }} onClick={() => handleOnClick()}> Publiser annonse </Button>
+                            <Button variant="outlined" color="primary" sx={{ p: 2, ':hover': { bgcolor: 'black', color: 'white', }, }}> Forhåndsvisning </Button>
                         </div>
-                        
+
                     </div>
                 </div>
 

@@ -1,9 +1,10 @@
 import { updateUser, deleteUser, removeFromSessionStorage } from "../lib/controller";
 import { User } from "../types/types";
 import {TextField, Button} from '@mui/material';
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { validateSimilarPasswords } from "../lib/validation";
 import { useNavigate } from "react-router-dom";
+import { Snack, SnackbarContext } from "../context/SnackbarContext";
 
 interface IProps{
     user: User;
@@ -12,6 +13,7 @@ interface IProps{
 export default function EditUser({user}: IProps){
     let navigate = useNavigate();
     const [editMode, setEditMode] = useState(false);
+    const {setSnack} = useContext(SnackbarContext);
 
     // states for all the textfields
     const [firstname, setFirstname] = useState(user.firstname);
@@ -30,16 +32,15 @@ export default function EditUser({user}: IProps){
         if (userIDFromSessionStorage != null){
             deleteUser(userIDFromSessionStorage);
             removeFromSessionStorage();
-            alert("Brukeren ble slettet");
+            setSnack(new Snack({message: 'Brukeren ble slettet!', color:'success', autoHideDuration:5000, open: true}))
             navigate("/");
         }
     }
 
-
     function updateUserButton(){
         if (firstname != null && lastname != null && email != null && phone != null && address != null && zip != null && city != null && username != null && password != null && password2 != null){
             if (!validateSimilarPasswords(password, password2)){
-                alert("Passordene er ikke like!");
+                setSnack(new Snack({message: 'Passordene er ikke like!', color:'warning', autoHideDuration:5000, open: true}))
                 return;
             }
             validateSimilarPasswords(password, password2);
@@ -59,8 +60,8 @@ export default function EditUser({user}: IProps){
                     password: password
                 }
                 updateUser(userIDFromSessionStorage, user2);
-                alert("Brukeren ble oppdatert");
                 editMode ? setEditMode(false) : setEditMode(true);
+                setSnack(new Snack({message: 'Bruker er oppdatert!', color:'success', autoHideDuration:5000, open: true}))
             }
         }
     }

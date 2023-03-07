@@ -21,31 +21,12 @@ const Ads = () => {
             filters.search,
             filters.category,
             filters.minPrice,
-            filters.maxPrice
+            filters.maxPrice,
+            filters.zipCode
         ).then((ads) => {
             setAds(ads);
         });
     }, [filters]);
-
-
-
-    /*     useEffect(
-            () =>
-                onSnapshot(adsCollection, (snapshot: QuerySnapshot<DocumentData>) => {
-                    setAds(
-                        snapshot.docs.map((doc) => {
-                            return {
-                                id: doc.id,
-                                ...doc.data(),
-                            };
-                        })
-                    );
-                }),
-            []
-        ); */
-
-
-
 
     return (
         <div className='w-screen flex flex-col bg-pu-grunn pt-40'>
@@ -55,7 +36,6 @@ const Ads = () => {
                 </div>            
     
                 <section className='flex flex-col h-auto'>
-                    {/* <Title heading="Våre " span='annonser' size='text-7xl'/> */}
                     <div className='w-full flex flex-row justify-center gap-5'>
                         <div className='lg:hidden block'>
                             <Button variant="contained">Filter</Button>
@@ -66,22 +46,11 @@ const Ads = () => {
                             }} variant="filled" label="Ønsket produkt" value={filters.search} onChange={(event: any) => {
                                 dispatch(setFilter({ field: "search", value: event.target.value }));
                             }} />
-                            {/* <Button variant="contained" >Søk</Button> */}
                         </div>
                         <Button color="info" variant="contained" href="/#/adcreator">Opprett annonse</Button>
                     </div>
 
                     <div className='flex m-auto w-full max-w-7xl pt-10 text-current flex-wrap flex-row justify-center'>
-                        {/* Not in use but can be used as testdata
-                        <Ad 
-                            src="https://static.bb.se/wcsstore/CAS/PIM/Luna/imgs/1151376.jpg"
-                            title="Bor"
-                            description="Dritbra bor som lager høl"
-                            location="Fredrikstad"
-                            price="200kr/dag"
-                            date="07.02.23" 
-                        />
-                        */}
                         {ads?.map((ad) => (
                             <AdComponent key={ad.id} ad={ad} />
                         ))}

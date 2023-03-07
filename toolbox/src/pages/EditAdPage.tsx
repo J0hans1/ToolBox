@@ -1,11 +1,12 @@
 import { MenuItem, Select, TextField, Button, FormControl, InputLabel, ImageList } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { getAd, updateAd, uploadImages } from "../lib/controller";
 import { UpdateAd } from "../types/types";
 import Title from "../components/Title";
 import Step from "../components/Step";
 import { validateAddress, validateCity, validateDescription, validatePrice, validateTitle, validateZip } from "../lib/validation";
 import { useNavigate } from "react-router-dom";
+import { Snack, SnackbarContext } from "../context/SnackbarContext";
 
 
 const EditAd = () => {
@@ -19,7 +20,10 @@ const EditAd = () => {
     const [address, setAddress] = useState("");
     const [zip, setZip] = useState("");
     const [city, setCity] = useState("");
+    const [pictures, setPictures] = useState<string[]>([]);
     const [images, setImages] = useState<FileList | null>(null);
+
+    const {setSnack} = useContext(SnackbarContext);
 
 
     useEffect(() => {
@@ -37,6 +41,7 @@ const EditAd = () => {
                     setAddress(adFromDatabase.address);
                     setZip(adFromDatabase.zip.toString());
                     setCity(adFromDatabase.city);
+                    setPictures(adFromDatabase.pictures);
                 }
             }
         }
@@ -58,6 +63,88 @@ const EditAd = () => {
             const ad = {
                 id: adID,
                 userid: userID,
+                title: props.title,
+                description: props.description,
+                category: props.category,
+                price: props.price,
+                address: props.address,
+                zip: props.zip,
+                city: props.city,
+                pictures: props.pictures,
+            } as UpdateAd;
+
+
+            if (ad.pictures.length > 0) {
+                for (let i = 0; i < ad.pictures.length; i++) {
+                    if (ad.pictures[i] === 'http://www.sitech.co.id/assets/img/products/default.jpg') {
+                        ad.pictures.splice(i, 1); // remove default image if other images are provided
+                    }
+                }
+            }
+
+            if (ad.pictures.length === 0) {
+                ad.pictures = ['http://www.sitech.co.id/assets/img/products/default.jpg']; // default image if none is provided
+            }
+
+            console.log(ad)
+            updateAd(adID, ad);
+            setSnack(new Snack({message: 'Annonse er oppdatert!', color:'success', autoHideDuration:5000, open: true}));
+
+            navigate(`/adinspector/${ad.id}`); // redirect back to same ad
+            setSnack(new Snack({message: 'Annonse er oppdatert!', color:'success', autoHideDuration:5000, open: true}));
+        }
+    }
+
+
+    const handleOnClick = async () => {
+        if (sessionStorage.getItem("username") === null) {
+            setSnack(new Snack({message: 'Du må være logget inn for å opprette en annonse!', color:'warning', autoHideDuration:5000, open: true}));
+            return;
+        }
+        // check if all fields are filled
+        if (title === "" || description === "" || category === "" || price === "" || address === "" || zip === "" || city === "") {
+            setSnack(new Snack({message: 'Alle felt må fylles ut!', color:'warning', autoHideDuration:5000, open: true}));
+            return;
+        }
+        if (!validateTitle(title)) {
+            setSnack(new Snack({message: 'Ikke en gyldig tittel!', color:'warning', autoHideDuration:5000, open: true}));
+            return;
+        }
+        if (!validateDescription(description)) {
+            setSnack(new Snack({message: 'Ikke en gyldig beskrivelse!', color:'warning', autoHideDuration:5000, open: true}));
+            return;
+        }
+        if (!validateAddress(address)) {
+            setSnack(new Snack({message: 'Ikke en gyldig adresse!', color:'warning', autoHideDuration:5000, open: true}));
+            return;
+        }
+        if (!validateZip(zip)) {
+            setSnack(new Snack({message: 'Ikke et gyldig postnummer!', color:'warning', autoHideDuration:5000, open: true}));
+            return;
+        }
+        if (!validateCity(city)) {
+            setSnack(new Snack({message: 'Ikke gyldig navn på by!', color:'warning', autoHideDuration:5000, open: true}));
+            return;
+        }
+        if (!validatePrice(price)) {
+            setSnack(new Snack({message: 'Pris kan ikke være tom!', color:'warning', autoHideDuration:5000, open: true}));
+            return;
+        }
+        await uploadImagesToBackend(images);
+    }
+
+    async function uploadImagesToBackend(images: FileList | null) {
+        if (images !== null) {
+            const imageUrls2 = await uploadImages(images);
+
+            // Add existing images to ad
+            if (pictures !== null) {
+                if (pictures.length > 0) {
+                    imageUrls2.push(...pictures);
+                }
+            }
+
+            const adToDatabase = {
                 title: title,
                 description: description,
                 category: category,
@@ -65,81 +152,22 @@ const EditAd = () => {
                 address: address,
                 zip: parseInt(zip),
                 city: city,
-                pictures: [],
+                pictures: imageUrls2
             } as UpdateAd;
-
-            // add the old pictures to the ad object
-            if (ad.pictures && ad.pictures.length > 0) {
-                ad.pictures.push(...props.pictures);
-            } else {
-                ad.pictures = props.pictures;
-            }
-
-            console.log(ad)
-            updateAd(adID, ad);
-            alert("Annonse er oppdatert");
-            navigate(`/adinspector/${ad.id}`); // redirect back to same ad
+            updateAdToDatabase(adToDatabase);
+        } else {
+            const adToDatabase = {
+                title: title,
+                description: description,
+                category: category,
+                price: parseInt(price),
+                address: address,
+                zip: parseInt(zip),
+                city: city,
+                pictures: ad?.pictures
+            } as UpdateAd;
+            updateAdToDatabase(adToDatabase);
         }
-    }
-
-
-    const handleOnClick = async () => {
-        if (sessionStorage.getItem("username") === null) {
-            alert("Du må være logget inn for å opprette en annonse");
-            return;
-        }
-        // check if all fields are filled
-        if (title === "" || description === "" || category === "" || price === "" || address === "" || zip === "" || city === "") {
-            alert("Alle felt må fylles ut");
-            return;
-        }
-        if (!validateTitle(title)) {
-            alert("Ikke gyldig tittel!");
-            return;
-        }
-        if (!validateDescription(description)) {
-            alert("Ikke en gyldig beksrivelse!");
-            return;
-        }
-        if (!validateAddress(address)) {
-            alert("Ikke en gyldig adresse!");
-            return;
-        }
-        if (!validateZip(zip)) {
-            alert("Ikke et gyldig postnummer!");
-            return;
-        }
-        if (!validateCity(city)) {
-            alert("Ikke gyldig navn på by!");
-            return;
-        }
-        if (!validatePrice(price)) {
-            alert("Pris kan ikke være tom!");
-            return;
-        }
-        await uploadImagesToBackend(images);
-    }
-
-    async function uploadImagesToBackend(images: FileList | null) {
-        console.log("uploadImagesToBackend");
-        console.log("images: " + images);
-        if (images === null) {
-            return;
-        }
-        const imageUrls2 = await uploadImages(images);
-
-        const adToDatabase = {
-            title: title,
-            description: description,
-            category: category,
-            price: parseInt(price),
-            address: address,
-            zip: parseInt(zip),
-            city: city,
-            pictures: imageUrls2
-        }
-        console.log("hei")
-        updateAdToDatabase(adToDatabase);
     }
 
 
@@ -149,7 +177,6 @@ const EditAd = () => {
         <div>
             <div id="c_section" className='flex w-full h-full content-center bg-slate-100 overflow-hidden z-10'>
                 <div id="c_container" className='static flex flex-row mr-auto ml-auto mt-auto mb-auto w-full max-w-7xl p-10 gap-10 justify-center bg-white'>
-                    {/* <div className='flex flex-col justify-between w-1/4 bg-yellow-400 h-full'></div> */}
                     <div className='flex flex-col w-10/12 text-left pt-32 mb-10'>
 
                         <Title size={'text-7xl'} heading={'Rediger '} span={'annonse'} description={'Start utlån allerede i dag! Følg stegene, så er annonsen din oppe og går i løpet av kort tid!'} />
@@ -203,16 +230,6 @@ const EditAd = () => {
 
                             <div className='flex flex-col w-full mt-5 gap-2'>
                                 <ImageList sx={{ width: 500, height: "auto" }} cols={3} rowHeight={164}>
-                                    {/* {itemData.map((item) => (
-                                        <ImageListItem key={item.img}>
-                                        <img
-                                src={`${item.img}?w=164&h=164&fit=crop&auto=format`}
-                                srcSet={`${item.img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-                                alt={item.title}
-                                loading="lazy"
-                                    />
-                                    </ImageListItem>
-                                ))} */}
                                 </ImageList>
                                 <Button
                                     variant="outlined"
@@ -232,6 +249,16 @@ const EditAd = () => {
                                         multiple
                                         onChange={e => setImages(e.target.files)}
                                     /></Button>
+                                {images && images.length > 0 && (
+                                    <div>
+                                        <p>Selected files:</p>
+                                        <ul>
+                                            {Array.from(images).map((file, index) => (
+                                                <li key={index}>{file.name}</li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
                             </div>
                         </div>
 

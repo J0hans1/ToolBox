@@ -1,70 +1,14 @@
 import { Button, TextField } from '@mui/material';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { addToSessionStorage, addUser, removeFromSessionStorage, validateDuplicateUsername } from "../lib/controller"
 import PEOPLE from '../img/people.svg';
 import { useNavigate } from 'react-router-dom';
 import Title from '../components/Title';
 import Step from '../components/Step'
 import { validateAddress, validateCity, validateEmail, validatefirstName, validatelastName, validatePassword, validatePhoneNumber, validateSimilarPasswords, validateUserName, validateZip } from '../lib/validation';
+import { Snack, SnackbarContext } from '../context/SnackbarContext';
+import { NewUser } from '../types/types';
 
-
-async function validation(firstname: string, lastname: string, 
-                            phone: string,email: string, username: string, 
-                            password: string, password2: string,
-                            address: string, zip: string, city: string) {
-
-    if (!validatefirstName(firstname)){
-        alert("Navn kan ikke inneholde tall!");
-        return false;
-    }
-    if (!validatelastName(lastname)){
-        alert("Navn kan ikke inneholde tall!");
-        return false;
-    }
-    if (!validatePhoneNumber(phone)){
-        alert("Ikke gyldig telefonnummer!");
-        return false;
-    }
-    if (!validateEmail(email)){
-        alert("Ikke gyldig epostadresse!");
-        return false;
-    }
-    if (!validateAddress(address)){
-        alert("Ikke en gyldig adresse!");
-        return false;
-    }
-    if (!validateZip(zip)){
-        alert("Ikke et gyldig postnummer!");
-        return false;
-    }
-    if (!validateCity(city)){
-        alert("Ikke en gyldig by!");
-        return false;
-    }
-
-    if (sessionStorage.getItem("username") !== null) {
-        removeFromSessionStorage(); // logger ut fra bruker man er pålogget som
-    }
-    // Check if the username exists in the database
-    if (await validateDuplicateUsername(username)) {
-        alert("Brukernavn er allerede i bruk");
-        return false;
-    }
-    if (!validateUserName(username)) {
-        alert("Ikke gyldig brukernavn");
-        return false;
-    }
-    if (!validatePassword(password)) {
-        alert("Ikke gyldig passord.\nPassord må være minst 4 bokstaver bestående\nav tall, store og små bokstaver!");
-        return false;
-    }
-    if (!validateSimilarPasswords(password, password2)){
-        alert("Passordene er ikke like!");
-        return false;
-    }
-
-    return true;
-}
 
 const RegisterPage = () => {
     let navigate = useNavigate();
@@ -79,8 +23,69 @@ const RegisterPage = () => {
     const [zip, setZip] = useState("");
     const [city, setCity] = useState("");
 
+    const {setSnack} = useContext(SnackbarContext);
+
+    async function validation(firstname: string, lastname: string, 
+        phone: string,email: string, username: string, 
+        password: string, password2: string,
+        address: string, zip: string, city: string) {
+
+    if (!validatefirstName(firstname)){
+        setSnack(new Snack({message: 'Navn kan ikke inneholde tall!', color:'warning', autoHideDuration:5000, open: true}));
+        return false;
+    }
+    if (!validatelastName(lastname)){
+        setSnack(new Snack({message: 'Navn kan ikke inneholde tall!', color:'warning', autoHideDuration:5000, open: true}));
+        return false;
+    }
+    if (!validatePhoneNumber(phone)){
+        setSnack(new Snack({message: 'Ikke gyldig telefonnummer!', color:'warning', autoHideDuration:5000, open: true}));
+        return false;
+    }
+    if (!validateEmail(email)){
+        setSnack(new Snack({message: 'Ikke gyldig epostadresse!', color:'warning', autoHideDuration:5000, open: true}));
+        return false;
+    }
+    if (!validateAddress(address)){
+        setSnack(new Snack({message: 'Ikke en gyldig adresse!', color:'warning', autoHideDuration:5000, open: true}));
+        return false;
+    }
+    if (!validateZip(zip)){
+        setSnack(new Snack({message: 'Ikke et postnummer!', color:'warning', autoHideDuration:5000, open: true}));
+        return false;
+    }
+    if (!validateCity(city)){
+        setSnack(new Snack({message: 'Ikke et gyldig navn på en by!', color:'warning', autoHideDuration:5000, open: true}));
+        return false;
+    }
+
+    if (sessionStorage.getItem("username") !== null) {
+        removeFromSessionStorage(); // logger ut fra bruker man er pålogget som
+    }
+    // Check if the username exists in the database
+    if (await validateDuplicateUsername(username)) {
+        setSnack(new Snack({message: 'Brukernavnet er allerede i bruk!', color:'warning', autoHideDuration:5000, open: true}));
+        return false;
+    }
+    if (!validateUserName(username)) {
+        setSnack(new Snack({message: 'Ikke et gyldig brukernavn!', color:'warning', autoHideDuration:5000, open: true}));
+        return false;
+    }
+    if (!validatePassword(password)) {
+        setSnack(new Snack({message: 'Ikke gyldig passord.\nPassord må være minst 4 bokstaver bestående\nav tall, store og små bokstaver!', color:'warning', autoHideDuration:5000, open: true}));
+        return false;
+    }
+    if (!validateSimilarPasswords(password, password2)){
+        setSnack(new Snack({message: 'Passordene er ikke like!', color:'warning', autoHideDuration:5000, open: true}));
+        return false;
+    }
+
+    return true;
+    }
+
     const addNewUser = () => {
-        addUser({
+
+        const newUser: NewUser = {
             firstname,
             lastname,
             phone,
@@ -92,7 +97,9 @@ const RegisterPage = () => {
             city,
             myAds: [],
             savedAds: [],
-        })
+            myReviews: [],
+        }
+        addUser(newUser)
     }
 
       
@@ -151,7 +158,8 @@ const RegisterPage = () => {
                                         address, zip, city)) {
                                             addNewUser();
                                             addToSessionStorage(username); // lagrer brukernavn og brukerID til session storage
-                                            alert("Du er nå registrert og logget inn som " + username)
+                                            setSnack(new Snack({message: 'Du er nå registrert og logget inn som: ' + username, color:'success', autoHideDuration:5000, open: true}));
+
                                             navigate("/"); /* navigerer fra registrersiden til hovedsiden */
                                 }
                             }}>Registrer
