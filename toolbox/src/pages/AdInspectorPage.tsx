@@ -9,6 +9,7 @@ import { Avatar } from "@mui/material";
 import { amber } from "@mui/material/colors";
 import LinkButton from "../components/LinkButton";
 import { Snack, SnackbarContext } from "../context/SnackbarContext";
+import Map from "../components/Map";
 
 
 
@@ -17,6 +18,7 @@ interface Info {
     email?: string;
     phone?: string;
     avatar?: string;
+
 }
 
 const AdUserInfo = (props: Info) => {
@@ -37,6 +39,12 @@ const AdUserInfo = (props: Info) => {
                 <LinkButton label={props.email} href={props.email} type="mail" />
                 <LinkButton label={props.phone} href={props.phone} type="phone" />
             </div>
+            <div className="flex h-1/3">
+
+            </div >
+
+
+
         </div>
     )
 }
@@ -256,7 +264,22 @@ const AdInspectorPage = () => {
                                     <TitledIcon icon="https://img.icons8.com/ios/50/000000/price-tag-euro.png" key={ad.price} text={ad.price?.toString() + " kr/dag"} iconSize="h-full" textSize="text-3xl" />
                                     <TitledIcon icon="https://img.icons8.com/material-sharp/256/map-marker.png" key={ad.city} text={ad.city} iconSize="h-full" textSize="text-3xl" />
                                 </div>
+                                
+                                <div className="flex flex-col">
+                                    <div className="bg-white text-3xl">{`${ad.address} ${ad.zip} ${ad.city}`}</div>
+                                    <a href={`https://www.google.com/maps/dir/?api=1&destination=${ad.address} ${ad.zip} ${ad.city}`}>
+                                        <div className="absolute pt-40 text-center pl-7">
+                                            Trykk her for veibeskrivelse
+
+                                        </div>
+                                        <div className="opacity-50 flex relative">
+                                            <Map address={`${ad.address} ${ad.zip} ${ad.city}`} />
+                                        </div>
+                                    </a>
+                                </div>
                             </div>
+
+
 
                         )}
 
