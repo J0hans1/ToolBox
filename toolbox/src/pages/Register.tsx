@@ -7,6 +7,7 @@ import Title from '../components/Title';
 import Step from '../components/Step'
 import { validateAddress, validateCity, validateEmail, validatefirstName, validatelastName, validatePassword, validatePhoneNumber, validateSimilarPasswords, validateUserName, validateZip } from '../lib/validation';
 import { Snack, SnackbarContext } from '../context/SnackbarContext';
+import { NewUser } from '../types/types';
 
 
 const RegisterPage = () => {
@@ -83,7 +84,8 @@ const RegisterPage = () => {
     }
 
     const addNewUser = () => {
-        addUser({
+
+        const newUser: NewUser = {
             firstname,
             lastname,
             phone,
@@ -95,7 +97,9 @@ const RegisterPage = () => {
             city,
             myAds: [],
             savedAds: [],
-        })
+            myReviews: [],
+        }
+        addUser(newUser)
     }
 
       

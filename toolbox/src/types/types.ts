@@ -13,6 +13,7 @@ export interface User{
     city?: string;
     myAds?: string[];
     savedAds?: string[];
+    myReviews?: string[];
 }
 
 export interface Ad{
@@ -26,6 +27,7 @@ export interface Ad{
     zip?: number;
     city?: string;
     pictures?: string[];
+    reviews?: string[];
 }
 
 export interface UpdateAd {
@@ -39,6 +41,7 @@ export interface UpdateAd {
     zip: number;
     city: string;
     pictures: string[];
+    reviews: string[];
 }
 
 export interface NewAd{
@@ -52,6 +55,7 @@ export interface NewAd{
     zip?: number;
     city?: string;
     pictures?: string[];
+    reviews?: string[];
 }
 
 export interface NewUser{
@@ -66,5 +70,22 @@ export interface NewUser{
     city: string;
     myAds: string[];
     savedAds: string[];
+    myReviews: string[];
+}
+
+export interface Review{
+    id: string;
+    userId?: string;
+    adId?: string;
+    rating?: number;
+    comment?: string;
+}
+
+export interface NewReview{
+    id?: string;
+    userId: string;
+    adId: string;
+    rating: number;
+    comment: string;
 }
 

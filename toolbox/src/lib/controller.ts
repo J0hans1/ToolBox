@@ -1,6 +1,6 @@
 import { addDoc, collection, deleteDoc, doc, DocumentData, getDoc, getDocs, getFirestore, Query, query, updateDoc, where } from "firebase/firestore";
 import { app, storage } from "./firebase";
-import { Ad, NewUser, UpdateAd, User } from "../types/types";
+import { Ad, NewReview, NewUser, Review, UpdateAd, User } from "../types/types";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 const firestore = getFirestore(app);
@@ -32,10 +32,32 @@ export const addAd = async (adData: any) => {
   console.log(`New ad created${newAd.path}`)
 };
 
+// Create a new review
+export async function addReview(reviewData: NewReview) {
+  const res = await addDoc(reviewCollection, { ...reviewData });
+  console.log(`New review created${res.path}`)
+  if (res) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+// check if user has already reviewed this ad
+export async function checkReview(userId: string, adId: string) {
+  const q = query(reviewCollection, where("userId", "==", userId), where("adId", "==", adId));
+  const snapshot = await getDocs(q);
+  if (snapshot.empty) {
+    return false;
+  } else {
+    return true;
+  }
+}
 
 // READ
 export const usersCollection = collection(firestore, "users"); // Get all users
 export const adsCollection = collection(firestore, "ads"); // Get all ads
+export const reviewCollection = collection(firestore, "reviews"); // Get all reviews
 
 
 
@@ -194,7 +216,6 @@ export const AdsQuery = async (
 export const getUser = async (id: string) => {
   const document = doc(firestore, `users/${id}`);
   const user = await getDoc(document);
-  console.log(`getUser: User with ID: ${id}`);
   return user;
 };
 
@@ -258,7 +279,6 @@ export const getUserAds = async (id: string) => {
 export const updateUser = async (id: string, userData: User) => {
   const document = doc(firestore, `users/${id}`);
   await updateDoc(document, { ...userData });
-  console.log(`Updated user with ID: ${id}`);
 };
 
 
@@ -266,13 +286,15 @@ export const updateUser = async (id: string, userData: User) => {
 export const updateAd = async (adId: string, adData: UpdateAd) => {
   const document = doc(firestore, `ads/${adId}`);
   await updateDoc(document, { ...adData });
-  console.log(`Updated ad with ID: ${adId}`);
 };
 
 
+// Delete review
+export const deleteReview = async (id: string) => {
+  const document = doc(firestore, `reviews/${id}`);
+  await deleteDoc(document);
+};
 
-
-// Delete user's ads collection
 // Delete user's ads collection
 export const deleteUserAdsCollection = async (id: string) => {
   const userRef = doc(firestore, `users/${id}`);
@@ -282,7 +304,6 @@ export const deleteUserAdsCollection = async (id: string) => {
     await Promise.all(myAds.map(async (adId: string) => {
       await deleteAd(adId);
     }));
-    console.log(`Deleted ads with userId: ${id}`);
   }
 };
 
@@ -298,9 +319,62 @@ export const deleteUser = async (id: string) => {
   }
 };
 
+export async function getAdReviews(adId: string) {
+  const reviews: Review[] = [];
+  const reviewSnapshot = await getDocs(collection(firestore, "reviews"));
+  reviewSnapshot.forEach((doc) => {
+    if (doc.data().adId === adId) {
+      reviews.push({
+        id: doc.id,
+        adId: doc.data().adId,
+        userId: doc.data().userId,
+        rating: doc.data().rating,
+        comment: doc.data().comment,
+      });
+    }
+  });
+  return reviews;
+}
+
+export async function getReview(reviewId: string) {
+  const document = doc(firestore, `reviews/${reviewId}`);
+  const review = await getDoc(document);
+  return review;
+}
+
+export async function getMyReviews(userId: string) {
+  // get reviewId from user's myReviews array
+  const reviews: Review[] = [];
+  const user = await getUser(userId);
+  if (user.exists() && user.data().myReviews) {
+    const myReviews = user.data().myReviews;
+    const reviewPromises = myReviews.map(async (reviewId: string) => {
+      const review = await getReview(reviewId);
+      if (review.exists()) {
+        return {
+          id: review.id,
+          adId: review.data().adId,
+          userId: review.data().userId,
+          rating: review.data().rating,
+          comment: review.data().comment,
+        };
+      }
+      return null;
+    });
+    const reviewResults = await Promise.all(reviewPromises);
+    reviews.push(...reviewResults.filter((review) => review !== null));
+  }
+  return reviews;
+}
+
 // DELETE AN AD
 export const deleteAd = async (adId: string) => {
   try {
+    // delete reviews 
+    for (const review of await Promise.all(await getAdReviews(adId))) {
+      await deleteReview(review.id);
+    }
+
     const adRef = doc(firestore, `ads/${adId}`);
     await deleteDoc(adRef);
     console.log(`Deleted ad with ID: ${adId}`);

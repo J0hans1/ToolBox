@@ -30,10 +30,10 @@ const AdUserInfo = (props: Info) => {
                 </div>
             </div>
 
-           <div className="font-bold text-left p-8 pt-20 flex-wrap justify-center">
-            <p>Kontakt utleier for å avtale leie eller utlån: </p>
+            <div className="font-bold text-left p-8 pt-20 flex-wrap justify-center">
+                <p>Kontakt utleier for å avtale leie eller utlån: </p>
             </div>
-            <div className="flex flex-row font-bold ">                
+            <div className="flex flex-row font-bold ">
                 <LinkButton label={props.email} href={props.email} type="mail" />
                 <LinkButton label={props.phone} href={props.phone} type="phone" />
             </div>
@@ -49,7 +49,7 @@ const AdInspectorPage = () => {
     const [isOwnedAd, setIsOwnedAd] = useState(false);
     const [isAdSaved, setIsAdSaved] = useState(false);
 
-    const {snack, setSnack} = useContext(SnackbarContext);
+    const { setSnack } = useContext(SnackbarContext);
 
 
     const handleEditAd = async () => {
@@ -61,7 +61,7 @@ const AdInspectorPage = () => {
         const adIDFromSessionStorage = sessionStorage.getItem("ADID");
         if (adIDFromSessionStorage != null) {
             await deleteAd(adIDFromSessionStorage);
-            setSnack(new Snack({message: 'Annonse er slettet!', color:'success', autoHideDuration:5000, open: true}))
+            setSnack(new Snack({ message: 'Annonse er slettet!', color: 'success', autoHideDuration: 5000, open: true }))
             navigate("/ads");
         }
     };
@@ -73,10 +73,12 @@ const AdInspectorPage = () => {
             const isSavedAd = await isSaved(userIDFromSessionStorage, adIDFromSessionStorage);
             if (!isSavedAd) {
                 await saveAdToUser(userIDFromSessionStorage, adIDFromSessionStorage);
-                setSnack(new Snack({message: 'Annonse er lagret til lagrede annonser!', color:'success', autoHideDuration:5000, open: true}));
+                setSnack(new Snack({ message: 'Annonse er lagret til lagrede annonser!', color: 'success', autoHideDuration: 5000, open: true }));
 
                 setIsAdSaved(true);
-            } 
+            }
+        } else {
+            setSnack(new Snack({ message: 'Du må være logget inn for å lagre annonser!', color: 'warning', autoHideDuration: 5000, open: true }));
         }
     };
 
@@ -94,7 +96,6 @@ const AdInspectorPage = () => {
 
     async function getUserFromDatabase() {
         const userIDFromAd = sessionStorage.getItem("userIDFromAd");
-        console.log("setUserFromDatabase 2 " + userIDFromAd);
         if (userIDFromAd != null) {
             const userFromDatabase = await getUser(userIDFromAd).then((doc) => {
                 return { id: doc.id, ...doc.data() }
@@ -110,109 +111,21 @@ const AdInspectorPage = () => {
             const isSavedAd = await isSaved(userIDFromSessionStorage, adIDFromSessionStorage);
             if (isSavedAd) {
                 await removeAdFromUser(userIDFromSessionStorage, adIDFromSessionStorage);
-                setSnack(new Snack({message: 'Annonse er fjernet fra lagrede annonser!', color:'success', autoHideDuration:5000, open: true}));
-
+                setSnack(new Snack({ message: 'Annonse er fjernet fra lagrede annonser!', color: 'success', autoHideDuration: 5000, open: true }));
                 setIsAdSaved(false);
-            } 
+            }
         }
     };
 
-    const renderAdControls = () => {
-        if (isOwnedAd) {
-            return (
-                <div className="flex flex-row">
-                    <Button variant="contained" color="primary" onClick={handleEditAd}>
-                        Rediger annonse
-                    </Button>
-                    <Button variant="contained" color="error" onClick={handleDeleteAd}>
-                        Slett annonse
-                    </Button>
-                </div>
-            );
+    const handleRedirect = () => {
+        const userIDFromSessionStorage = sessionStorage.getItem("userID");
+        const adIDFromSessionStorage = sessionStorage.getItem("ADID");
+        if (userIDFromSessionStorage != null && adIDFromSessionStorage != null) {
+            navigate(`/reviewad`);
         } else {
-            return (
-                <div>
-                  {isAdSaved ? (
-                    <Button onClick={handleRemoveAd}>Fjern annonse fra lagrede annonser</Button>
-                  ) : (
-                    <Button onClick={handleSaveAd}>Lagre annonse</Button>
-                  )}
-                </div>
-              );
+            setSnack(new Snack({ message: 'Du må være logget inn for å gi en tilbakemelding!', color: 'warning', autoHideDuration: 5000, open: true }));
         }
     };
-
-
-    const renderPageControll = () => {
-        if (isOwnedAd) {
-            return (
-                <div className="flex flex-row items-center">
-                    <div className="flex flex-row gap-1 w-4/5">
-                        <Button variant="contained" onClick={handleEditAd}>
-                            Rediger annonse
-                        </Button>
-                        <Button variant="outlined" color="primary" onClick={handleDeleteAd}>
-                            Slett annonse
-                        </Button>
-                    </div> 
-                    <div className="p-10 text-2xl text-left" >
-                        {ad?.map((ad) =>
-                        <div>
-                            <Title size={"text-4xl ml-5 mr-5"} heading={ad.title} description={""} span={""} key={ad.title} ></Title>
-                            <p key={ad.description}>
-                                {ad.description}
-                            </p>
-
-                            <div className="flex flex-row p-10 h-28 w-full justify-between">
-                                <TitledIcon icon="https://img.icons8.com/ios/512/calendar--v1.png" key={69} text={"Dato"} iconSize="h-full" textSize="text-3xl" />
-                                <TitledIcon icon="https://img.icons8.com/ios/50/000000/price-tag-euro.png" key={ad.price} text={ad.price?.toString() + " kr/dag"} iconSize="h-full" textSize="text-3xl" />
-                                <TitledIcon icon="https://img.icons8.com/material-sharp/256/map-marker.png" key={ad.city} text={ad.city} iconSize="h-full" textSize="text-3xl" />
-                            </div>
-                        </div>
-    
-                        )}
-                    </div>
-
-                </div>
-            )
-        }
-        else {
-            return (
-                <div className="flex flex-row items-center">
-                    <div className="flex flex-row gap-1 w-4/5 text-center">
-                        <h2>Placeholder for calendar</h2>
-                    </div>
-
-                    <div className="p-10 text-2xl text-left" >
-                        {ad?.map((ad) =>
-                        <div>
-                            <Title size={"text-4xl"} heading={ad.title} description={""} span={""} key={ad.title} ></Title>
-                            <p key={ad.description}>
-                                {ad.description}
-                            </p>
-
-                            <div className="flex flex-row h-28 w-full justify-between text-left">
-                                <TitledIcon icon="https://img.icons8.com/ios/512/calendar--v1.png" key={69} text={"Dato"} iconSize="h-full" textSize="text-3xl" />
-                                <TitledIcon icon="https://img.icons8.com/ios/50/000000/price-tag-euro.png" key={ad.price} text={ad.price?.toString() + " kr/dag"} iconSize="h-full" textSize="text-3xl" />
-                                <TitledIcon icon="https://img.icons8.com/material-sharp/256/map-marker.png" key={ad.city} text={ad.city} iconSize="h-full" textSize="text-3xl" />
-                            </div>
-                        </div>
-
-                        )}
-
-                        <div className="flex flex-row gap-1 w-4/5">
-                            <Button variant="contained" sx={{p:2}}>
-                                Lagre annonse
-                            </Button>
-                            <Button variant="outlined" color="primary">
-                                Kontakt utleier
-                            </Button>
-                        </div>
-                    </div>
-                </div>
-            )
-        }
-    }
 
     const checkIfAdIsSaved = async () => {
         const userID = sessionStorage.getItem("userID");
@@ -259,6 +172,121 @@ const AdInspectorPage = () => {
         });
     }, []);
 
+    /*     const renderAdControls = () => {
+            if (isOwnedAd) {
+                return (
+                    <div className="flex flex-row">
+                        <Button variant="contained" color="primary" onClick={handleEditAd}>
+                            Rediger annonse
+                        </Button>
+                        <Button variant="contained" color="error" onClick={handleDeleteAd}>
+                            Slett annonse
+                        </Button>
+                    </div>
+                );
+            } else {
+                return (
+                    <div>
+                        <div>
+                            {isAdSaved ? (
+                                <Button onClick={handleRemoveAd}>Fjern annonse fra lagrede annonser</Button>
+                            ) : (
+                                <Button onClick={handleSaveAd}>Lagre annonse</Button>
+                            )}
+                        </div>
+                        <div>
+                            <Button onClick={handleRedirect}>Gi en tilbakemelding</Button>
+                        </div>
+                    </div>
+                );
+            }
+        }; */
+
+
+    const renderPageControll = () => {
+        if (isOwnedAd) {
+            return (
+                <div className="flex flex-row items-center">
+                    <div className="flex flex-row gap-1 w-4/5">
+                        <Button variant="contained" onClick={handleEditAd}>
+                            Rediger annonse
+                        </Button>
+                        <Button variant="outlined" color="primary" onClick={handleDeleteAd}>
+                            Slett annonse
+                        </Button>
+                    </div>
+                    <div className="p-10 text-2xl text-left" >
+                        {ad?.map((ad) =>
+                            <div>
+                                <Title size={"text-4xl ml-5 mr-5"} heading={ad.title} description={""} span={""} key={ad.title} ></Title>
+                                <p key={ad.description}>
+                                    {ad.description}
+                                </p>
+
+                                <div className="flex flex-row p-10 h-28 w-full justify-between">
+                                    <TitledIcon icon="https://img.icons8.com/ios/512/calendar--v1.png" key={69} text={"Dato"} iconSize="h-full" textSize="text-3xl" />
+                                    <TitledIcon icon="https://img.icons8.com/ios/50/000000/price-tag-euro.png" key={ad.price} text={ad.price?.toString() + " kr/dag"} iconSize="h-full" textSize="text-3xl" />
+                                    <TitledIcon icon="https://img.icons8.com/material-sharp/256/map-marker.png" key={ad.city} text={ad.city} iconSize="h-full" textSize="text-3xl" />
+                                </div>
+                            </div>
+
+                        )}
+                    </div>
+
+                </div>
+            )
+        }
+        else {
+            return (
+                <div className="flex flex-row items-center">
+                    <div className="flex flex-row gap-1 w-4/5 text-center">
+                        <h2>Placeholder for calendar</h2>
+                    </div>
+
+                    <div className="p-10 text-2xl text-left" >
+                        {ad?.map((ad) =>
+                            <div>
+                                <Title size={"text-4xl"} heading={ad.title} description={""} span={""} key={ad.title} ></Title>
+                                <p key={ad.description}>
+                                    {ad.description}
+                                </p>
+
+                                <div className="flex flex-row h-28 w-full justify-between text-left">
+                                    <TitledIcon icon="https://img.icons8.com/ios/512/calendar--v1.png" key={69} text={"Dato"} iconSize="h-full" textSize="text-3xl" />
+                                    <TitledIcon icon="https://img.icons8.com/ios/50/000000/price-tag-euro.png" key={ad.price} text={ad.price?.toString() + " kr/dag"} iconSize="h-full" textSize="text-3xl" />
+                                    <TitledIcon icon="https://img.icons8.com/material-sharp/256/map-marker.png" key={ad.city} text={ad.city} iconSize="h-full" textSize="text-3xl" />
+                                </div>
+                            </div>
+
+                        )}
+
+                        <div className="flex flex-row gap-1 w-4/5">
+                            <div>
+                                {isAdSaved ? (
+                                    <Button onClick={handleRemoveAd} variant="contained" sx={{ p: 2 }}>
+                                        Fjern annonse fra lagrede annonser
+                                    </Button>
+                                ) : (
+                                    <Button variant="contained" sx={{ p: 2 }} onClick={handleSaveAd}>
+                                        Lagre annonse
+                                    </Button>
+                                )}
+                            </div>
+                            <Button variant="outlined" color="primary" >
+                                Kontakt utleier
+                            </Button>
+                            <Button onClick={handleRedirect} variant="outlined" color="primary">
+                                Skriv en anmeldelse
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            )
+        }
+    }
+
+
+
 
     //Todo: Component for slideshow of pictures
     return (
@@ -272,7 +300,7 @@ const AdInspectorPage = () => {
 
                         }}
                     >
-    
+
                     </div>
 
                     <div className="w-full">
