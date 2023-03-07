@@ -7,12 +7,14 @@ import AdComponent from '../components/Ad';
 import { AdsQuery } from '../lib/controller';
 import { useDispatch, useSelector } from "react-redux";
 import { selectFilters, setFilter } from "../store/FiltersReducer";
+import { useNavigate } from 'react-router-dom';
 
 
 const Ads = () => {
     const [ads, setAds] = useState<Ad[]>([]);
     const dispatch = useDispatch();
     const filters = useSelector(selectFilters);
+    let navigate = useNavigate();
 
 
     // query backend for ads with filters
@@ -47,7 +49,7 @@ const Ads = () => {
                                 dispatch(setFilter({ field: "search", value: event.target.value }));
                             }} />
                         </div>
-                        <Button color="info" variant="contained" href="/#/adcreator">Opprett annonse</Button>
+                        <Button color="info" variant="contained" onClick={() => navigate("/adcreator")}>Opprett annonse</Button>
                     </div>
 
                     <div className='flex m-auto w-full max-w-7xl pt-10 text-current flex-wrap flex-row justify-center'>

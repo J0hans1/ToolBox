@@ -12,7 +12,7 @@ const Navbar = () => {
         <div id="c_section" className='fixed top-0 bg-white text-black w-screen h-auto content-center z-20 shadow-md'>
             <div id="c_container" className='relative flex flex-col m-auto w-full max-w-7xl pt-5 px-10 justify-between'>
                 <div className='flex flex-row justify-between'>
-                    <a href="/#/" className="text-4xl p-3">ToolBox</a>
+                    <Button onClick={() => navigate("/")} className="text-4xl p-3">ToolBox</Button>
 
                     <div className='flex flex-col w-4/5'>
                         <div className='flex flex-row justify-between'>
@@ -24,19 +24,19 @@ const Navbar = () => {
                             </div>
 
                             <div className='flex flex-row gap-1 w-auto'>
-                                <Button href="/#/login" variant="contained">Logg inn</Button>
-                                <Button color="primary" href="/#/register" variant="outlined">Registrer</Button>
+                                <Button onClick={() => navigate("/login")} variant="contained">Logg inn</Button>
+                                <Button color="primary" onClick={() => navigate("/register")} variant="outlined">Registrer</Button>
                                 <Button color="primary" variant="outlined" onClick={() => navigate("/profile")} > {sessionStorage.getItem("username")} </Button>
                             </div>
                         </div>
 
                         <div className='flex flex-row m-auto w-full max-w-7xl gap-10 my-4 text-gray-800'>
-                            <a href="/#/">Om oss</a>
-                            <a href="/#/Ads">Annonser</a>
-                            <a href="/#/profile">Min side</a>
-                            <a href="/#/">Kategorier</a>
-                            <a href="/#/">Avtalevilkår</a>
-                            <a href="/#/FAQ">FAQ</a>
+                            <Button onClick={() => navigate("/")}>Om oss</Button>
+                            <Button onClick={() => navigate("/ads")}>Annonser</Button>
+                            <Button onClick={() => navigate("/profile")} >Min side</Button>
+                            <Button onClick={() => navigate("/")}>Kategorier</Button>
+                            <Button onClick={() => navigate("/")}>Avtalevilkår</Button>
+                            <Button onClick={() => navigate("/FAQ")}>FAQ</Button>
                         </div>
                     </div>
                 </div>
