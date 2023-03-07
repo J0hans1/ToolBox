@@ -71,7 +71,7 @@ const LoginPage = () => {
                                     color="info"
                                     variant="contained"
                                     sx={{ p: 2 }}
-                                    href="/#/Register">Registrer bruker
+                                    onClick={() => navigate("/register")}>Registrer bruker
                                 </Button>
 
 
