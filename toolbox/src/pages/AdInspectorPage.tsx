@@ -2,12 +2,13 @@ import Title from "../components/Title";
 import TitledIcon from "../components/TitledIcon";
 import { getUser, getAd, isSaved, isOwned, removeAdFromUser, saveAdToUser, deleteAd } from "../lib/controller";
 import { Ad, User } from "../types/types";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import { Avatar } from "@mui/material";
 import { amber } from "@mui/material/colors";
 import LinkButton from "../components/LinkButton";
+import { Snack, SnackbarContext } from "../context/SnackbarContext";
 
 
 
@@ -48,6 +49,8 @@ const AdInspectorPage = () => {
     const [isOwnedAd, setIsOwnedAd] = useState(false);
     const [isAdSaved, setIsAdSaved] = useState(false);
 
+    const {snack, setSnack} = useContext(SnackbarContext);
+
 
     const handleEditAd = async () => {
         const adIDFromSessionStorage = sessionStorage.getItem("ADID");
@@ -58,7 +61,7 @@ const AdInspectorPage = () => {
         const adIDFromSessionStorage = sessionStorage.getItem("ADID");
         if (adIDFromSessionStorage != null) {
             await deleteAd(adIDFromSessionStorage);
-            alert("Annonse slettet");
+            setSnack(new Snack({message: 'Annonse er slettet!', color:'success', autoHideDuration:5000, open: true}))
             navigate("/ads");
         }
     };
@@ -70,7 +73,8 @@ const AdInspectorPage = () => {
             const isSavedAd = await isSaved(userIDFromSessionStorage, adIDFromSessionStorage);
             if (!isSavedAd) {
                 await saveAdToUser(userIDFromSessionStorage, adIDFromSessionStorage);
-                alert("Annonse lagret til lagrede annonser");
+                setSnack(new Snack({message: 'Annonse er lagret til lagrede annonser!', color:'success', autoHideDuration:5000, open: true}));
+
                 setIsAdSaved(true);
             } 
         }
@@ -106,7 +110,8 @@ const AdInspectorPage = () => {
             const isSavedAd = await isSaved(userIDFromSessionStorage, adIDFromSessionStorage);
             if (isSavedAd) {
                 await removeAdFromUser(userIDFromSessionStorage, adIDFromSessionStorage);
-                alert("Annonse fjernet fra lagrede annonser");
+                setSnack(new Snack({message: 'Annonse er fjernet fra lagrede annonser!', color:'success', autoHideDuration:5000, open: true}));
+
                 setIsAdSaved(false);
             } 
         }

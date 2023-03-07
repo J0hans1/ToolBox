@@ -1,11 +1,12 @@
 import { MenuItem, Select, TextField, Button, FormControl, InputLabel, ImageList } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { getAd, updateAd, uploadImages } from "../lib/controller";
 import { UpdateAd } from "../types/types";
 import Title from "../components/Title";
 import Step from "../components/Step";
 import { validateAddress, validateCity, validateDescription, validatePrice, validateTitle, validateZip } from "../lib/validation";
 import { useNavigate } from "react-router-dom";
+import { Snack, SnackbarContext } from "../context/SnackbarContext";
 
 
 const EditAd = () => {
@@ -21,6 +22,8 @@ const EditAd = () => {
     const [city, setCity] = useState("");
     const [pictures, setPictures] = useState<string[]>([]);
     const [images, setImages] = useState<FileList | null>(null);
+
+    const {setSnack} = useContext(SnackbarContext);
 
 
     useEffect(() => {
@@ -85,44 +88,46 @@ const EditAd = () => {
 
             console.log(ad)
             updateAd(adID, ad);
-            alert("Annonse er oppdatert");
+            setSnack(new Snack({message: 'Annonse er oppdatert!', color:'success', autoHideDuration:5000, open: true}));
+
             navigate(`/adinspector/${ad.id}`); // redirect back to same ad
+            setSnack(new Snack({message: 'Annonse er oppdatert!', color:'success', autoHideDuration:5000, open: true}));
         }
     }
 
 
     const handleOnClick = async () => {
         if (sessionStorage.getItem("username") === null) {
-            alert("Du må være logget inn for å opprette en annonse");
+            setSnack(new Snack({message: 'Du må være logget inn for å opprette en annonse!', color:'warning', autoHideDuration:5000, open: true}));
             return;
         }
         // check if all fields are filled
         if (title === "" || description === "" || category === "" || price === "" || address === "" || zip === "" || city === "") {
-            alert("Alle felt må fylles ut");
+            setSnack(new Snack({message: 'Alle felt må fylles ut!', color:'warning', autoHideDuration:5000, open: true}));
             return;
         }
         if (!validateTitle(title)) {
-            alert("Ikke gyldig tittel!");
+            setSnack(new Snack({message: 'Ikke en gyldig tittel!', color:'warning', autoHideDuration:5000, open: true}));
             return;
         }
         if (!validateDescription(description)) {
-            alert("Ikke en gyldig beksrivelse!");
+            setSnack(new Snack({message: 'Ikke en gyldig beskrivelse!', color:'warning', autoHideDuration:5000, open: true}));
             return;
         }
         if (!validateAddress(address)) {
-            alert("Ikke en gyldig adresse!");
+            setSnack(new Snack({message: 'Ikke en gyldig adresse!', color:'warning', autoHideDuration:5000, open: true}));
             return;
         }
         if (!validateZip(zip)) {
-            alert("Ikke et gyldig postnummer!");
+            setSnack(new Snack({message: 'Ikke et gyldig postnummer!', color:'warning', autoHideDuration:5000, open: true}));
             return;
         }
         if (!validateCity(city)) {
-            alert("Ikke gyldig navn på by!");
+            setSnack(new Snack({message: 'Ikke gyldig navn på by!', color:'warning', autoHideDuration:5000, open: true}));
             return;
         }
         if (!validatePrice(price)) {
-            alert("Pris kan ikke være tom!");
+            setSnack(new Snack({message: 'Pris kan ikke være tom!', color:'warning', autoHideDuration:5000, open: true}));
             return;
         }
         await uploadImagesToBackend(images);
