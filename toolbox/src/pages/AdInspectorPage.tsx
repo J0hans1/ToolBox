@@ -10,6 +10,11 @@ import { amber } from "@mui/material/colors";
 import LinkButton from "../components/LinkButton";
 import { Snack, SnackbarContext } from "../context/SnackbarContext";
 import Map from "../components/Map";
+import DynamicRatingStars from "../components/DyniamicRatingStars"
+import StaticRatingStars from "../components/StaticRatingStars"
+
+import { getAdRating } from "../lib/controller";
+
 
 
 
@@ -277,6 +282,14 @@ const AdInspectorPage = () => {
                                         </div>
                                     </a>
                                 </div>
+                                Gi annonsen en vurdering!
+                                {/* stjerner for å gi rating */}
+
+                                <DynamicRatingStars/>
+                                Annonsens gjennomsnittlige vurdering:
+                                {/* stjerner for å vise gjennomsnittsrating til annonsen */}
+                                <StaticRatingStars value={Number(getAdRating(ad.id))}/>
+
                             </div>
 
 

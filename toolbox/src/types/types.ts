@@ -28,6 +28,7 @@ export interface Ad{
     city?: string;
     pictures?: string[];
     reviews?: string[];
+    review?:number;
 }
 
 export interface UpdateAd {
