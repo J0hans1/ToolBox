@@ -319,8 +319,10 @@ export const deleteUser = async (id: string) => {
   }
 };
 
+//get ad reviews
 export async function getAdReviews(adId: string) {
   const reviews: Review[] = [];
+ 
   const reviewSnapshot = await getDocs(collection(firestore, "reviews"));
   reviewSnapshot.forEach((doc) => {
     if (doc.data().adId === adId) {
@@ -332,9 +334,33 @@ export async function getAdReviews(adId: string) {
         comment: doc.data().comment,
       });
     }
-  });
+  })
+ 
   return reviews;
 }
+
+//get ad rating
+export async function getAdRating(adId: string) {
+  const reviews: Review[] = [];
+  let ratingSum:number = 0;
+  let ratingCount:number=0;
+ 
+  const reviewSnapshot = await getDocs(collection(firestore, "reviews"));
+  reviewSnapshot.forEach((doc) => {
+    if (doc.data().adId === adId) {
+      ratingCount += 1;
+      ratingSum += doc.data().rating;  
+    }
+  })
+
+  return ratingSum/ratingCount;
+}
+
+
+
+
+
+
 
 export async function getReview(reviewId: string) {
   const document = doc(firestore, `reviews/${reviewId}`);
