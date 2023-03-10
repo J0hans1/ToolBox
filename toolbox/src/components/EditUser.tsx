@@ -1,139 +1,112 @@
-import { updateUser, deleteUser, removeFromSessionStorage } from "../lib/controller";
-import { User } from "../types/types";
-import {TextField, Button} from '@mui/material';
+import { updateUser, deleteUser } from "../lib/controller";
+import { GoogleUser } from "../types/types";
+import { TextField, Button } from '@mui/material';
 import { useContext, useState } from "react";
-import { validateSimilarPasswords } from "../lib/validation";
 import { useNavigate } from "react-router-dom";
 import { Snack, SnackbarContext } from "../context/SnackbarContext";
+import { useAuth } from "../context/AuthContext";
 
-interface IProps{
-    user: User;
-}
 
-export default function EditUser({user}: IProps){
+export default function EditUser() {
     let navigate = useNavigate();
     const [editMode, setEditMode] = useState(false);
-    const {setSnack} = useContext(SnackbarContext);
+    const { setSnack } = useContext(SnackbarContext);
+    const { currentUser, setCurrentUser, logout } = useAuth();
+    const [displayName, setDisplayName] = useState(currentUser?.displayName);
+    const [phone, setPhone] = useState(currentUser?.phoneNumber);
 
-    // states for all the textfields
-    const [firstname, setFirstname] = useState(user.firstname);
-    const [lastname, setLastname] = useState(user.lastname);
-    const [email, setEmail] = useState(user.email);
-    const [phone, setPhone] = useState(user.phone);
-    const [address, setAddress] = useState(user.address);
-    const [zip, setZip] = useState(user.zip);
-    const [city, setCity] = useState(user.city);
-    const [username, setUsername] = useState(user.username);
-    const [password, setPassword] = useState(user.password);
-    const [password2, setPassword2] = useState(user.password);
-
-    function deleteUserButton(){
-        const userIDFromSessionStorage = sessionStorage.getItem("userID");
-        if (userIDFromSessionStorage != null){
-            deleteUser(userIDFromSessionStorage);
-            removeFromSessionStorage();
-            setSnack(new Snack({message: 'Brukeren ble slettet!', color:'success', autoHideDuration:5000, open: true}))
-            navigate("/");
-        }
-    }
-
-    function updateUserButton(){
-        if (firstname != null && lastname != null && email != null && phone != null && address != null && zip != null && city != null && username != null && password != null && password2 != null){
-            if (!validateSimilarPasswords(password, password2)){
-                setSnack(new Snack({message: 'Passordene er ikke like!', color:'warning', autoHideDuration:5000, open: true}))
-                return;
-            }
-            validateSimilarPasswords(password, password2);
-            const userIDFromSessionStorage = sessionStorage.getItem("userID");
-
-            if (userIDFromSessionStorage != null){
-                const user2 = {
-                    id: userIDFromSessionStorage,
-                    firstname: firstname,
-                    lastname: lastname,
-                    email: email,
-                    phone: phone,
-                    address: address,
-                    zip: zip,
-                    city: city,
-                    username: username,
-                    password: password
+    async function deleteUserButton() {
+        const confirm = window.confirm("Er du sikker på at du vil slette brukeren din? Dette kan ikke angres!");
+        if (confirm) {
+            if (currentUser?.id != null) {
+                await deleteUser(currentUser?.id).then(async () => {
+                    await logout().then(() => {
+                        setSnack(new Snack({ message: 'Brukeren ble slettet!', color: 'success', autoHideDuration: 5000, open: true }))
+                        navigate("/");
+                    }).catch((err) => {
+                        setSnack(new Snack({ message: 'Noe gikk galt!', color: 'error', autoHideDuration: 5000, open: true }))
+                    })
+                    
+                }).catch((err) => {
+                    setSnack(new Snack({ message: 'Noe gikk galt!', color: 'error', autoHideDuration: 5000, open: true }))
                 }
-                updateUser(userIDFromSessionStorage, user2);
-                editMode ? setEditMode(false) : setEditMode(true);
-                setSnack(new Snack({message: 'Bruker er oppdatert!', color:'success', autoHideDuration:5000, open: true}))
+                )
             }
         }
     }
 
+    function updateUserButton() {
+        if (currentUser?.id != null) {
+            const user2: GoogleUser = {
+                id: currentUser?.id,
+                uid: currentUser?.uid,
+                displayName: displayName,
+                email: currentUser?.email,
+                phoneNumber: phone,
+                photoURL: currentUser?.photoURL,
+                myAds: currentUser?.myAds,
+                savedAds: currentUser?.savedAds,
+                myReviews: currentUser?.myReviews,
+            }
+            updateUser(currentUser?.id, user2);
+            editMode ? setEditMode(false) : setEditMode(true);
+            setSnack(new Snack({ message: 'Bruker er oppdatert!', color: 'success', autoHideDuration: 5000, open: true }))
+            // update context 
+            if (user2 !== null && user2 !== undefined && setCurrentUser !== undefined) {
+                setCurrentUser(user2);
+            }
+        }
+    }
 
     return (
         <div className="flex gap-2 flex-col">
-           
+
             <div id="PERSONAL_INFO" className='flex flex-col my-5'>
-            <div className='flex flex-row w-full gap-2 my-2'>
-                <TextField disabled={!editMode} fullWidth label="Fornavn" value={firstname} variant="outlined" onChange={(e) => setFirstname(e.target.value)} />
-                <TextField disabled={!editMode} fullWidth label="Etternavn" variant="outlined" value={lastname} onChange={(e) => setLastname(e.target.value)} />
-            </div>
-            <div className='flex flex-col w-full gap-2'>
-                <TextField disabled={!editMode} label="E-post" variant="outlined" value={email} onChange={(e) => setEmail(e.target.value)} />
-                <TextField disabled={!editMode} label="Telefon" variant="outlined" value ={phone} onChange={(e) => setPhone(e.target.value)}/>
-            </div>
-        </div>
-
-        <div id="ADDRESS_INFO" className='flex flex-col my-5'>
-            <div className='flex flex-col w-full gap-2'>
-                <TextField disabled={!editMode} label="Hjemmeadresse" variant="outlined" value ={address} onChange={(e) => setAddress(e.target.value)}/>
-                <div className='flex flex-row w-full gap-2'>
-                    <TextField disabled={!editMode} label="Postnummer" type="number" variant="outlined" value ={zip} onChange={(e) => setZip(e.target.value)}/>
-                    <TextField disabled={!editMode} fullWidth label="By" variant="outlined" value ={city} onChange={(e) => setCity(e.target.value)}/>
-                </div>
-
-            </div>
-        </div>
-
-        <div id="USER_INFO" className='flex flex-col my-5'>
-            <div className='flex flex-col w-full gap-2'>
-                <TextField disabled={!editMode} label="Brukernavn" variant="outlined" value ={username} onChange={(e) => setUsername(e.target.value)}/>
-                <TextField disabled={!editMode} label="Passord" type="password" value ={password} onChange={(e) => setPassword(e.target.value)}/>
-                <div
-                    style={
-                    {display: editMode ? 'block' : 'none'}
-                }>
-                    <TextField disabled={!editMode} label="Passord" type="password" value={password2} onChange={(e) => setPassword2(e.target.value)} />
+                <div className='flex flex-col w-full gap-2'>
+                    <TextField  variant="outlined" value={currentUser?.email} disabled={true} />
                 </div>
             </div>
-        </div>
- 
-            <div className="flex flex-row gap-2" > 
-                <Button 
-                    sx={{p:2}}
+            <div id="PERSONAL_INFO" className='flex flex-col my-5'>
+                <div className='flex flex-col w-full gap-2'>
+                    <TextField disabled={!editMode} label="Telefon" variant="outlined" value={phone} onChange={(e) => setPhone(e.target.value)} />
+                </div>
+            </div>
+
+            <div id="PERSONAL_INFO" className='flex flex-col my-5'>
+                <div className='flex flex-col w-full gap-2'>
+                    <TextField disabled={!editMode} label="Navn" variant="outlined" value={displayName} onChange={(e) => setDisplayName(e.target.value)} />
+                </div>
+            </div>
+
+            <div className="flex flex-row gap-2" >
+                <Button
+                    sx={{ p: 2 }}
                     onClick={
                         () => setEditMode(!editMode)
-                    } 
+                    }
                     variant='contained'
                 >
                     {editMode ? 'Avbryt endring' : 'Endre brukerinfo'}
                 </Button>
 
-                <div style={{display: editMode ? 'block' : 'none'}}>
-                    <Button 
-                        sx={{p:2}}
+                <div style={{ display: editMode ? 'block' : 'none' }}>
+                    <Button
+                        sx={{ p: 2 }}
                         onClick={
                             () => updateUserButton()
-                        } 
+                        }
                         variant="outlined"
                     >
                         Lagre endringer
                     </Button>
                 </div>
 
-                <div style={{display: editMode ? 'block' : 'none'}}>
-                    <Button 
-                        sx={{p:2}}
+                <div style={{ display: editMode ? 'block' : 'none' }}>
+                    <Button
+                        sx={{ p: 2 }}
                         onClick={
-                            () => deleteUserButton()
-                        } 
+                            async () => await deleteUserButton()
+                        }
                         variant="outlined"
                     >
                         Slett bruker
@@ -143,5 +116,3 @@ export default function EditUser({user}: IProps){
         </div>
     );
 }
-
-            

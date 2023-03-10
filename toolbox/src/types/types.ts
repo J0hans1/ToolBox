@@ -1,22 +1,5 @@
 
-export interface User{
-    id: string;
-    username?: string;
-    password?: string;
-    password2?: string;
-    firstname?: string;
-    lastname?: string;
-    phone?: string;
-    email?: string;
-    address?: string;
-    zip?: string;
-    city?: string;
-    myAds?: string[];
-    savedAds?: string[];
-    myReviews?: string[];
-}
-
-export interface Ad{
+export interface Ad {
     id: string;
     userid?: string;
     title?: string;
@@ -28,7 +11,7 @@ export interface Ad{
     city?: string;
     pictures?: string[];
     reviews?: string[];
-    review?:number;
+    review?: number;
 }
 
 export interface UpdateAd {
@@ -45,7 +28,7 @@ export interface UpdateAd {
     reviews: string[];
 }
 
-export interface NewAd{
+export interface NewAd {
     id?: string;
     userid?: string;
     title?: string;
@@ -57,21 +40,6 @@ export interface NewAd{
     city?: string;
     pictures?: string[];
     reviews?: string[];
-}
-
-export interface NewUser{
-    username: string;
-    password: string;
-    firstname: string;
-    lastname: string;
-    phone: string;
-    email: string;
-    address: string;
-    zip: string;
-    city: string;
-    myAds: string[];
-    savedAds: string[];
-    myReviews: string[];
 }
 
 export interface Review{
@@ -90,3 +58,25 @@ export interface NewReview{
     comment: string;
 }
 
+export interface NewGoogleUser {
+    uid: string;
+    phoneNumber?: string | null;
+    displayName?: string | null;
+    photoURL?: string | null;
+    email?: string | null;
+    myAds?: string[];
+    savedAds?: string[];
+    myReviews?: string[];
+}
+
+export interface GoogleUser {
+    id: string;
+    uid?: string;
+    phoneNumber?: string | null;
+    displayName?: string | null;
+    photoURL?: string | null;
+    email?: string | null;
+    myAds?: string[];
+    savedAds?: string[];
+    myReviews?: string[];
+}

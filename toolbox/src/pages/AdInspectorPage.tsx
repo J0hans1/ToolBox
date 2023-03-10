@@ -1,7 +1,7 @@
 import Title from "../components/Title";
 import TitledIcon from "../components/TitledIcon";
-import { getUser, getAd, isSaved, isOwned, removeAdFromUser, saveAdToUser, deleteAd } from "../lib/controller";
-import { Ad, User } from "../types/types";
+import { getAd, isSaved, isOwned, removeAdFromUser, saveAdToUser, deleteAd } from "../lib/controller";
+import { Ad } from "../types/types";
 import { useContext, useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
@@ -12,10 +12,8 @@ import { Snack, SnackbarContext } from "../context/SnackbarContext";
 import Map from "../components/Map";
 import DynamicRatingStars from "../components/DyniamicRatingStars"
 import StaticRatingStars from "../components/StaticRatingStars"
-
 import { getAdRating } from "../lib/controller";
-
-
+import { useAuth } from "../context/AuthContext";
 
 
 interface Info {
@@ -23,15 +21,23 @@ interface Info {
     email?: string;
     phone?: string;
     avatar?: string;
-
 }
 
 const AdUserInfo = (props: Info) => {
+    const { currentUser } = useAuth();
+
+    const [image, setImage] = useState<string>("");
+
+    useEffect(() => {
+        if (currentUser?.photoURL !== null && currentUser?.photoURL !== undefined) {
+            setImage(currentUser?.photoURL);
+        }
+    }, [currentUser]);
     return (
         <div className='rounded-lg w-auto h-72 shadow-lg hover:shadow-2xl justify-center'>
 
             <div className="flex flex-row w-3/4 h-1/4 ml-2 gap-10 mt-5 p-8" >
-                <Avatar sx={{ bgcolor: amber[500], width: 70, height: 70 }}>AO</Avatar>
+                <img src={image} alt="User profile" style={{ width: '20px', height: '20px', borderRadius: '50%', marginRight: '8px' }} />
                 <div className="text-left justify-start pb-5 flex-wrap">
                     <h2 className="text-3xl mt-2 font-bold">{props.name}</h2>
                 </div>
@@ -45,23 +51,17 @@ const AdUserInfo = (props: Info) => {
                 <LinkButton label={props.phone} href={props.phone} type="phone" />
             </div>
             <div className="flex h-1/3">
-
             </div >
-
-
-
         </div>
     )
 }
 
 const AdInspectorPage = () => {
     const navigate = useNavigate();
-
-    const [user, setUser] = useState<User[]>([]);
+    const { currentUser } = useAuth();
     const [ad, setAd] = useState<Ad[]>([]);
     const [isOwnedAd, setIsOwnedAd] = useState(false);
     const [isAdSaved, setIsAdSaved] = useState(false);
-
     const { setSnack } = useContext(SnackbarContext);
 
 
@@ -80,12 +80,11 @@ const AdInspectorPage = () => {
     };
 
     const handleSaveAd = async () => {
-        const userIDFromSessionStorage = sessionStorage.getItem("userID");
         const adIDFromSessionStorage = sessionStorage.getItem("ADID");
-        if (userIDFromSessionStorage != null && adIDFromSessionStorage != null) {
-            const isSavedAd = await isSaved(userIDFromSessionStorage, adIDFromSessionStorage);
+        if (currentUser?.id != null && adIDFromSessionStorage != null) {
+            const isSavedAd = await isSaved(currentUser?.id, adIDFromSessionStorage);
             if (!isSavedAd) {
-                await saveAdToUser(userIDFromSessionStorage, adIDFromSessionStorage);
+                await saveAdToUser(currentUser?.id, adIDFromSessionStorage);
                 setSnack(new Snack({ message: 'Annonse er lagret til lagrede annonser!', color: 'success', autoHideDuration: 5000, open: true }));
 
                 setIsAdSaved(true);
@@ -106,24 +105,12 @@ const AdInspectorPage = () => {
         }
     }
 
-
-    async function getUserFromDatabase() {
-        const userIDFromAd = sessionStorage.getItem("userIDFromAd");
-        if (userIDFromAd != null) {
-            const userFromDatabase = await getUser(userIDFromAd).then((doc) => {
-                return { id: doc.id, ...doc.data() }
-            });
-            setUser([userFromDatabase]);
-        }
-    }
-
     const handleRemoveAd = async () => {
-        const userIDFromSessionStorage = sessionStorage.getItem("userID");
         const adIDFromSessionStorage = sessionStorage.getItem("ADID");
-        if (userIDFromSessionStorage != null && adIDFromSessionStorage != null) {
-            const isSavedAd = await isSaved(userIDFromSessionStorage, adIDFromSessionStorage);
+        if (currentUser?.id != null && adIDFromSessionStorage != null) {
+            const isSavedAd = await isSaved(currentUser?.id, adIDFromSessionStorage);
             if (isSavedAd) {
-                await removeAdFromUser(userIDFromSessionStorage, adIDFromSessionStorage);
+                await removeAdFromUser(currentUser?.id, adIDFromSessionStorage);
                 setSnack(new Snack({ message: 'Annonse er fjernet fra lagrede annonser!', color: 'success', autoHideDuration: 5000, open: true }));
                 setIsAdSaved(false);
             }
@@ -131,9 +118,8 @@ const AdInspectorPage = () => {
     };
 
     const handleRedirect = () => {
-        const userIDFromSessionStorage = sessionStorage.getItem("userID");
         const adIDFromSessionStorage = sessionStorage.getItem("ADID");
-        if (userIDFromSessionStorage != null && adIDFromSessionStorage != null) {
+        if (currentUser?.id != null && adIDFromSessionStorage != null) {
             navigate(`/reviewad`);
         } else {
             setSnack(new Snack({ message: 'Du må være logget inn for å gi en tilbakemelding!', color: 'warning', autoHideDuration: 5000, open: true }));
@@ -141,10 +127,9 @@ const AdInspectorPage = () => {
     };
 
     const checkIfAdIsSaved = async () => {
-        const userID = sessionStorage.getItem("userID");
         const adID = sessionStorage.getItem("ADID");
-        if (userID && adID) {
-            const result = await isSaved(userID, adID);
+        if (currentUser?.id && adID) {
+            const result = await isSaved(currentUser?.id, adID);
             return result;
         }
         return false;
@@ -152,69 +137,19 @@ const AdInspectorPage = () => {
 
     useEffect(() => {
         getAdFromDatabase().then(() => {
-            getUserFromDatabase().then(() => {
-                const checkIsOwned = async () => {
-                    const userID = sessionStorage.getItem("userID");
-                    const adID = sessionStorage.getItem("ADID");
-                    if (userID && adID) {
-                        const result = await isOwned(userID, adID);
-                        setIsOwnedAd(result);
-                    }
-                };
-                checkIsOwned().then(async () => {
-                    const saved = await checkIfAdIsSaved();
-                    setIsAdSaved(saved);
-                });
-            });
-        });
-        getAdFromDatabase().then(() => {
-            getUserFromDatabase().then(() => {
-                const checkIsOwned = async () => {
-                    const userID = sessionStorage.getItem("userID");
-                    const adID = sessionStorage.getItem("ADID");
-                    if (userID && adID) {
-                        const result = await isOwned(userID, adID);
-                        setIsOwnedAd(result);
-                    }
-                };
-                checkIsOwned().then(async () => {
-                    const saved = await checkIfAdIsSaved();
-                    setIsAdSaved(saved);
-                });
+            const checkIsOwned = async () => {
+                const adID = sessionStorage.getItem("ADID");
+                if (currentUser?.id && adID) {
+                    const result = await isOwned(currentUser?.id, adID);
+                    setIsOwnedAd(result);
+                }
+            };
+            checkIsOwned().then(async () => {
+                const saved = await checkIfAdIsSaved();
+                setIsAdSaved(saved);
             });
         });
     }, []);
-
-    /*     const renderAdControls = () => {
-            if (isOwnedAd) {
-                return (
-                    <div className="flex flex-row">
-                        <Button variant="contained" color="primary" onClick={handleEditAd}>
-                            Rediger annonse
-                        </Button>
-                        <Button variant="contained" color="error" onClick={handleDeleteAd}>
-                            Slett annonse
-                        </Button>
-                    </div>
-                );
-            } else {
-                return (
-                    <div>
-                        <div>
-                            {isAdSaved ? (
-                                <Button onClick={handleRemoveAd}>Fjern annonse fra lagrede annonser</Button>
-                            ) : (
-                                <Button onClick={handleSaveAd}>Lagre annonse</Button>
-                            )}
-                        </div>
-                        <div>
-                            <Button onClick={handleRedirect}>Gi en tilbakemelding</Button>
-                        </div>
-                    </div>
-                );
-            }
-        }; */
-
 
     const renderPageControll = () => {
         if (isOwnedAd) {
@@ -242,7 +177,6 @@ const AdInspectorPage = () => {
                                     <TitledIcon icon="https://img.icons8.com/material-sharp/256/map-marker.png" key={ad.city} text={ad.city} iconSize="h-full" textSize="text-3xl" />
                                 </div>
                             </div>
-
                         )}
                     </div>
 
@@ -269,7 +203,7 @@ const AdInspectorPage = () => {
                                     <TitledIcon icon="https://img.icons8.com/ios/50/000000/price-tag-euro.png" key={ad.price} text={ad.price?.toString() + " kr/dag"} iconSize="h-full" textSize="text-3xl" />
                                     <TitledIcon icon="https://img.icons8.com/material-sharp/256/map-marker.png" key={ad.city} text={ad.city} iconSize="h-full" textSize="text-3xl" />
                                 </div>
-                                
+
                                 <div className="flex flex-col">
                                     <div className="bg-white text-3xl">{`${ad.address} ${ad.zip} ${ad.city}`}</div>
                                     <a href={`https://www.google.com/maps/dir/?api=1&destination=${ad.address} ${ad.zip} ${ad.city}`}>
@@ -282,39 +216,48 @@ const AdInspectorPage = () => {
                                         </div>
                                     </a>
                                 </div>
-                                Gi annonsen en vurdering!
-                                {/* stjerner for å gi rating */}
-
-                                <DynamicRatingStars/>
+                                {currentUser ? (
+                                    <div >
+                                        Gi annonsen en vurdering!
+                                        {/* stjerner for å gi rating */}
+                                        <DynamicRatingStars />
+                                    </div>
+                                ) : (
+                                    <div>
+                                        <p>Du må være logget inn for å gi en vurdering</p>
+                                    </div>
+                                )}
                                 Annonsens gjennomsnittlige vurdering:
                                 {/* stjerner for å vise gjennomsnittsrating til annonsen */}
-                                <StaticRatingStars value={Number(getAdRating(ad.id))}/>
-
+                                <StaticRatingStars value={Number(getAdRating(ad.id))} />
                             </div>
-
-
 
                         )}
-
-                        <div className="flex flex-row gap-1 w-4/5">
-                            <div>
-                                {isAdSaved ? (
-                                    <Button onClick={handleRemoveAd} variant="contained" sx={{ p: 2 }}>
-                                        Fjern annonse fra lagrede annonser
-                                    </Button>
-                                ) : (
-                                    <Button variant="contained" sx={{ p: 2 }} onClick={handleSaveAd}>
-                                        Lagre annonse
-                                    </Button>
-                                )}
+                        {currentUser ? (
+                            <div className="flex flex-row gap-1 w-4/5">
+                                <div>
+                                    {isAdSaved ? (
+                                        <Button onClick={handleRemoveAd} variant="contained" sx={{ p: 2 }}>
+                                            Fjern annonse fra lagrede annonser
+                                        </Button>
+                                    ) : (
+                                        <Button variant="contained" sx={{ p: 2 }} onClick={handleSaveAd}>
+                                            Lagre annonse
+                                        </Button>
+                                    )}
+                                </div>
+                                <Button variant="outlined" color="primary" >
+                                    Kontakt utleier
+                                </Button>
+                                <Button onClick={handleRedirect} variant="outlined" color="primary">
+                                    Skriv en anmeldelse
+                                </Button>
                             </div>
+                        ) : (
                             <Button variant="outlined" color="primary" >
                                 Kontakt utleier
                             </Button>
-                            <Button onClick={handleRedirect} variant="outlined" color="primary">
-                                Skriv en anmeldelse
-                            </Button>
-                        </div>
+                        )}
                     </div>
                 </div>
             )

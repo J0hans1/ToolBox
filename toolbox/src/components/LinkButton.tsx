@@ -1,4 +1,4 @@
-interface Mail{
+interface Mail {
     href?: string;
     label?: string;
     type?: string;
@@ -15,23 +15,22 @@ export default function LinkButton(props: Mail) {
 
 
     */
-    if(props.type === "mail"){
+    if (props.type === "mail") {
         f = "mailto:"
         icon = "https://img.icons8.com/ios/512/message-squared.png"
-    }else if(props.type === "phone"){
+    } else if (props.type === "phone") {
         f = "tel:"
         icon = "https://img.icons8.com/ios-glyphs/256/phone.png"
-    }else{
+    } else {
         icon = "https://img.icons8.com/ios-filled/256/link.png"
     }
 
     return (
         <div className="flex items-center gap-2">
             <a href={`${f + props.href}`}>
-                <img className="h-10 ml-5" src={icon} alt={props.type}/>
+                <img className="h-10 ml-5" src={icon} alt={props.type} />
             </a>
-            {props.label}           
+            {props.label}
         </div>
- 
     );
 };

@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit'
-import filtersReducer from "./FiltersReducer";
+import AdFiltersReducer from "./AdFiltersReducer";
 
 export const store = configureStore({
   reducer: {
-    filters: filtersReducer,
+    AdFilters: AdFiltersReducer,
   }
 })
 

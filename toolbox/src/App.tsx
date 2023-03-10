@@ -1,9 +1,7 @@
 import './App.css';
-import LoginPage from './pages/Login';
-import RegisterPage from "./pages/Register";
-import ErrorPage from './pages/ErrorPage';
+import PageNotFound from './pages/PageNotFound';
 import LandingPage from './pages/LandingPage';
-import Ads from './pages/Ads';
+import Ads from './pages/AdsPage';
 import AdInspector from './pages/AdInspectorPage';
 import { HashRouter, Route, Routes, } from "react-router-dom"
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -15,7 +13,7 @@ import MyAds from './pages/MyAds';
 import ScrollToTop from './components/functions/ScrollToTop';
 import SavedAds from './pages/SavedAds';
 import EditAdPage from './pages/EditAdPage';
-import FAQ from './pages/FAQ';
+import FAQ from './pages/FAQPage';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ReviewCreator from './pages/ReviewCreator';
@@ -24,6 +22,8 @@ import { useState } from 'react';
 import { Alert, Snackbar } from '@mui/material';
 import Snacks from './components/Snacks';
 import { Snack, SnackbarContext } from './context/SnackbarContext';
+import AuthRoute from './components/AuthRoute';
+import { AuthProvider } from './context/AuthContext';
 
 export default function App() {
   const [snack, setSnack] = useState(new Snack({ open: false }));
@@ -64,37 +64,38 @@ export default function App() {
       <ThemeProvider theme={theme}>
         <HashRouter>
           <SnackbarContext.Provider value={{ snack, setSnack }}>
-            <Navbar />
-            <ScrollToTop />
+            <AuthProvider >
+              <Navbar />
+              <ScrollToTop />
 
-            <Routes>
-              <Route path="/" element={<LandingPage />} />
-              <Route path="/adcreator" element={<AdCreator />} />
-              <Route path='/adinspector/:id' element={<AdInspector />} />
-              <Route path="/ads" element={<Ads />} />
-              <Route path="/editadpage/:id" element={<EditAdPage />} />
-              <Route path="/faq" element={<FAQ />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path='/myAds' element={<MyAds />} />
-              <Route path="/myreviews" element={<MyReviews />} />
-              <Route path="/profile" element={<ProfilePage />} />
-              <Route path="/register" element={<RegisterPage />} />
-              <Route path="/reviewad" element={<ReviewCreator />} />
-              <Route path="/savedads" element={<SavedAds />} />
-              <Route path="*" element={<ErrorPage />} />
-            </Routes>
+              <Routes>
+                <Route path="/" element={<LandingPage />} />
+                <Route path='/adinspector/:id' element={<AdInspector />} />
+                <Route path="/ads" element={<Ads />} />
+                <Route path="/faq" element={<FAQ />} />
+                <Route path="*" element={<PageNotFound />} />
+                <Route path="/adcreator" element={<AuthRoute> <AdCreator /> </AuthRoute>} />
+                <Route path="/editadpage/:id" element={<AuthRoute><EditAdPage /></AuthRoute>} />
+                <Route path='/myAds' element={<AuthRoute><MyAds /></AuthRoute>} />
+                <Route path="/myreviews" element={<AuthRoute><MyReviews /></AuthRoute>} />
+                <Route path="/profile" element={<AuthRoute><ProfilePage /></AuthRoute>} />
+                <Route path="/reviewad" element={<AuthRoute><ReviewCreator /></AuthRoute>} />
+                <Route path="/savedads" element={<AuthRoute><SavedAds /></AuthRoute>} />
+              </Routes>
 
-            <div id="c_section" className='w-screen h-auto content-center bg-black text-white'>
-              <div id="c_container" className='flex m-auto w-full max-w-7xl p-10'>
-                <Footer />
+
+              <div id="c_section" className='w-screen h-auto content-center bg-black text-white'>
+                <div id="c_container" className='flex m-auto w-full max-w-7xl p-10'>
+                  <Footer />
+                </div>
               </div>
-            </div>
 
-            <Snackbar open={snack.open} autoHideDuration={snack.autoHideDuration} onClose={handleClose}>
-              <Alert severity={snack.color}>
-                {snack.message || ''}
-              </Alert>
-            </Snackbar>
+              <Snackbar open={snack.open} autoHideDuration={snack.autoHideDuration} onClose={handleClose}>
+                <Alert severity={snack.color}>
+                  {snack.message || ''}
+                </Alert>
+              </Snackbar>
+            </AuthProvider>
           </SnackbarContext.Provider>
         </HashRouter>
       </ThemeProvider>
