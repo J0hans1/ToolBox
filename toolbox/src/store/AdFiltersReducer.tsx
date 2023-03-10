@@ -4,18 +4,18 @@ import { RootState } from './Store';
 
 interface IAction {
     type: string
-    payload: IFiltersSlice
+    payload: IAdFiltersSlice
 }
 
-interface SetFilterAction {
+interface SetAdFilterAction {
     type: string;
     payload: {
-        field: keyof IFiltersSlice;
+        field: keyof IAdFiltersSlice;
         value: string | number | null | undefined;
     }
 }
 
-interface IFiltersSlice {
+interface IAdFiltersSlice {
     search: string | undefined;
     category: string;
     minPrice: number | undefined;
@@ -23,7 +23,7 @@ interface IFiltersSlice {
     zipCode: number | undefined;
 }
 
-const initialState: IFiltersSlice = {
+const initialState: IAdFiltersSlice = {
     search: "",
     category: "",
     minPrice: undefined,
@@ -31,20 +31,20 @@ const initialState: IFiltersSlice = {
     zipCode: undefined,
 }
 
-export const filtersSlice = createSlice({
-    name: 'filters',
+export const AdFiltersSlice = createSlice({
+    name: 'AdFilters',
     initialState,
     reducers: {
-        setFilters(_, action: IAction) {
+        setAdFilters(_, action: IAction) {
             return action.payload;
         },
-        setFilter(state, action: SetFilterAction) {
+        setAdFilter(state, action: SetAdFilterAction) {
             return { ...state, [action.payload.field]: action.payload.value };
         }
     },
 })
 
-export const { setFilters, setFilter } = filtersSlice.actions
-export const selectFilters = (state: RootState) => state.filters;
+export const { setAdFilters, setAdFilter } = AdFiltersSlice.actions
+export const selectAdFilters = (state: RootState) => state.AdFilters;
 
-export default filtersSlice.reducer
+export default AdFiltersSlice.reducer

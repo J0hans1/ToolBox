@@ -3,17 +3,15 @@ import ReactMapboxGl, { Marker } from 'react-mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import mapboxgl from "mapbox-gl";
 
-  
 
 const Map = ReactMapboxGl({
   accessToken: 'pk.eyJ1IjoiYW5uZW9sZCIsImEiOiJjbGV3bnNrMHIwZWw5M3pxdzJwNHM3dDdiIn0.R8xh7lwFlJu0-2hK76_qqg'
 });
 
 
-
 interface Props {
   address: string;
- 
+
 }
 
 const MapComponent: React.FC<Props> = ({ address }) => {
@@ -22,7 +20,7 @@ const MapComponent: React.FC<Props> = ({ address }) => {
     color: "#ff1500",
     draggable: false,
   }).setLngLat(coordinates);
-  
+
 
   useEffect(() => {
     const fetchCoordinates = async () => {
@@ -42,16 +40,14 @@ const MapComponent: React.FC<Props> = ({ address }) => {
     fetchCoordinates();
   }, [address]);
 
-  
+
   return (
     <Map
       style="mapbox://styles/mapbox/streets-v11"
       center={coordinates}
       zoom={[12]}
-      containerStyle={{ height: '50vh', width: '100%'}}
-    
-  />     
-
+      containerStyle={{ height: '50vh', width: '100%' }}
+    />
   );
 };
 

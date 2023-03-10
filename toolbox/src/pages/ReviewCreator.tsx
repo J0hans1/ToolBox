@@ -6,6 +6,7 @@ import Step from "../components/Step";
 import { useNavigate } from "react-router-dom";
 import { NewReview } from "../types/types";
 import { Snack, SnackbarContext } from "../context/SnackbarContext";
+import { useAuth } from "../context/AuthContext";
 
 
 const ReviewCreator = () => {
@@ -13,13 +14,10 @@ const ReviewCreator = () => {
     const [rating, setRating] = useState(0);
     const [review, setReview] = useState("");
     const {setSnack} = useContext(SnackbarContext);
+    const { currentUser } = useAuth();
 
 
     const handleOnClick = async () => {
-        if (sessionStorage.getItem("username") === null) {
-            setSnack(new Snack({message: 'Du må være logget inn for å opprette en annonse!', color:'warning', autoHideDuration:5000, open: true}));
-            return;
-        }
         const adId = sessionStorage.getItem("ADID");
         if (adId === null) {
             setSnack(new Snack({message: 'Noe gikk galt, prøv igjen senere', color:'warning', autoHideDuration:5000, open: true}));  
@@ -31,24 +29,23 @@ const ReviewCreator = () => {
             return;
         }
 
-        const userId = sessionStorage.getItem("userID");
-        if (userId !== null) {
+        if (currentUser?.id !== null && currentUser !== undefined) {
             // check if the user has already reviewed the ad
-            if (await checkReview(userId, adId) === true) {
+            if (await checkReview(currentUser?.id, adId) === true) {
                 setSnack(new Snack({message: 'Du har allerede anmeldt denne annonsen', color:'warning', autoHideDuration:5000, open: true}));
                 return;
             }
 
 
             const newReview: NewReview = {
-                userId: userId,
+                userId: currentUser?.id,
                 adId: adId,
                 rating: rating,
                 comment: review,
             }
             const res = await addReview(newReview);
             if (res === true) {
-                setSnack(new Snack({message: 'Anmeldelse lagt til', color:'warning', autoHideDuration:5000, open: true}));
+                setSnack(new Snack({message: 'Anmeldelse lagt til', color:'success', autoHideDuration:5000, open: true}));
                 navigate("/adinspector/" + adId);
             } else {
                 setSnack(new Snack({message: 'Noe gikk galt, prøv igjen senere', color:'warning', autoHideDuration:5000, open: true}));

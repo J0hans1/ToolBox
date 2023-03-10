@@ -7,6 +7,7 @@ import Step from "../components/Step";
 import { validateAddress, validateCity, validateDescription, validatePrice, validateTitle, validateZip } from "../lib/validation";
 import { useNavigate } from "react-router-dom";
 import { Snack, SnackbarContext } from "../context/SnackbarContext";
+import { useAuth } from "../context/AuthContext";
 
 
 const EditAd = () => {
@@ -24,6 +25,7 @@ const EditAd = () => {
     const [images, setImages] = useState<FileList | null>(null);
 
     const {setSnack} = useContext(SnackbarContext);
+    const { currentUser } = useAuth();
 
 
     useEffect(() => {
@@ -57,12 +59,11 @@ const EditAd = () => {
     }
 
     function updateAdToDatabase(props: UpdateAd) {
-        const userID = sessionStorage.getItem("userID")
         const adID = sessionStorage.getItem("ADID")
-        if (userID !== null && adID != null) {
+        if (currentUser?.id !== null && adID != null) {
             const ad = {
                 id: adID,
-                userid: userID,
+                userid: currentUser?.id,
                 title: props.title,
                 description: props.description,
                 category: props.category,
@@ -97,10 +98,6 @@ const EditAd = () => {
 
 
     const handleOnClick = async () => {
-        if (sessionStorage.getItem("username") === null) {
-            setSnack(new Snack({message: 'Du må være logget inn for å opprette en annonse!', color:'warning', autoHideDuration:5000, open: true}));
-            return;
-        }
         // check if all fields are filled
         if (title === "" || description === "" || category === "" || price === "" || address === "" || zip === "" || city === "") {
             setSnack(new Snack({message: 'Alle felt må fylles ut!', color:'warning', autoHideDuration:5000, open: true}));
@@ -289,7 +286,6 @@ const EditAd = () => {
                         <div className='flex flex-col w-full gap-2 my-2'>
                             <Button variant="contained" color="primary" sx={{ p: 2 }} onClick={() => handleOnClick()}> Oppdater annonse </Button>
                             <Button variant="contained" color="primary" sx={{ p: 2, ':hover': { bgcolor: 'black', color: 'white', }, }} onClick={() => navigate(`/adinspector/${sessionStorage.getItem("ADID")}`)}> Avbryt redigering </Button>
-                            <Button variant="outlined" color="primary" sx={{ p: 2, ':hover': { bgcolor: 'black', color: 'white', }, }}> Forhåndsvisning </Button>
                         </div>
 
                     </div>

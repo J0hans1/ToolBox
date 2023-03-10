@@ -7,10 +7,12 @@ import Step from "../components/Step";
 import { validateAddress, validateCity, validateDescription, validatePrice, validateTitle, validateZip } from "../lib/validation";
 import { useNavigate } from "react-router-dom";
 import { Snack, SnackbarContext } from "../context/SnackbarContext";
+import { useAuth } from "../context/AuthContext";
 
 
 const AdCreator = () => {
     let navigate = useNavigate();
+    const { currentUser } = useAuth();
 
     const [description, setDescription] = useState("");
     const [title, setTitle] = useState("");
@@ -24,10 +26,6 @@ const AdCreator = () => {
     const {setSnack} = useContext(SnackbarContext);
 
     const handleOnClick = async () => {
-        if (sessionStorage.getItem("username") === null) {
-            setSnack(new Snack({message: 'Du må være logget inn for å opprette en annonse!', color:'warning', autoHideDuration:5000, open: true}));
-            return;
-        }
         // check if all fields are filled
         if (title === "" || description === "" || category === "" || price === "" || address === "" || zip === "" || city === "") {
             setSnack(new Snack({message: 'Alle felt må fylles ut!', color:'warning', autoHideDuration:5000, open: true}));
@@ -61,9 +59,8 @@ const AdCreator = () => {
     }
 
     function writeAdToDatabase(props: NewAd) {
-        const userID = sessionStorage.getItem("userID")
         const ad = {
-            userid: userID,
+            userid: currentUser?.id,
             title: props.title,
             description: props.description,
             category: props.category,
@@ -82,7 +79,7 @@ const AdCreator = () => {
         if (images !== null) {
             const imageUrls2 = await uploadImages(images);
 
-            const adToDatabase = {
+            const adToDatabase: NewAd = {
                 title: title,
                 description: description,
                 category: category,
@@ -91,12 +88,12 @@ const AdCreator = () => {
                 zip: parseInt(zip),
                 city: city,
                 pictures: imageUrls2
-            } as NewAd;
+            };
             writeAdToDatabase(adToDatabase);
             navigate("/ads");
         }
         else {
-            const adToDatabase = {
+            const adToDatabase: NewAd = {
                 title: title,
                 description: description,
                 category: category,
@@ -105,7 +102,7 @@ const AdCreator = () => {
                 zip: parseInt(zip),
                 city: city,
                 pictures: ['http://www.sitech.co.id/assets/img/products/default.jpg'] // default image if none is provided
-            } as NewAd;
+            };
             writeAdToDatabase(adToDatabase);
             navigate("/ads");
         }
@@ -119,7 +116,6 @@ const AdCreator = () => {
                     <div className='flex flex-col w-10/12 text-left pt-32 mb-10'>
 
                         <Title size={'text-7xl'} heading={'Opprett '} span={'annonse'} description={'Start utlån allerede i dag! Følg stegene, så er annonsen din oppe og går i løpet av kort tid!'} />
-
 
                         <div id="CATEGORY" className='flex flex-col my-5'>
                             <Step nr={'01'} title={'Velg kategori'} />
@@ -148,9 +144,7 @@ const AdCreator = () => {
                                     </Select>
                                 </FormControl>
                             </div>
-
                         </div>
-
 
                         <div id="TITLE_DESC" className='flex flex-col my-5'>
                             <Step nr={'02'} title={'Tittel og beskrivelse'} />
@@ -229,10 +223,8 @@ const AdCreator = () => {
                             <Button variant="contained" color="primary" sx={{ p: 2 }} onClick={() => handleOnClick()}> Publiser annonse </Button>
                             <Button variant="outlined" color="primary" sx={{ p: 2, ':hover': { bgcolor: 'black', color: 'white', }, }}> Forhåndsvisning </Button>
                         </div>
-
                     </div>
                 </div>
-
             </div>
         </div>
     );
