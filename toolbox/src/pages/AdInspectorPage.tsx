@@ -10,10 +10,11 @@ import { amber } from "@mui/material/colors";
 import LinkButton from "../components/LinkButton";
 import { Snack, SnackbarContext } from "../context/Context";
 import Map from "../components/Map";
-import DynamicRatingStars from "../components/DyniamicRatingStars"
 import StaticRatingStars from "../components/StaticRatingStars"
 import { getAdRating } from "../lib/controller";
-import { useAuth } from "../context/AuthContext";import Calendar from "../components/Calendar";
+import ReviewList from "../components/ReviewList";
+import { useAuth } from "../context/AuthContext";
+import Calendar from "../components/Calendar";
 import { EndDateContext, StartDateContext } from "../context/Context";
 
 
@@ -254,20 +255,11 @@ const AdInspectorPage = () => {
                                         </div>
                                     </a>
                                 </div>
-                                {currentUser ? (
-                                    <div >
-                                        Gi annonsen en vurdering!
-                                        {/* stjerner for å gi rating */}
-                                        <DynamicRatingStars />
-                                    </div>
-                                ) : (
-                                    <div>
-                                        <p>Du må være logget inn for å gi en vurdering</p>
-                                    </div>
-                                )}
+                               
                                 Annonsens gjennomsnittlige vurdering:
                                 {/* stjerner for å vise gjennomsnittsrating til annonsen */}
                                 <StaticRatingStars value={Number(getAdRating(ad.id))} />
+                                <ReviewList/>
                             </div>
 
                         )}

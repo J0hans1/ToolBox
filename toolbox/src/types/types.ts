@@ -54,8 +54,8 @@ export interface NewReview{
     id?: string;
     userId: string;
     adId: string;
-    rating: number;
-    comment: string;
+    rating?: number;
+    comment?: string;
 }
 
 export interface NewGoogleUser {
