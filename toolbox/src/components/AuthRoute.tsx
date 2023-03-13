@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import { Snack, SnackbarContext } from '../context/SnackbarContext';
+import { Snack, SnackbarContext } from '../context/Context';
 
 export interface IAuthRouteProps {
     children: React.ReactNode;

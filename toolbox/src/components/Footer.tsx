@@ -2,7 +2,7 @@ import Button from "@mui/material/Button";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { Snack, SnackbarContext } from '../context/SnackbarContext';
+import { Snack, SnackbarContext } from '../context/Context';
 
 const Footer = () => {
     const { currentUser, login, logout} = useAuth();

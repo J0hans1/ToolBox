@@ -6,7 +6,7 @@ import Title from "../components/Title";
 import Step from "../components/Step";
 import { validateAddress, validateCity, validateDescription, validatePrice, validateTitle, validateZip } from "../lib/validation";
 import { useNavigate } from "react-router-dom";
-import { Snack, SnackbarContext } from "../context/SnackbarContext";
+import { Snack, SnackbarContext } from "../context/Context";
 import { useAuth } from "../context/AuthContext";
 
 

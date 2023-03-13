@@ -1,6 +1,6 @@
 import Title from "../components/Title";
 import TitledIcon from "../components/TitledIcon";
-import { getAd, isSaved, isOwned, removeAdFromUser, saveAdToUser, deleteAd } from "../lib/controller";
+import { getUser, getAd, isSaved, isOwned, removeAdFromUser, saveAdToUser, deleteAd } from "../lib/controller";
 import { Ad } from "../types/types";
 import { useContext, useEffect, useState } from "react";
 import Button from "@mui/material/Button";
@@ -8,12 +8,13 @@ import { useNavigate } from "react-router-dom";
 import { Avatar } from "@mui/material";
 import { amber } from "@mui/material/colors";
 import LinkButton from "../components/LinkButton";
-import { Snack, SnackbarContext } from "../context/SnackbarContext";
+import { Snack, SnackbarContext } from "../context/Context";
 import Map from "../components/Map";
 import DynamicRatingStars from "../components/DyniamicRatingStars"
 import StaticRatingStars from "../components/StaticRatingStars"
 import { getAdRating } from "../lib/controller";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/AuthContext";import Calendar from "../components/Calendar";
+import { EndDateContext, StartDateContext } from "../context/Context";
 
 
 interface Info {
@@ -63,6 +64,8 @@ const AdInspectorPage = () => {
     const [isOwnedAd, setIsOwnedAd] = useState(false);
     const [isAdSaved, setIsAdSaved] = useState(false);
     const { setSnack } = useContext(SnackbarContext);
+    const { startDate} = useContext(StartDateContext);
+    const { endDate} = useContext(EndDateContext);
 
 
     const handleEditAd = async () => {
@@ -151,6 +154,41 @@ const AdInspectorPage = () => {
         });
     }, []);
 
+    /*     const renderAdControls = () => {
+            if (isOwnedAd) {
+                return (
+                    <div className="flex flex-row">
+                        <Button variant="contained" color="primary" onClick={handleEditAd}>
+                            Rediger annonse
+                        </Button>
+                        <Button variant="contained" color="error" onClick={handleDeleteAd}>
+                            Slett annonse
+                        </Button>
+                    </div>
+                );
+            } else {
+                return (
+                    <div>
+                        <div>
+                            {isAdSaved ? (
+                                <Button onClick={handleRemoveAd}>Fjern annonse fra lagrede annonser</Button>
+                            ) : (
+                                <Button onClick={handleSaveAd}>Lagre annonse</Button>
+                            )}
+                        </div>
+                        <div>
+                            <Button onClick={handleRedirect}>Gi en tilbakemelding</Button>
+                        </div>
+                    </div>
+                );
+            }
+        }; */
+
+    function handleReserve(){
+        
+    }
+
+
     const renderPageControll = () => {
         if (isOwnedAd) {
             return (
@@ -233,6 +271,34 @@ const AdInspectorPage = () => {
                             </div>
 
                         )}
+
+                        <div className="flex flex-row gap-1 w-4/5">
+                            <div>
+                                {isAdSaved ? (
+                                    <Button onClick={handleRemoveAd} variant="contained" sx={{ p: 2 }}>
+                                        Fjern annonse fra lagrede annonser
+                                    </Button>
+                                ) : (
+                                    <Button variant="contained" sx={{ p: 2 }} onClick={handleSaveAd}>
+                                        Lagre annonse
+                                    </Button>
+                                )}
+                            </div>
+                            <Button variant="outlined" color="primary" >
+                                Kontakt utleier
+                            </Button>
+                            <Button onClick={handleRedirect} variant="outlined" color="primary">
+                                Skriv en anmeldelse
+                            </Button>
+                        </div>
+                        <div className="items-center mt-10">
+                            <h2>Reserver produkt</h2>
+                            <div className="flex flex-row mt-5">
+                                <Calendar/>
+                            </div>
+                            <Button variant="contained" onClick={handleReserve}>Reserver produkt</Button>
+                            
+                        </div>
                         {currentUser ? (
                             <div className="flex flex-row gap-1 w-4/5">
                                 <div>
