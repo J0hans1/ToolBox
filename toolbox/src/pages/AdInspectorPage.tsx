@@ -1,12 +1,10 @@
 import Title from "../components/Title";
 import TitledIcon from "../components/TitledIcon";
-import { getUser, getAd, isSaved, isOwned, removeAdFromUser, saveAdToUser, deleteAd } from "../lib/controller";
+import { getAd, isSaved, isOwned, removeAdFromUser, saveAdToUser, deleteAd } from "../lib/controller";
 import { Ad } from "../types/types";
 import { useContext, useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
-import { Avatar } from "@mui/material";
-import { amber } from "@mui/material/colors";
 import LinkButton from "../components/LinkButton";
 import { Snack, SnackbarContext } from "../context/Context";
 import Map from "../components/Map";
@@ -16,6 +14,10 @@ import ReviewList from "../components/ReviewList";
 import { useAuth } from "../context/AuthContext";
 import Calendar from "../components/Calendar";
 import { EndDateContext, StartDateContext } from "../context/Context";
+import { FavoriteBorder, Favorite } from "@material-ui/icons";
+import { IconButton } from "@material-ui/core";
+
+
 
 
 interface Info {
@@ -82,6 +84,8 @@ const AdInspectorPage = () => {
             navigate("/ads");
         }
     };
+
+    
 
     const handleSaveAd = async () => {
         const adIDFromSessionStorage = sessionStorage.getItem("ADID");
@@ -155,39 +159,10 @@ const AdInspectorPage = () => {
         });
     }, []);
 
-    /*     const renderAdControls = () => {
-            if (isOwnedAd) {
-                return (
-                    <div className="flex flex-row">
-                        <Button variant="contained" color="primary" onClick={handleEditAd}>
-                            Rediger annonse
-                        </Button>
-                        <Button variant="contained" color="error" onClick={handleDeleteAd}>
-                            Slett annonse
-                        </Button>
-                    </div>
-                );
-            } else {
-                return (
-                    <div>
-                        <div>
-                            {isAdSaved ? (
-                                <Button onClick={handleRemoveAd}>Fjern annonse fra lagrede annonser</Button>
-                            ) : (
-                                <Button onClick={handleSaveAd}>Lagre annonse</Button>
-                            )}
-                        </div>
-                        <div>
-                            <Button onClick={handleRedirect}>Gi en tilbakemelding</Button>
-                        </div>
-                    </div>
-                );
-            }
-        }; */
-
     function handleReserve(){
         
     }
+
 
 
     const renderPageControll = () => {
@@ -267,14 +242,16 @@ const AdInspectorPage = () => {
                         <div className="flex flex-row gap-1 w-4/5">
                             <div>
                                 {isAdSaved ? (
-                                    <Button onClick={handleRemoveAd} variant="contained" sx={{ p: 2 }}>
-                                        Fjern annonse fra lagrede annonser
-                                    </Button>
+                                    <IconButton onClick={() => handleRemoveAd()}>
+                                    <Favorite className="text-red-500 cursor-pointer" fontSize="large" />
+                                    </IconButton>
                                 ) : (
-                                    <Button variant="contained" sx={{ p: 2 }} onClick={handleSaveAd}>
-                                        Lagre annonse
-                                    </Button>
-                                )}
+                                    <IconButton onClick={() => handleSaveAd()} >
+                                    <FavoriteBorder className="text-red-500" fontSize="large"/>
+                                    </IconButton>)}
+
+
+                                
                             </div>
                             <Button variant="outlined" color="primary" >
                                 Kontakt utleier
@@ -291,31 +268,7 @@ const AdInspectorPage = () => {
                             <Button variant="contained" onClick={handleReserve}>Reserver produkt</Button>
                             
                         </div>
-                        {currentUser ? (
-                            <div className="flex flex-row gap-1 w-4/5">
-                                <div>
-                                    {isAdSaved ? (
-                                        <Button onClick={handleRemoveAd} variant="contained" sx={{ p: 2 }}>
-                                            Fjern annonse fra lagrede annonser
-                                        </Button>
-                                    ) : (
-                                        <Button variant="contained" sx={{ p: 2 }} onClick={handleSaveAd}>
-                                            Lagre annonse
-                                        </Button>
-                                    )}
-                                </div>
-                                <Button variant="outlined" color="primary" >
-                                    Kontakt utleier
-                                </Button>
-                                <Button onClick={handleRedirect} variant="outlined" color="primary">
-                                    Skriv en anmeldelse
-                                </Button>
-                            </div>
-                        ) : (
-                            <Button variant="outlined" color="primary" >
-                                Kontakt utleier
-                            </Button>
-                        )}
+                       
                     </div>
                 </div>
             )
