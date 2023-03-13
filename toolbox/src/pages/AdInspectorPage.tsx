@@ -15,6 +15,8 @@ import StaticRatingStars from "../components/StaticRatingStars"
 import { getAdRating } from "../lib/controller";
 import { useAuth } from "../context/AuthContext";import Calendar from "../components/Calendar";
 import { EndDateContext, StartDateContext } from "../context/Context";
+import { FavoriteBorder, Favorite } from "@material-ui/icons";
+
 
 
 interface Info {
@@ -275,14 +277,14 @@ const AdInspectorPage = () => {
                         <div className="flex flex-row gap-1 w-4/5">
                             <div>
                                 {isAdSaved ? (
-                                    <Button onClick={handleRemoveAd} variant="contained" sx={{ p: 2 }}>
-                                        Fjern annonse fra lagrede annonser
-                                    </Button>
+                                    <Favorite className="text-red-500 " onClick={() => handleRemoveAd()} fontSize="large" />
+
                                 ) : (
-                                    <Button variant="contained" sx={{ p: 2 }} onClick={handleSaveAd}>
-                                        Lagre annonse
-                                    </Button>
+                                    <FavoriteBorder className="text-red-500" onClick={() => handleSaveAd()} fontSize="large"/>
                                 )}
+
+
+                                
                             </div>
                             <Button variant="outlined" color="primary" >
                                 Kontakt utleier
