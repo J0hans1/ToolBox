@@ -23,9 +23,7 @@ export default function StaticRatingStars(props: defaultValues) {
   return (
     <Box
       sx={{
-        width: 200,
         display: 'flex',
-        alignItems: 'center',
       }}
     >
      

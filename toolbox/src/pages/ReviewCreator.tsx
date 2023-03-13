@@ -7,32 +7,36 @@ import { useNavigate } from "react-router-dom";
 import { NewReview } from "../types/types";
 import { Snack, SnackbarContext } from "../context/Context";
 import { useAuth } from "../context/AuthContext";
+import * as React from 'react';
+import Rating from '@mui/material/Rating';
+import Box from '@mui/material/Box';
+import StarIcon from '@mui/icons-material/Star';
 
-
+//TODO: få verdien fra stjernene til å bli med videre 
 const ReviewCreator = () => {
     let navigate = useNavigate();
     const [rating, setRating] = useState(0);
     const [review, setReview] = useState("");
-    const {setSnack} = useContext(SnackbarContext);
+    const { setSnack } = useContext(SnackbarContext);
     const { currentUser } = useAuth();
 
 
     const handleOnClick = async () => {
         const adId = sessionStorage.getItem("ADID");
         if (adId === null) {
-            setSnack(new Snack({message: 'Noe gikk galt, prøv igjen senere', color:'warning', autoHideDuration:5000, open: true}));  
+            setSnack(new Snack({ message: 'Noe gikk galt, prøv igjen senere', color: 'warning', autoHideDuration: 5000, open: true }));
             return;
         }
 
         if (review === "") {
-            setSnack(new Snack({message: 'Alle felt må fylles ut', color:'warning', autoHideDuration:5000, open: true}));
+            setSnack(new Snack({ message: 'Alle felt må fylles ut', color: 'warning', autoHideDuration: 5000, open: true }));
             return;
         }
 
         if (currentUser?.id !== null && currentUser !== undefined) {
             // check if the user has already reviewed the ad
             if (await checkReview(currentUser?.id, adId) === true) {
-                setSnack(new Snack({message: 'Du har allerede anmeldt denne annonsen', color:'warning', autoHideDuration:5000, open: true}));
+                setSnack(new Snack({ message: 'Du har allerede anmeldt denne annonsen', color: 'warning', autoHideDuration: 5000, open: true }));
                 return;
             }
 
@@ -45,17 +49,32 @@ const ReviewCreator = () => {
             }
             const res = await addReview(newReview);
             if (res === true) {
-                setSnack(new Snack({message: 'Anmeldelse lagt til', color:'success', autoHideDuration:5000, open: true}));
+                setSnack(new Snack({ message: 'Anmeldelse lagt til', color: 'success', autoHideDuration: 5000, open: true }));
                 navigate("/adinspector/" + adId);
             } else {
-                setSnack(new Snack({message: 'Noe gikk galt, prøv igjen senere', color:'warning', autoHideDuration:5000, open: true}));
+                setSnack(new Snack({ message: 'Noe gikk galt, prøv igjen senere', color: 'warning', autoHideDuration: 5000, open: true }));
             }
 
         }
     }
 
+    const labels: { [index: string]: string } = {
+        1: 'Forferdelig!',
+        2: 'Dårlig!',
+        3: 'Ok!',
+        4: 'Bra!',
+        5: 'Fantastisk!',
+    };
 
-    //TODO add rating stars from mui, with max and min value
+    function getLabelText(value: number) {
+        return `${value} Star${value !== 1 ? 's' : ''}, ${labels[value]}`;
+    }
+
+    const [value, setValue] = React.useState<number | null>(0);
+    const [hover, setHover] = React.useState(-1);
+
+
+
     return (
         <div>
             <div id="c_section" className='flex w-full h-full content-center bg-slate-100 overflow-hidden z-10'>
@@ -65,12 +84,43 @@ const ReviewCreator = () => {
                         <Title size={'text-7xl'} heading={'Opprett '} span={'anmeldelse'} description={'Gi en tilbakemelding på produktet du har lånt!'} />
 
                         <div id="RATING" className='flex flex-col my-5'>
-                            <Step nr={'01'} title={'Velg fra 0-5'} />
-                            <p>Velg en passende rating på produktet.</p>
+                            <Step nr={'01'} title={'Rating'} />
+                            <p> Gi en anmeldelse av produktet. </p>
 
-                            <div className='flex flex-col w-full mt-5 gap-2'>
+                            <Box
+                                sx={{
+                                    width: 400,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    padding: 2,
+                                }}
+                            >
+                                <Rating
+                                    name="hover-feedback"
+                                    value={value}
+                                    precision={1}
+                                    sx={{
+                                        fontSize: "4rem"
+
+                                    }}
+                                    getLabelText={getLabelText}
+                                    onChange={(event, newValue) => {
+                                        setValue(newValue);
+                                        setRating(Number(newValue));
+                                    }}
+                                    onChangeActive={(event, newHover) => {
+                                        setHover(newHover);
+                                    }}
+                                    emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
+                                />
+                                {value !== null && (
+                                    <Box sx={{ ml: 2 }}>{labels[hover !== -1 ? hover : value]}</Box>
+                                )}
+                            </Box>
+
+                            {/* <div className='flex flex-col w-full mt-5 gap-2'>
                                 <TextField label="Rating" type="number" InputLabelProps={{ shrink: true, }} value={rating} onChange={(e) => { setRating(parseInt(e.target.value)) }} />
-                            </div>
+                            </div> */}
                         </div>
 
                         <div id="REVIEW" className='flex flex-col my-5'>
