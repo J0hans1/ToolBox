@@ -21,12 +21,16 @@ import MyReviews from './pages/MyReviews';
 import { useState } from 'react';
 import { Alert, Snackbar } from '@mui/material';
 import Snacks from './components/Snacks';
-import { Snack, SnackbarContext } from './context/SnackbarContext';
+import { StartDateContext, EndDateContext, Snack, SnackbarContext } from './context/Context';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import AuthRoute from './components/AuthRoute';
 import { AuthProvider } from './context/AuthContext';
 
 export default function App() {
   const [snack, setSnack] = useState(new Snack({ open: false }));
+  const [startDate, setStartDate] = useState<Date>(new Date());
+  const [endDate, setEndDate] = useState<Date>(new Date());
 
   const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {

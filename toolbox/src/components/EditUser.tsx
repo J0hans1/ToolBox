@@ -3,7 +3,7 @@ import { GoogleUser } from "../types/types";
 import { TextField, Button } from '@mui/material';
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Snack, SnackbarContext } from "../context/SnackbarContext";
+import { Snack, SnackbarContext } from "../context/Context";
 import { useAuth } from "../context/AuthContext";
 
 

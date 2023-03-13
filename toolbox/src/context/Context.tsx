@@ -24,4 +24,15 @@ type SnackDefaultValue = {
   
 export const SnackbarContext = createContext<SnackDefaultValue>({snack: new Snack({open: false}), setSnack: () => {}});
 
+export type StartDateDefaultValue = {
+  startDate: Date,
+  setStartDate: React.Dispatch<React.SetStateAction<Date>>
+}
 
+type EndDateDefaultValue = {
+  endDate: Date,
+  setEndDate: React.Dispatch<React.SetStateAction<Date>>
+}
+
+export const StartDateContext = createContext<StartDateDefaultValue>({startDate: new Date(), setStartDate: () => {}});
+export const EndDateContext = createContext<EndDateDefaultValue>({endDate: new Date(), setEndDate: () => {}});

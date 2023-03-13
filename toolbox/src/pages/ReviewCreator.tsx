@@ -5,7 +5,7 @@ import Title from "../components/Title";
 import Step from "../components/Step";
 import { useNavigate } from "react-router-dom";
 import { NewReview } from "../types/types";
-import { Snack, SnackbarContext } from "../context/SnackbarContext";
+import { Snack, SnackbarContext } from "../context/Context";
 import { useAuth } from "../context/AuthContext";
 
 

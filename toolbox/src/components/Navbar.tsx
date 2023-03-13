@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import { selectAdFilters, setAdFilter } from "../store/AdFiltersReducer";
 import { useAuth } from '../context/AuthContext';
-import { Snack, SnackbarContext } from '../context/SnackbarContext';
+import { Snack, SnackbarContext } from '../context/Context';
 import { useState, useContext, useEffect } from 'react';
 
 const Navbar = () => {
