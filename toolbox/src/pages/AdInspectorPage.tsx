@@ -69,6 +69,7 @@ const AdInspectorPage = () => {
     const { setSnack } = useContext(SnackbarContext);
     const { startDate} = useContext(StartDateContext);
     const { endDate} = useContext(EndDateContext);
+    const [avgrating, setAvgrating] = useState<number>(-1);
 
 
     const handleEditAd = async () => {
@@ -160,9 +161,20 @@ const AdInspectorPage = () => {
             checkIsOwned().then(async () => {
                 const saved = await checkIfAdIsSaved();
                 setIsAdSaved(saved);
+                getAverageRating();
             });
         });
     }, []);
+
+    async function getAverageRating() {
+        const adID = sessionStorage.getItem("ADID");
+        if (adID !== null ) {
+        const averageRating = Number(await getAdRating(adID));
+        console.log(averageRating);
+        setAvgrating(averageRating);}
+
+    }
+
 
     function handleReserve(){
         
@@ -238,8 +250,7 @@ const AdInspectorPage = () => {
                                
                                 Annonsens gjennomsnittlige vurdering:
                                 {/* stjerner for å vise gjennomsnittsrating til annonsen */}
-                                <StaticRatingStars value={Number(getAdRating(ad.id))} />
-                                <ReviewList/>
+                                <StaticRatingStars value={avgrating} />                                <ReviewList/>
                             </div>
 
                         )}
