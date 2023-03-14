@@ -308,7 +308,7 @@ export const getAd = async (adId: string) => {
       }
       return ad;
     } else {
-      throw new Error(`Ad with ID ${adId} does not exist`);
+      return null 
     }
   } catch (error) {
     console.error(`Error getting ad with ID ${adId}: ${error}`);
@@ -324,7 +324,7 @@ export const getUserAds = async (id: string) => {
     const myAds = user.data().myAds;
     const adPromises = myAds.map(async (adId: string) => {
       const ad = await getAd(adId);
-      if (ad.exists()) {
+      if (ad !== null && ad.exists()) {
         return {
           id: ad.id,
           userid: ad.data().userid,
@@ -397,7 +397,7 @@ export const deleteUser = async (id: string) => {
 };
 
 //get ad reviews
-export async function getAdReviews(adId: string) {
+/* export async function getAdReviews(adId: string) {
   const reviews: Review[] = [];
   const reviewSnapshot = await getDocs(collection(firestore, "reviews"));
   reviewSnapshot.forEach((doc) => {
@@ -412,6 +412,47 @@ export async function getAdReviews(adId: string) {
     }
   })
 
+  return reviews;
+} */
+export async function getAdReviews(adId: string) {
+  const reviews: Review[] = [];
+  const reviewSnapshot = await getDocs(collection(firestore, "reviews"));
+  const updatedReviews = [];
+  for (const doc of reviewSnapshot.docs) {
+    if (doc.data().adId === adId) {
+      const review = {
+        id: doc.id,
+        adId: doc.data().adId,
+        userId: doc.data().userId,
+        rating: doc.data().rating,
+        comment: doc.data().comment,
+      };
+      if (doc.exists()) {
+        updatedReviews.push(review);
+      }
+      reviews.push(review);
+    }
+  }
+  if (updatedReviews.length !== reviews.length) {
+    // some reviews were deleted, update the ad document
+    const adToBeUpdated = await getAd(adId);
+    if (adToBeUpdated === null) {
+      throw new Error(`Ad with ID ${adId} does not exist`);
+    }
+    await updateAd(adId, {
+      id: adId,
+      userid: reviews[0].userId,
+      title: adToBeUpdated.data().title,
+      description: adToBeUpdated.data().description,
+      category: adToBeUpdated.data().category,
+      price: adToBeUpdated.data().price,
+      address: adToBeUpdated.data().address,
+      zip: adToBeUpdated.data().zip,
+      city: adToBeUpdated.data().city,
+      pictures: adToBeUpdated.data().pictures,
+      reviews: updatedReviews.map((r) => r.id),
+    });
+  }
   return reviews;
 }
 
@@ -439,7 +480,7 @@ export async function getReview(reviewId: string) {
   return review;
 }
 
-export async function getMyReviews(userId: string) {
+/* export async function getMyReviews(userId: string) {
   // get reviewId from user's myReviews array
   const reviews: Review[] = [];
   const user = await getUser(userId);
@@ -462,18 +503,51 @@ export async function getMyReviews(userId: string) {
     reviews.push(...reviewResults.filter((review) => review !== null));
   }
   return reviews;
+} */
+export async function getMyReviews(userId: string) {
+  // get reviewId from user's myReviews array
+  const reviews: Review[] = [];
+  const user = await getUser(userId);
+  if (user.exists() && user.data().myReviews) {
+    const myReviews = user.data().myReviews;
+    const updatedMyReviews = [];
+    for (const reviewId of myReviews) {
+      const review = await getReview(reviewId);
+      if (review.exists()) {
+        updatedMyReviews.push(reviewId);
+        reviews.push({
+          id: review.id,
+          adId: review.data().adId,
+          userId: review.data().userId,
+          rating: review.data().rating,
+          comment: review.data().comment,
+        });
+      }
+    }
+    if (updatedMyReviews.length !== myReviews.length) {
+      await updateUser(userId, {
+        id: userId,
+        myReviews: updatedMyReviews,
+      });
+    }
+  }
+  return reviews;
 }
 
 // DELETE AN AD
 export const deleteAd = async (adId: string) => {
   try {
     // delete reviews 
-    for (const review of await Promise.all(await getAdReviews(adId))) {
-      await deleteReview(review.id);
-    }
+    const reviews = await getAdReviews(adId);
+    const reviewPromises = reviews.map(async (review) => {
+      const reviewRef = doc(firestore, `reviews/${review.id}`);
+      await deleteDoc(reviewRef);
+      console.log(`Deleted review with ID: ${review.id}`);
+    });
+    await Promise.all(reviewPromises);
     // delete ad from user's myAds array
     const ad = await getAd(adId);
-    if (ad.exists()) {
+    if (ad !== null && ad.exists()) {
       const user = await getUser(ad.data().userid);
       if (user.exists() && user.data().myAds) {
         const myAds = user.data().myAds;
@@ -565,7 +639,7 @@ export async function saveAdToUser(userId: string, adId: string) {
 
 // get all saved ads for user
 // Get all ads from a specific user
-export const getSavedAdsFromUser = async (id: string) => {
+/* export const getSavedAdsFromUser = async (id: string) => {
   const user = await getUser(id);
   const userAds: Ad[] = [];
 
@@ -594,5 +668,110 @@ export const getSavedAdsFromUser = async (id: string) => {
   }
 
   return userAds;
+}; */
+/* export const getSavedAdsFromUser = async (id: string) => {
+  const user = await getUser(id);
+  const userAds: Ad[] = [];
+
+  if (user.exists() && user.data().savedAds) {
+    const savedAds = user.data().savedAds;
+    const updatedSavedAds = savedAds.filter(async (adId: string) => {
+      try {
+      const ad = await getAd(adId);
+      if (ad !== null && ad.exists()) {
+        return true;
+      }
+    } catch (error) {
+      // remove ad from savedAds array
+      await removeAdFromUser(id, adId);
+      return false;
+    }
+    });
+    await updateUser(id, {
+      id,
+      savedAds: updatedSavedAds,
+    });
+    const adPromises = updatedSavedAds.map(async (adId: string) => {
+      const ad = await getAd(adId);
+      if (ad !== null && ad.exists()) {
+      return {
+        id: ad.id,
+        userid: ad.data().userid,
+        title: ad.data().title,
+        description: ad.data().description,
+        category: ad.data().category,
+        price: ad.data().price,
+        address: ad.data().address,
+        zip: ad.data().zip,
+        city: ad.data().city,
+        pictures: ad.data().pictures,
+      };
+    }});
+    const adResults = await Promise.all(adPromises);
+    userAds.push(...adResults);
+  }
+
+  return userAds;
+}; */
+export const getSavedAdsFromUser = async (id: string): Promise<Ad[]> => {
+  const user = await getUser(id);
+  const userAds: Ad[] = [];
+  
+  if (user.exists() && user.data().savedAds) {
+    const savedAds = user.data().savedAds;
+    const adPromises = savedAds.map(async (adId: string) => {
+      const ad = await getAd(adId);
+      if (ad !== null && ad.exists()) {
+        return {
+          id: ad.id,
+          userid: ad.data().userid,
+          title: ad.data().title,
+          description: ad.data().description,
+          category: ad.data().category,
+          price: ad.data().price,
+          address: ad.data().address,
+          zip: ad.data().zip,
+          city: ad.data().city,
+          pictures: ad.data().pictures,
+        };
+      } else {
+        // remove ad from savedAds array
+        await removeAdFromUser(id, adId);
+      }
+      return null;
+    });
+    const adResults = await Promise.all(adPromises);
+    userAds.push(...adResults.filter((ad) => ad !== null));
+  }
+  
+  return userAds;
 };
 
+/* export const getUserAds = async (id: string) => {
+  const user = await getUser(id);
+  const userAds: Ad[] = [];
+  if (user.exists() && user.data().myAds) {
+    const myAds = user.data().myAds;
+    const adPromises = myAds.map(async (adId: string) => {
+      const ad = await getAd(adId);
+      if (ad !== null && ad.exists()) {
+        return {
+          id: ad.id,
+          userid: ad.data().userid,
+          title: ad.data().title,
+          description: ad.data().description,
+          category: ad.data().category,
+          price: ad.data().price,
+          address: ad.data().address,
+          zip: ad.data().zip,
+          city: ad.data().city,
+          pictures: ad.data().pictures,
+        };
+      }
+      return null;
+    });
+    const adResults = await Promise.all(adPromises);
+    userAds.push(...adResults.filter((ad) => ad !== null));
+  }
+  return userAds;
+}; */
