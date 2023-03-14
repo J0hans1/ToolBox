@@ -52,9 +52,9 @@ const EditAd = () => {
     }, []);
 
     async function getAdFromDatabase(adID: string): Promise<UpdateAd | undefined> {
-        const adFromDatabase = await getAd(adID).then((doc) => {
-            return { id: doc.id, ...doc.data() } as UpdateAd;
-        });
+        const doc = await getAd(adID)
+        if (doc === undefined || doc === null) return undefined;
+        const adFromDatabase = { id: doc.id, ...doc.data() } as UpdateAd;
         return adFromDatabase;
     }
 

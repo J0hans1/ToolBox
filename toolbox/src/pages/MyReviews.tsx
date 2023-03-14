@@ -1,10 +1,22 @@
+import { useEffect } from "react";
 import ProfileSidebar from "../components/ProfileBar";
 import Title from "../components/Title";
+import { useAuth } from "../context/AuthContext";
+import { getMyReviews } from "../lib/controller";
 
 
 const MyReviews = () => {
+    const { currentUser } = useAuth();
 
     // TODO: mappe ut alle reviews som er laget av brukeren
+
+    // get reviews from controller
+    useEffect(() => {
+        if (currentUser?.id != null) {
+            getMyReviews(currentUser.id);
+        }
+    }, []);
+
 
 
     return (

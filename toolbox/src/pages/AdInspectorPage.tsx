@@ -112,9 +112,9 @@ const AdInspectorPage = () => {
     async function getAdFromDatabase() {
         const adFromSessionStorage = sessionStorage.getItem("ADID");
         if (adFromSessionStorage != null) {
-            const adFromDatabase = await getAd(adFromSessionStorage).then((doc) => {
-                return { id: doc.id, ...doc.data() }
-            });
+            const doc = await getAd(adFromSessionStorage)
+            if (doc === undefined || doc === null) return undefined;
+            const adFromDatabase = { id: doc.id, ...doc.data() }
             setAd([adFromDatabase]);
         }
     }
