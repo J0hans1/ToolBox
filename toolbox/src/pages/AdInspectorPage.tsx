@@ -77,12 +77,17 @@ const AdInspectorPage = () => {
     };
 
     const handleDeleteAd = async () => {
-        const adIDFromSessionStorage = sessionStorage.getItem("ADID");
-        if (adIDFromSessionStorage != null) {
-            await deleteAd(adIDFromSessionStorage);
-            setSnack(new Snack({ message: 'Annonse er slettet!', color: 'success', autoHideDuration: 5000, open: true }))
-            navigate("/ads");
+        const confirmDelete = window.confirm('Er du sikker på at du vil slette annonsen din?');
+        if (confirmDelete) {
+            const adIDFromSessionStorage = sessionStorage.getItem("ADID");
+            if (adIDFromSessionStorage != null) {
+                await deleteAd(adIDFromSessionStorage);
+                setSnack(new Snack({ message: 'Annonse er slettet!', color: 'success', autoHideDuration: 5000, open: true }))
+                navigate("/ads");
+            }
         }
+
+        
     };
 
     
