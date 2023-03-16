@@ -58,7 +58,7 @@ const Navbar = () => {
                     <div className='flex flex-col w-4/5'>
                         <div className='flex flex-row justify-between'>
                             <div className='flex flex-row gap-1 w-3/5'>
-                                <TextField fullWidth label={'Søk'} type={'search'} value={AdFilters.search} onChange={(event: any) => {
+                                <TextField fullWidth label={'Søk etter produkt'} type={'search'} value={AdFilters.search} onChange={(event: any) => {
                                     dispatch(setAdFilter({ field: "search", value: event.target.value }));
                                 }} />
                                 <Button color="primary" variant="contained" sx={{ p: 2 }} onClick={() => navigate("/ads")} > Søk </Button>
@@ -90,14 +90,12 @@ const Navbar = () => {
                                     <Button onClick={() => navigate("/")}>Om oss</Button>
                                     <Button onClick={() => navigate("/ads")}>Annonser</Button>
                                     <Button onClick={() => navigate("/profile")} >Min side</Button>
-                                    <Button onClick={() => navigate("/")}>Avtalevilkår</Button>
                                     <Button onClick={() => navigate("/FAQ")}>FAQ</Button>
                                 </div>
                             ) : (
                                 <div className='flex flex-row gap-1 w-auto'>
                                     <Button onClick={() => navigate("/")}>Om oss</Button>
                                     <Button onClick={() => navigate("/ads")}>Annonser</Button>
-                                    <Button onClick={() => navigate("/")}>Avtalevilkår</Button>
                                     <Button onClick={() => navigate("/FAQ")}>FAQ</Button>
                                 </div>
                             )}
