@@ -34,7 +34,7 @@ const SavedAds = () => {
                     <Title heading="Lagrede " span="annonser" size="text-7xl" />
                 </div>
                 <section className='flex flex-col h-auto'>
-                    <div className='flex m-auto w-full max-w-7xl p-10 text-current flex-wrap flex-row justify-center'>
+                    <div className='flex w-full max-w-7xl text-current flex-wrap flex-row justify-left'>
                         {savedAds?.map((savedAds) => (
                             <AdFB key={savedAds.id} ad={savedAds} />
                         ))}

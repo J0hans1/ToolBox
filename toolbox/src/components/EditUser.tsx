@@ -101,7 +101,7 @@ export default function EditUser() {
                     </Button>
                 </div>
 
-                <div style={{ display: editMode ? 'block' : 'none' }}>
+                <div>
                     <Button
                         sx={{ p: 2 }}
                         onClick={

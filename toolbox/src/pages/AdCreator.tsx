@@ -221,7 +221,6 @@ const AdCreator = () => {
 
                         <div className='flex flex-col w-full gap-2 my-2'>
                             <Button variant="contained" color="primary" sx={{ p: 2 }} onClick={() => handleOnClick()}> Publiser annonse </Button>
-                            <Button variant="outlined" color="primary" sx={{ p: 2, ':hover': { bgcolor: 'black', color: 'white', }, }}> Forhåndsvisning </Button>
                         </div>
                     </div>
                 </div>

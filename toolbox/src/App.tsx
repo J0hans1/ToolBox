@@ -17,7 +17,7 @@ import FAQ from './pages/FAQPage';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ReviewCreator from './pages/ReviewCreator';
-import MyReviews from './pages/MyReviews';
+import MyReviews from './pages/MyReservations';
 import { useState } from 'react';
 import { Alert, Snackbar } from '@mui/material';
 import Snacks from './components/Snacks';
@@ -26,6 +26,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import AuthRoute from './components/AuthRoute';
 import { AuthProvider } from './context/AuthContext';
+import MyReservations from './pages/MyReservations';
 
 export default function App() {
   const [snack, setSnack] = useState(new Snack({ open: false }));
@@ -81,7 +82,7 @@ export default function App() {
                 <Route path="/adcreator" element={<AuthRoute> <AdCreator /> </AuthRoute>} />
                 <Route path="/editadpage/:id" element={<AuthRoute><EditAdPage /></AuthRoute>} />
                 <Route path='/myAds' element={<AuthRoute><MyAds /></AuthRoute>} />
-                <Route path="/myreviews" element={<AuthRoute><MyReviews /></AuthRoute>} />
+                <Route path="/myReservations" element={<AuthRoute><MyReservations /></AuthRoute>} />
                 <Route path="/profile" element={<AuthRoute><ProfilePage /></AuthRoute>} />
                 <Route path="/reviewad" element={<AuthRoute><ReviewCreator /></AuthRoute>} />
                 <Route path="/savedads" element={<AuthRoute><SavedAds /></AuthRoute>} />
