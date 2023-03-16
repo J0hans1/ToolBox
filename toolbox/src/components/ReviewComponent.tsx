@@ -18,21 +18,13 @@ interface Review {
 export default function ReviewComponent(props: Review) {
 
     const [image, setImage] = useState<string>("");
-    const [value = 0, setValue] = useState<Number>();
-
 
     useEffect(() => {
-        if (props.user?.photoURL !== null && props.user?.photoURL !== undefined) {
+        if (props.user?.photoURL) {
             setImage(props.user?.photoURL);
         }
-    }, [props.user]);
+    }, [props.user?.photoURL]);
 
-    useEffect(() => {
-        if (props.rating !== null && props.rating !== undefined) {
-            setValue(props.rating);
-        }
-
-    }, [props.user]);
     return (
         <div className=" p-5 rounded-md mt-2 shadow">
             <div className="flex flex-row justify-between">
@@ -40,7 +32,7 @@ export default function ReviewComponent(props: Review) {
                 <div className="w-full p-3">
                     {props.user?.displayName}
                     <div className="m-3 aligin-right text-right content-end">
-                        <StaticRatingStars value={Number(value)} />
+                        <StaticRatingStars value={Number(props.rating)} />
                         <div className="mt-5">
                             {props.comment}
                         </div>
