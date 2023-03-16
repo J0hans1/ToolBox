@@ -5,7 +5,7 @@ import Ads from './pages/AdsPage';
 import AdInspector from './pages/AdInspectorPage';
 import { HashRouter, Route, Routes, } from "react-router-dom"
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { grey } from '@mui/material/colors';
+import { blue, grey, red } from '@mui/material/colors';
 import AdCreator from './pages/AdCreator';
 import ProfilePage from './pages/ProfilePage';
 import { Helmet } from "react-helmet";
@@ -21,6 +21,7 @@ import MyReviews from './pages/MyReservations';
 import { useState } from 'react';
 import { Alert, Snackbar } from '@mui/material';
 import Snacks from './components/Snacks';
+import { useSelector } from 'react-redux';
 import { StartDateContext, EndDateContext, Snack, SnackbarContext } from './context/Context';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -33,6 +34,8 @@ export default function App() {
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [endDate, setEndDate] = useState<Date>(new Date());
 
+
+  
   const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
       return;
@@ -41,14 +44,19 @@ export default function App() {
     setSnack(new Snack({ color: snack.color, open: false }));
   };
 
-  const theme = createTheme({
+
+  //--------------------MUI Theme control----------------------
+  const MuiMode = useSelector((state: any) => 
+    state.darkMode.active
+  );
+
+  const lightModeTheme = createTheme({
     palette: {
       primary: {
         main: grey[900],
-
       },
       secondary: {
-        main: grey[50],
+        main: grey[900],
       },
       info: {
         main: '#FFD542',
@@ -57,16 +65,34 @@ export default function App() {
     },
   });
 
-  return (
+  const darkModeTheme = createTheme({
+    palette: {
+      primary: {
+        main: '#3d3d3d',
+        contrastText: '#fff',
+      },
+      secondary: {
+        main: grey[400],
+      },
+      info: {
+        main: '#FFD542',
+        dark: '#ffca12',
+      },
+      action: {
+        disabled: grey[400],
+      }
+      },
+  });
 
+  //-----------------------------Render--------------------------------
+  return (
     <div className="App w-screen overflow-hidden">
       <Helmet>
         <meta charSet="utf-8" />
         <title>ToolBox</title>
         <link rel="canonical" href="http://mysite.com/example" />
       </Helmet>
-
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={MuiMode ? darkModeTheme : lightModeTheme}>
         <HashRouter>
           <SnackbarContext.Provider value={{ snack, setSnack }}>
             <AuthProvider >
@@ -104,7 +130,6 @@ export default function App() {
           </SnackbarContext.Provider>
         </HashRouter>
       </ThemeProvider>
-
       <Snacks />
     </div>
   );

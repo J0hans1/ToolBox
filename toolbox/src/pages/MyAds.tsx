@@ -24,7 +24,7 @@ const MyAds = () => {
     }, []);
 
     return (
-        <div className='flex w-screen h-auto text-current flex-wrap flex-row gap-20 bg-slate-100'>
+        <div className='flex w-screen h-auto text-current flex-wrap flex-row gap-20 bg-slate-100 dark:bg-dark-graa'>
             <div className="flex flex-col">
                 <ProfileSidebar />
             </div>

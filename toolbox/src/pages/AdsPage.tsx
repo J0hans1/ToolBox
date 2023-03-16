@@ -1,5 +1,5 @@
 import Filter from '../components/Filter';
-import { Button } from '@mui/material';
+import { Button, TextField, styled } from '@mui/material';
 import { Ad } from '../types/types';
 import { useState, useEffect } from 'react';
 import AdComponent from '../components/Ad';
@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectAdFilters } from "../store/AdFiltersReducer";
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { Searchfield } from '../components/TextField';
 
 
 const Ads = () => {
@@ -30,8 +31,16 @@ const Ads = () => {
         });
     }, [AdFilters]);
 
+    //--------------- MUI themecontrol for button text----------------
+    const MuiMode = useSelector((state: any) => 
+        state.darkMode.active
+    );
+
+    let StandardColor = MuiMode ? 'white' : 'black';
+
+
     return (
-        <div className='w-screen flex flex-col bg-pu-grunn pt-40'>
+        <div className='w-screen flex flex-col bg-slate-100 dark:bg-dark-graa pt-40'>
             <div className='flex flex-row w-full lg:mx-10 xl:mx-20'>
                 <div className='pt-24 hidden w-1/5 lg:block '>
                 {currentUser ? (
@@ -48,7 +57,27 @@ const Ads = () => {
                 </div>            
     
                 <section className='flex flex-col h-auto w-3/5'>
-                
+                {currentUser ? (
+                    <div className=' flex flex-row justify-left gap-5'>
+                        <div className='lg:hidden block'>
+                            <Button variant="contained">Filter</Button>
+                        </div>
+                        <div className='h-full w-2/5 lg:w-3/5 gap-1 flex flex-row'>
+                            <Searchfield Label='Ønsket Produkt' Type='text' Width='w-full'/>
+                        </div>
+                        <Button color="info" variant="contained" onClick={() => navigate("/adcreator")}>Opprett annonse</Button>
+                    </div>
+                ) : (
+                    <div className='w-full flex flex-row justify-left gap-5'>
+                    <div className='lg:hidden block'>
+                        <Button variant="contained">Filter</Button>
+                    </div>
+                    <div className='h-full w-2/5 lg:w-3/5 gap-1 flex flex-row'>
+                       <Searchfield Label='Ønsket Produkt' Type='text' Width='w-full'/>
+                    </div>
+                    <Button disabled={true} color="info" variant="contained" onClick={() => navigate("/adcreator")}>Opprett annonse</Button>
+                </div>
+                )}
 
                     <div className='flex m-2 max-w-7xl pt-10 text-current flex-wrap flex-row justify-left'>
                         {ads?.map((ad) => (

@@ -5,6 +5,8 @@ import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Snack, SnackbarContext } from "../context/Context";
 import { useAuth } from "../context/AuthContext";
+import { useSelector } from "react-redux";
+import TwStyles from "../Data";
 
 
 export default function EditUser() {
@@ -14,6 +16,12 @@ export default function EditUser() {
     const { currentUser, setCurrentUser, logout } = useAuth();
     const [displayName, setDisplayName] = useState(currentUser?.displayName);
     const [phone, setPhone] = useState(currentUser?.phoneNumber);
+    
+    const MuiMode = useSelector((state: any) => 
+        state.darkMode.active
+    );
+
+    let StandardColor = MuiMode ? 'white' : 'black';
 
     async function deleteUserButton() {
         const confirm = window.confirm("Er du sikker på at du vil slette brukeren din? Dette kan ikke angres!");
@@ -59,22 +67,43 @@ export default function EditUser() {
     }
 
     return (
-        <div className="flex gap-2 flex-col">
+        <div className="flex flex-col gap-6 w-full ">
 
-            <div id="PERSONAL_INFO" className='flex flex-col my-5'>
+            <div id="PERSONAL_INFO" className='flex flex-col'>
                 <div className='flex flex-col w-full gap-2'>
-                    <TextField  variant="outlined" value={currentUser?.email} disabled={true} />
+                    <input 
+                        type='text'
+                        placeholder="E-post"
+                        //Email should not be able to null, but can be, have to override this with ternary operator
+                        value={currentUser?.email != null ? currentUser?.email : ''}
+                        className={TwStyles.TextField}
+                        disabled={true}
+                    />
                 </div>
             </div>
-            <div id="PERSONAL_INFO" className='flex flex-col my-5'>
+            <div id="PERSONAL_INFO" className='flex flex-col'>
                 <div className='flex flex-col w-full gap-2'>
-                    <TextField disabled={!editMode} label="Telefon" variant="outlined" value={phone} onChange={(e) => setPhone(e.target.value)} />
+                    <input 
+                        type='text'
+                        placeholder="Telefon"
+                        value={phone != null ? phone : ''}
+                        onChange={(e) => setPhone(e.target.value)}
+                        className={TwStyles.TextField}
+                        disabled={!editMode}
+                    />
                 </div>
             </div>
 
-            <div id="PERSONAL_INFO" className='flex flex-col my-5'>
+            <div id="PERSONAL_INFO" className='flex flex-col'>
                 <div className='flex flex-col w-full gap-2'>
-                    <TextField disabled={!editMode} label="Navn" variant="outlined" value={displayName} onChange={(e) => setDisplayName(e.target.value)} />
+                    <input 
+                        type='text'
+                        placeholder="Navn"
+                        value={displayName != null ? displayName : ''}
+                        onChange={(e) => setDisplayName(e.target.value)}                        
+                        className={TwStyles.TextField}
+                        disabled={!editMode}
+                    />
                 </div>
             </div>
 
@@ -91,7 +120,10 @@ export default function EditUser() {
 
                 <div style={{ display: editMode ? 'block' : 'none' }}>
                     <Button
-                        sx={{ p: 2 }}
+                        sx={{ 
+                            p: 2,
+                            color: StandardColor,
+                        }}
                         onClick={
                             () => updateUserButton()
                         }
@@ -103,8 +135,10 @@ export default function EditUser() {
 
                 <div>
                     <Button
-                        sx={{ p: 2 }}
-                        onClick={
+                        sx={{ 
+                            p: 2,
+                            color: StandardColor,
+                        }}                        onClick={
                             async () => await deleteUserButton()
                         }
                         variant="outlined"

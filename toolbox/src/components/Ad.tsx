@@ -3,6 +3,8 @@ import { amber } from "@mui/material/colors";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Ad } from "../types/types";
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import RoomIcon from '@mui/icons-material/Room';
 
 
 interface AdProps {
@@ -34,6 +36,7 @@ export default function AdComponent({ad}: AdProps){
             return "https://img.icons8.com/ios/50/000000/price-tag-euro.png";
         }
     }
+    
 
     useEffect(() => {
         getAdPicture();
@@ -41,14 +44,22 @@ export default function AdComponent({ad}: AdProps){
 
 
     return (
-        <div onClick={() => handleClick()} className='rounded-lg w-32 h-32 md:w-60 md:h-60 lg:w-80 lg:h-80 shadow-lg overflow-hidden relative hover:scale-105 hover:shadow-2xl active:scale-100 duration-200 m-3'>
+        <div 
+            onClick={() => handleClick()} 
+            className='
+                rounded-lg w-40 h-40 md:w-60 md:h-60 lg:w-80 lg:h-80 
+                shadow-lg overflow-hidden relative hover:scale-105 hover:shadow-2xl dark:shadow-dark-white/25 active:scale-100 duration-200 m-3
+            '>
         <div className="flex h-full w-full overflow-hidden bg-cover bg-center" style={{backgroundImage: `url(${picture})`}}>
-            <img className="h-32 w-full " src={picture} alt="AdPicture" /> {/* med h-full vil deler av bildet bli dekket av tekst */}
+            {/*
+            !Denne linjen med kode legger et bilde over bakgrunnsbildet, det er det som skaper gjentagelses buggen. 
+             <img className="h-40 w-full " src={picture} alt="AdPicture" /> med h-full vil deler av bildet bli dekket av tekst
+             */}
         </div>
 
         <div className="flex flex-row">
 
-        <div className="flex flex-row bg-white rounded-lg h-auto absolute bottom-0 p-4 justify-between w-full shadow-inner ">
+        <div className="flex flex-row bg-white dark:bg-dark-lysGraa dark:text-dark-white rounded-lg h-auto absolute bottom-0 p-4 justify-between w-full shadow-inner ">
 
                 <div className="w-1/5 hidden md:block">
                     <Avatar sx={{bgcolor: amber[500]}}>TH</Avatar>
@@ -59,7 +70,7 @@ export default function AdComponent({ad}: AdProps){
 
                         <div className="flex flex-row h-5 lg:hidden">
                             <img alt="bilde" className="h-full" src="https://img.icons8.com/ios/50/000000/price-tag-euro.png" />
-                            <p className="md:text-lg text-pu-ghost ml-1">{ad.price}kr/dag</p>
+                            <p className="md:text-lg text-pu-ghost ml-1 dark:text-dark-white">{ad.price}kr/dag</p>
                         </div>
 
                     </div>
@@ -67,18 +78,18 @@ export default function AdComponent({ad}: AdProps){
                     <div className=" flex-row gap-5 hidden lg:flex">
 
                         <div className="flex flex-row h-5">
-                            <img alt="bilde" className="h-full" src="https://img.icons8.com/ios/50/000000/price-tag-euro.png" />
-                            <p className="text-xs text-pu-ghost ml-1">{ad.price}kr/dag</p>
+                            <AttachMoneyIcon color="secondary"/>
+                            <p className="text-md text-pu-ghost ml-1 dark:text-dark-white">{ad.price}kr</p>
                         </div>
                         
                         <div className="flex flex-row h-5">
-                            <img alt="bilde" className="h-full" src="https://img.icons8.com/material-sharp/256/map-marker.png" />
-                            <p className="text-xs text-pu-ghost ml-1">{ad.city}</p>
+                            <RoomIcon color="secondary"/>
+                            <p className="text-md text-pu-ghost ml-1 dark:text-dark-white">{ad.city}</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    )
+        )
 }

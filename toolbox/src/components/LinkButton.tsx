@@ -12,8 +12,6 @@ export default function LinkButton(props: Mail) {
     Dette er en if-setning som sjekker om props.type er lik "mail" eller "phone"
     Dersom den kan sette en prefix til href og en ikon til linken
     Avhengig av om det er en mail, tlf eller link.
-
-
     */
     if (props.type === "mail") {
         f = "mailto:"

@@ -8,9 +8,20 @@ import { validateAddress, validateCity, validateDescription, validatePrice, vali
 import { useNavigate } from "react-router-dom";
 import { Snack, SnackbarContext } from "../context/Context";
 import { useAuth } from "../context/AuthContext";
+import TwStyles from "../Data";
+import { useSelector } from "react-redux";
+
+
 
 
 const AdCreator = () => {
+
+    const MuiMode = useSelector((state: any) => 
+        state.darkMode.active
+    );
+
+    let StandardColor = MuiMode ? 'white' : 'black';
+
     let navigate = useNavigate();
     const { currentUser } = useAuth();
 
@@ -111,19 +122,37 @@ const AdCreator = () => {
 
     return (
         <div>
-            <div id="c_section" className='flex w-full h-full content-center bg-slate-100 overflow-hidden z-10'>
-                <div id="c_container" className='static flex flex-row mr-auto ml-auto mt-auto mb-auto w-full max-w-7xl p-10 gap-10 justify-center bg-white'>
+            <div id="c_section" className='flex w-full h-full content-center bg-slate-100 dark:bg-dark-graa overflow-hidden z-10'>
+                <div id="c_container" className='static flex flex-row mr-auto ml-auto mt-auto mb-auto w-full max-w-7xl p-10 gap-10 justify-center bg-slate-100 dark:bg-dark-graa'>
                     <div className='flex flex-col w-10/12 text-left pt-32 mb-10'>
-
                         <Title size={'text-7xl'} heading={'Opprett '} span={'annonse'} description={'Start utlån allerede i dag! Følg stegene, så er annonsen din oppe og går i løpet av kort tid!'} />
-
-                        <div id="CATEGORY" className='flex flex-col my-5'>
+                        <div className='flex flex-col my-5 dark:text-dark-white'>
                             <Step nr={'01'} title={'Velg kategori'} />
                             <p>Velg en passende kategori så brukere enkelt kan finne annonsen din. Sjekk gjerne at valgt kategori inneholder lignende produkter.</p>
 
                             <div className='flex flex-row w-full gap-2 mt-5 my-2'>
-                                <FormControl fullWidth>
-                                    <InputLabel id="category">Kategori</InputLabel>
+                                <FormControl fullWidth sx={{
+                                    '& .MuiOutlinedInput-root': {
+                                        '& fieldset': {
+                                            borderColor: StandardColor,
+                                        },
+                                        '&:hover fieldset': {
+                                            borderColor: StandardColor,
+                                        },
+                                        '&.Mui-focused fieldset': {
+                                            borderColor: StandardColor,
+                                        },
+                                        color: StandardColor,
+                                    },
+                                }}>
+                                    <InputLabel sx={{
+                                       color: StandardColor,
+                                            '&.Mui-focused': { color: StandardColor },
+                                        }}
+                                        id="category"
+                                    >
+                                        Kategori
+                                    </InputLabel>
                                     <Select
                                         labelId="demo-simple-select-label"
                                         id="demo-simple-select"
@@ -146,26 +175,43 @@ const AdCreator = () => {
                             </div>
                         </div>
 
-                        <div id="TITLE_DESC" className='flex flex-col my-5'>
+
+                        <div id="TITLE_DESC" className='flex flex-col my-5 dark:text-dark-white'>
                             <Step nr={'02'} title={'Tittel og beskrivelse'} />
+                            
                             <p> Velg en kort og beskrivende tittel. Legg til en mer detaljert beskrivelse så bruker kan få mer informasjon om produktet når de trykker på annonsen. </p>
 
                             <div className='flex flex-col w-full mt-5 gap-2 my-2'>
-                                <TextField fullWidth label="Tittel" variant="outlined" value={title} onChange={(e) => { setTitle(e.target.value) }} />
-                                <TextField fullWidth multiline minRows={4} label="Beskrivelse" variant="outlined" value={description} onChange={(e) => { setDescription(e.target.value) }} />
+                                <input
+                                    placeholder = "Tittel"
+                                    type = 'text'
+                                    value={title} 
+                                    onChange={(e) => { setTitle(e.target.value) }}
+                                    className={TwStyles.TextField}
+                                />
+                                {/* <TextField fullWidth label="Tittel" variant="outlined"  /> */}
+                                {/* <TextField fullWidth multiline minRows={4} label="Beskrivelse" variant="outlined" value={description} onChange={(e) => { setDescription(e.target.value) }} /> */}
+                                <textarea
+                                    placeholder = "Beskrivelse"
+                                    value={description} 
+                                    onChange={(e) => { setDescription(e.target.value) }}
+                                    rows={4}
+                                    className={TwStyles.TextField + " resize-none h-40"}
+                                >
+                                </textarea>
                             </div>
 
                         </div>
 
-                        <div id="IMAGES" className='flex flex-col my-5'>
+                        <div id="IMAGES" className='flex flex-col my-5 dark:text-dark-white'>
                             <Step nr={'03'} title={'Last opp bilder'} />
                             <p>Vis frem produktet så brukere kan se hva du leier ut. Vi anbefaler 3-5 bilder for best resultat. Trykk på boksene eller bruk knappen.</p>
 
                             <div className='flex flex-col w-full mt-5 gap-2'>
-                                <ImageList sx={{ width: 500, height: "auto" }} cols={3} rowHeight={164}>
-                                </ImageList>
+                                {/* <ImageList sx={{ width: 500, height: "auto" }} cols={3} rowHeight={164}>
+                                </ImageList> */}
                                 <Button
-                                    variant="outlined"
+                                    variant="contained"
                                     component="label"
                                     color="primary"
                                     sx={{
@@ -195,27 +241,57 @@ const AdCreator = () => {
                             </div>
                         </div>
 
-                        <div id="ADDRESS_INFO" className='flex flex-col my-5'>
+                        <div id="ADDRESS_INFO" className='flex flex-col my-5 dark:text-dark-white'>
                             <Step nr={'04'} title={'Sted og addresse'} />
                             <p> Gi produktet en adresse. Dette vil gjøre annonsen din synlig for brukere i nærheten, og vil gi kjøpere mulighet til å hente produktet hos deg. Merk: adressen din blir kun synlig for andre brukere etter at utlån er avtalt og godkjent av deg.</p>
 
                             <div className='flex flex-col w-full mt-5 gap-2'>
-                                <TextField label="Hjemmeadresse" variant="outlined" value={address} onChange={(e) => setAddress(e.target.value)} />
-
-                                <div className='flex flex-row w-full gap-2'>
+                                {/* <TextField label="Hjemmeadresse" variant="outlined" value={address} onChange={(e) => setAddress(e.target.value)} /> */}
+                                <input
+                                    placeholder = "Hjemmeadresse"
+                                    type = 'text'
+                                    value={address} 
+                                    onChange={(e) => setAddress(e.target.value)}
+                                    className={TwStyles.TextField}
+                                />
+                                {/* <div className='flex flex-row w-full gap-2'>
                                     <TextField label="Postnummer" variant="outlined" value={zip} onChange={(e) => setZip(e.target.value)} />
                                     <TextField fullWidth label="By" variant="outlined" value={city} onChange={(e) => setCity(e.target.value)} />
+                                </div> */}
+                                <div className='flex flex-row w-full gap-2'>
+                                    <input
+                                        placeholder = "Postnummer"
+                                        type = 'number'
+                                        min={0}
+                                        value={zip} 
+                                        onChange={(e) => setZip(e.target.value)}
+                                        className={TwStyles.TextField + "w-1/4"}
+                                    />
+                                    <input
+                                        placeholder = "By"
+                                        type = 'text'
+                                        value={city} 
+                                        onChange={(e) => setCity(e.target.value)}
+                                        className={TwStyles.TextField}
+                                    />
                                 </div>
-
                             </div>
                         </div>
-
-                        <div id="PRICE" className='flex flex-col my-5'>
+    
+                        <div id="PRICE" className='flex flex-col my-5 dark:text-dark-white' >
                             <Step nr={'05'} title={'Velg pris'} />
                             <p>Vi anbefaler at du sjekker prisen til tilsvarende produkter. En passende pris øker sannsynligheten for utlån.</p>
 
                             <div className='flex flex-col w-full mt-5 gap-2'>
-                                <TextField label="Pris" type="number" InputLabelProps={{ shrink: true, }} value={price} onChange={(e) => { setPrice(e.target.value) }} />
+                                {/* <TextField label="Pris" type="number" InputLabelProps={{ shrink: true, }} value={price} onChange={(e) => { setPrice(e.target.value) }} /> */}
+                                <input
+                                    placeholder = "Pris"
+                                    type = 'number'
+                                    min={0}
+                                    value={price} 
+                                    onChange={(e) => setPrice(e.target.value)}
+                                    className={TwStyles.TextField}
+                                />
                             </div>
                         </div>
 
