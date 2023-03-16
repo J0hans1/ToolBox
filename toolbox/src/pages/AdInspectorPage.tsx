@@ -224,6 +224,7 @@ const AdInspectorPage = () => {
                     <div className="p-10 text-2xl text-left" >
                         {ad?.map((ad) =>
                             <div>
+                            <div>
                                 <Title size={"text-4xl"} heading={ad.title} description={""} span={""} key={ad.title} ></Title>
                                 <p key={ad.description}>
                                     {ad.description}
@@ -253,38 +254,39 @@ const AdInspectorPage = () => {
                                 <StaticRatingStars value={avgrating} />                                <ReviewList/>
                             </div>
 
-                        )}
+                        
 
-                        <div className="flex flex-row gap-1 w-4/5">
-                            <div>
-                                {isAdSaved ? (
-                                    <IconButton onClick={() => handleRemoveAd()}>
-                                    <Favorite className="text-red-500 cursor-pointer" fontSize="large" />
-                                    </IconButton>
-                                ) : (
-                                    <IconButton onClick={() => handleSaveAd()} >
-                                    <FavoriteBorder className="text-red-500" fontSize="large"/>
-                                    </IconButton>)}
+                            <div className="flex flex-row gap-1 w-4/5">
+                                <div>
+                                    {isAdSaved ? (
+                                        <IconButton onClick={() => handleRemoveAd()}>
+                                        <Favorite className="text-red-500 cursor-pointer" fontSize="large" />
+                                        </IconButton>
+                                    ) : (
+                                        <IconButton onClick={() => handleSaveAd()} >
+                                        <FavoriteBorder className="text-red-500" fontSize="large"/>
+                                        </IconButton>)}
 
 
+                                    
+                                </div>
+                                <Button variant="outlined" color="primary" >
+                                    Kontakt utleier
+                                </Button>
+                                <Button onClick={handleRedirect} variant="outlined" color="primary">
+                                    Skriv en anmeldelse
+                                </Button>
+                            </div>
+                            <div className="items-center mt-10">
+                                <h2>Reserver produkt</h2>
+                                <div className="flex flex-row mt-5">
+                                    <Calendar key={ad.id} ad={ad}/>
+                                </div>
+                                
                                 
                             </div>
-                            <Button variant="outlined" color="primary" >
-                                Kontakt utleier
-                            </Button>
-                            <Button onClick={handleRedirect} variant="outlined" color="primary">
-                                Skriv en anmeldelse
-                            </Button>
-                        </div>
-                        <div className="items-center mt-10">
-                            <h2>Reserver produkt</h2>
-                            <div className="flex flex-row mt-5">
-                                <Calendar/>
                             </div>
-                            <Button variant="contained" onClick={handleReserve}>Reserver produkt</Button>
-                            
-                        </div>
-                       
+                        )}
                     </div>
                 </div>
             )

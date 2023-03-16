@@ -24,8 +24,7 @@ function ReviewList() {
 
     useEffect(() => {
         getReviews()
-    },
-        []);
+    },[]);
 
     async function getUser() {
         const userID = sessionStorage.getItem("USERID");

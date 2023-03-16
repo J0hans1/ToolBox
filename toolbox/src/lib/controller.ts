@@ -1,9 +1,10 @@
 import { addDoc, collection, deleteDoc, doc, DocumentData, getDoc, getDocs, getFirestore, Query, query, updateDoc, where } from "firebase/firestore";
 import { app, storage } from "./firebase";
-import { Ad, NewReview, NewGoogleUser, Review, UpdateAd, GoogleUser } from "../types/types";
+import { Ad, NewReview, NewGoogleUser, Review, UpdateAd, GoogleUser, UpdateBookedDates, NewBookedDates, BookedDate } from "../types/types";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { GoogleAuthProvider, signInWithPopup } from "@firebase/auth";
 import { auth } from "./firebase";
+import { doExpression } from "@babel/types";
 
 const firestore = getFirestore(app);
 
@@ -90,6 +91,27 @@ export const addAd = async (adData: any) => {
   console.log(`New ad created${newAd.path}`)
 };
 
+// Book a product
+export async function addBookedDates(bookedDatesData: NewBookedDates) {
+  const res = await addDoc(bookedDatesCollection, {...bookedDatesData});
+
+  const adDoc = doc(firestore, `ads/${bookedDatesData.adId}`);
+  const ad = await getDoc(adDoc);
+  if (ad.exists()) {
+    const adData = ad.data();
+    const bookedDates = adData.bookedDates || []; // use default empty array if reviews is undefined
+    bookedDates.push(res.id);
+    await updateDoc(adDoc, { bookedDates });
+  } else {
+    console.log("No such ad!");
+  }
+  if (res) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 // Create a new review
 export async function addReview(reviewData: NewReview) {
   const res = await addDoc(reviewCollection, { ...reviewData });
@@ -138,6 +160,7 @@ export async function checkReview(userId: string, adId: string) {
 export const usersCollection = collection(firestore, "users"); // Get all users
 export const adsCollection = collection(firestore, "ads"); // Get all ads
 export const reviewCollection = collection(firestore, "reviews"); // Get all reviews
+export const bookedDatesCollection = collection(firestore, "bookedDates"); // Get all bookedDates
 
 
 // Query for filtering ads by category, price (min, max), location (zip) and search term
@@ -363,6 +386,11 @@ export const updateAd = async (adId: string, adData: UpdateAd) => {
   await updateDoc(document, { ...adData });
 };
 
+/*
+export const updateBookedAds = async (adID: string, adData: string[] ) => {
+  const document = doc(firestore, `ads/${adID}/bookedDates`)
+  await updateDoc(document, {...adData});
+}*/
 
 // Delete review
 export const deleteReview = async (id: string) => {
@@ -454,6 +482,23 @@ export async function getAdReviews(adId: string) {
     });
   }
   return reviews;
+}
+
+// get booked dates for ad
+export async function getAdBookedDates(adId: string){
+  const bookedDates: BookedDate[] = [];
+  const bookedDateSnapshot = await getDocs(collection(firestore, "bookedDates"));
+  bookedDateSnapshot.forEach((doc) => {
+    if (doc.data().adId === adId){
+      bookedDates.push({
+        id: doc.id,
+        userId: doc.data().userId,
+        adId: doc.data().adId,
+        date: doc.data().date,
+      });
+    }
+  })
+  return bookedDates;
 }
 
 //get ad rating
