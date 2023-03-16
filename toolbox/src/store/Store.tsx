@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
 import AdFiltersReducer from "./AdFiltersReducer";
+import darkModeReducer from './darkModeSlice';
 
 export const store = configureStore({
   reducer: {
     AdFilters: AdFiltersReducer,
+    darkMode: darkModeReducer,
   }
 })
 

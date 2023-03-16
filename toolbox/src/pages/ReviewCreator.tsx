@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { NewReview } from "../types/types";
 import { Snack, SnackbarContext } from "../context/Context";
 import { useAuth } from "../context/AuthContext";
+import TwStyles from "../Data";
 import * as React from 'react';
 import Rating from '@mui/material/Rating';
 import Box from '@mui/material/Box';
@@ -77,16 +78,23 @@ const ReviewCreator = () => {
 
     return (
         <div>
-            <div id="c_section" className='flex w-full h-full content-center bg-slate-100 overflow-hidden z-10'>
-                <div id="c_container" className='static flex flex-row mr-auto ml-auto mt-auto mb-auto w-full max-w-7xl p-10 gap-10 justify-center bg-white'>
+            <div id="c_section" className='flex w-full h-full content-center bg-slate-100 dark:bg-dark-graa overflow-hidden z-10'>
+                <div id="c_container" className='static flex flex-row mr-auto ml-auto mt-auto mb-auto w-full max-w-7xl p-10 gap-10 justify-center bg-slate-100 dark:bg-dark-graa'>
                     <div className='flex flex-col w-10/12 text-left pt-32 mb-10'>
 
                         <Title size={'text-7xl'} heading={'Opprett '} span={'anmeldelse'} description={'Gi en tilbakemelding på produktet du har lånt!'} />
 
-                        <div id="RATING" className='flex flex-col my-5'>
+                        <div id="RATING" className='flex flex-col my-5 dark:text-dark-white'>
                             <Step nr={'01'} title={'Rating'} />
                             <p> Gi en anmeldelse av produktet. </p>
-
+                            {/* <input
+                                    placeholder = "Rating"
+                                    type = 'number'
+                                    min={0}
+                                    value={rating} 
+                                    onChange={(e) => setRating(parseInt(e.target.value))}
+                                    className={TwStyles.TextField}
+                                /> */}
                             <Box
                                 sx={{
                                     width: 400,
@@ -123,11 +131,17 @@ const ReviewCreator = () => {
                             </div> */}
                         </div>
 
-                        <div id="REVIEW" className='flex flex-col my-5'>
+                        <div id="REVIEW" className='flex flex-col my-5 dark:text-dark-white'>
                             <Step nr={'02'} title={'Anmeldelse'} />
                             <p> Skriv en anmeldelse av produktet. </p>
                             <div className='flex flex-col w-full mt-5 gap-2 my-2'>
-                                <TextField fullWidth multiline minRows={5} label="Anmeldelse" variant="outlined" value={review} onChange={(e) => { setReview(e.target.value) }} />
+                                <textarea
+                                    placeholder = "Anmeldelse"
+                                    value={review} 
+                                    onChange={(e) => { setReview(e.target.value) }}
+                                    rows={4}
+                                    className={TwStyles.TextField + " resize-none h-40"}
+                                ></textarea>
                             </div>
                         </div>
 
