@@ -1,3 +1,4 @@
+import { string } from "yargs";
 
 export interface Ad {
     id: string;
@@ -12,6 +13,7 @@ export interface Ad {
     pictures?: string[];
     reviews?: string[];
     review?: number;
+    bookedDates?: string[];
 }
 
 export interface UpdateAd {
@@ -26,6 +28,9 @@ export interface UpdateAd {
     city: string;
     pictures: string[];
     reviews: string[];
+}
+export interface UpdateBookedDates {
+    bookedDates?: string[];
 }
 
 export interface NewAd {
@@ -56,6 +61,20 @@ export interface NewReview{
     adId: string;
     rating?: number;
     comment?: string;
+}
+
+export interface BookedDate{
+    id: string;
+    userId?: string;
+    adId?: string;
+    date?: string;
+}
+
+export interface NewBookedDates{
+    id?: string;
+    userID: string;
+    adId:string;
+    date?: string;
 }
 
 export interface NewGoogleUser {
