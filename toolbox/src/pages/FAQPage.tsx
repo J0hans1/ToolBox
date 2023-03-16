@@ -29,7 +29,7 @@ const Category = (props: CategoryFAQ) => {
 
 const FAQ = () => {
   return (
-    <div className="flex h-auto w-screen">
+    <div className="flex h-auto w-screen ">
       <section className={'flex flex-col h-auto w-full content-center gap-10 bg-slate-100 overflow-hidden m-20'}>
         <div className='flex m-auto w-full max-w-7xl p-10 text-current'>
           <div className="flex flex-col justify-start w-full h-full my-10 ">

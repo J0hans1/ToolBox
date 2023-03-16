@@ -27,7 +27,8 @@ const ProfileBar = () => {
                 <Button variant="contained" sx={{ p: 2 }} onClick={() => navigate("/profile")}>Min profil</Button>
                 <Button variant="contained" sx={{ p: 2 }} onClick={() => navigate("/myads")}>Mine annonser</Button>
                 <Button variant="contained" sx={{ p: 2 }} onClick={() => navigate("/savedads")}>Lagrede annonser</Button>
-                <Button variant="contained" sx={{ p: 2 }} onClick={() => navigate("/myreviews")}>Mine anmeldelser</Button>
+                <Button variant="contained" sx={{ p: 2 }} onClick={() => navigate("/myReservations")}>Mine reservasjoner</Button>
+
             </div>
         </div>
     );

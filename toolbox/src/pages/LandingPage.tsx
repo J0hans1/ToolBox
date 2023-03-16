@@ -45,7 +45,7 @@ const LandingPage = () => {
 
     return (
         <div>
-            <div id="c_section" className='relative flex h-screen content-center gap-10 bg-slate-100 overflow-hidden'>
+            <div id="c_section" className='relative flex h-screen content-center gap-10 bg-slate-100 overflow-hidden overscroll-x-none'>
                 <div id="c_container" className='static flex flex-row m-auto w-full max-w-7xl p-10'>
                     <div id="c_wrapper" className='max-w-3xl text-left mt-64 mb-32 z-10 flex-row'>
                         <img src={CIRCLES} alt="decorative circles" className=' w-14 h-14 mb-' />

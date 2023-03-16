@@ -237,7 +237,7 @@ const AdInspectorPage = () => {
                                 </div>
 
                                 <div className="flex flex-col">
-                                    <div className="bg-white text-3xl">{`${ad.address} ${ad.zip} ${ad.city}`}</div>
+                                    <div className="bg-white text-3xl">{`${ad.address}, ${ad.zip} ${ad.city}`}</div>
                                     <a href={`https://www.google.com/maps/dir/?api=1&destination=${ad.address} ${ad.zip} ${ad.city}`}>
                                         <div className="absolute pt-40 text-center pl-7">
                                             Trykk her for veibeskrivelse
@@ -256,16 +256,16 @@ const AdInspectorPage = () => {
 
                         
 
-                            <div className="flex flex-row gap-1 w-4/5">
-                                <div>
-                                    {isAdSaved ? (
-                                        <IconButton onClick={() => handleRemoveAd()}>
-                                        <Favorite className="text-red-500 cursor-pointer" fontSize="large" />
-                                        </IconButton>
-                                    ) : (
-                                        <IconButton onClick={() => handleSaveAd()} >
-                                        <FavoriteBorder className="text-red-500" fontSize="large"/>
-                                        </IconButton>)}
+                        <div className="flex flex-row gap-1 w-4/5">
+                            <div>
+                                {isAdSaved ? (
+                                    <IconButton onClick={() => handleRemoveAd()}>
+                                    <Favorite className="text-red-500 cursor-pointer" fontSize="large" />
+                                    </IconButton>
+                                ) : (
+                                    <IconButton onClick={() => handleSaveAd()} >
+                                    <FavoriteBorder className="text-black" fontSize="large"/>
+                                    </IconButton>)}
 
 
                                     

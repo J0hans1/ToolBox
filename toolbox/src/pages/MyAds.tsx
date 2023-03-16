@@ -33,7 +33,7 @@ const MyAds = () => {
                     <Title heading="Mine " span="annonser" size="text-7xl" />
                 </div>
                 <section className='flex flex-col h-auto'>
-                    <div className='flex m-auto w-full max-w-7xl p-10 text-current flex-wrap flex-row justify-center'>
+                    <div className='flex w-full max-w-7xl p-10 text-current flex-wrap flex-row justify-left'>
                         {myAds?.map((myAd) => (
                             <AdFB key={myAd.id} ad={myAd} />
                         ))}
