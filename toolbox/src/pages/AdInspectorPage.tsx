@@ -1,7 +1,7 @@
 import Title from "../components/Title";
 import TitledIcon from "../components/TitledIcon";
-import { getAd, isSaved, isOwned, removeAdFromUser, saveAdToUser, deleteAd } from "../lib/controller";
-import { Ad } from "../types/types";
+import { getAd, isSaved, isOwned, removeAdFromUser, saveAdToUser, deleteAd, getAdReviews, getUser } from "../lib/controller";
+import { Ad, GoogleUser, Review } from "../types/types";
 import { useContext, useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
@@ -67,8 +67,8 @@ const AdInspectorPage = () => {
     const [isOwnedAd, setIsOwnedAd] = useState(false);
     const [isAdSaved, setIsAdSaved] = useState(false);
     const { setSnack } = useContext(SnackbarContext);
-    const { startDate} = useContext(StartDateContext);
-    const { endDate} = useContext(EndDateContext);
+    const { startDate } = useContext(StartDateContext);
+    const { endDate } = useContext(EndDateContext);
     const [avgrating, setAvgrating] = useState<number>(-1);
 
 
@@ -88,10 +88,10 @@ const AdInspectorPage = () => {
             }
         }
 
-        
+
     };
 
-    
+
 
     const handleSaveAd = async () => {
         const adIDFromSessionStorage = sessionStorage.getItem("ADID");
@@ -161,26 +161,52 @@ const AdInspectorPage = () => {
             checkIsOwned().then(async () => {
                 const saved = await checkIfAdIsSaved();
                 setIsAdSaved(saved);
-                getAverageRating();
+                await getAverageRating();
+                await getReviews();
             });
         });
     }, []);
 
     async function getAverageRating() {
         const adID = sessionStorage.getItem("ADID");
-        if (adID !== null ) {
-        const averageRating = Number(await getAdRating(adID));
-        console.log(averageRating);
-        setAvgrating(averageRating);}
+        if (adID !== null) {
+            const averageRating = Number(await getAdRating(adID));
+            setAvgrating(averageRating);
+        }
+    }
+
+
+    function handleReserve() {
 
     }
 
 
-    function handleReserve(){
-        
+    // reviews
+    const [reviewsList2, setReviewList2] = useState<Review[]>([]);
+    const [users2, setUsers2] = useState<GoogleUser[]>([]);
+
+    async function getUser2(userId: string) {
+        const userFromDatabase = await getUser(userId);
+        return userFromDatabase;
     }
 
+    async function getReviews() {
+        const adID = sessionStorage.getItem("ADID");
+        if (adID != null) {
+            const reviewFromDatabase = await getAdReviews(adID);
+            setReviewList2(reviewFromDatabase);
+            mapUsers(reviewFromDatabase);
+        }
+    }
 
+    async function mapUsers(reviews: Review[]) {
+        const userIds = reviews.map((review) => review.userId);
+        const uniqueUserIds = [...new Set(userIds)].filter((userId) => userId !== undefined);
+        const usersFromDatabase = await Promise.all(uniqueUserIds.map((userId) => getUser2(userId!)));
+        const usersData = usersFromDatabase.filter((user) => user !== null && user !== undefined);
+        const userList = usersData.map((user) => ({ id: user!.id, ...user!.data() }));
+        setUsers2(userList);
+    }
 
     const renderPageControll = () => {
         if (isOwnedAd) {
@@ -203,10 +229,11 @@ const AdInspectorPage = () => {
                                 </p>
 
                                 <div className="flex flex-row p-10 h-28 w-full justify-between">
-                                    <TitledIcon icon="https://img.icons8.com/ios/512/calendar--v1.png" key={69} text={"Dato"} iconSize="h-full" textSize="text-3xl" />
                                     <TitledIcon icon="https://img.icons8.com/ios/50/000000/price-tag-euro.png" key={ad.price} text={ad.price?.toString() + " kr/dag"} iconSize="h-full" textSize="text-3xl" />
                                     <TitledIcon icon="https://img.icons8.com/material-sharp/256/map-marker.png" key={ad.city} text={ad.city} iconSize="h-full" textSize="text-3xl" />
                                 </div>
+                                <StaticRatingStars value={avgrating} />
+                                <ReviewList reviews={reviewsList2} users={users2} />
                             </div>
                         )}
                     </div>
@@ -231,7 +258,6 @@ const AdInspectorPage = () => {
                                 </p>
 
                                 <div className="flex flex-row h-28 w-full justify-between text-left">
-                                    <TitledIcon icon="https://img.icons8.com/ios/512/calendar--v1.png" key={69} text={"Dato"} iconSize="h-full" textSize="text-3xl" />
                                     <TitledIcon icon="https://img.icons8.com/ios/50/000000/price-tag-euro.png" key={ad.price} text={ad.price?.toString() + " kr/dag"} iconSize="h-full" textSize="text-3xl" />
                                     <TitledIcon icon="https://img.icons8.com/material-sharp/256/map-marker.png" key={ad.city} text={ad.city} iconSize="h-full" textSize="text-3xl" />
                                 </div>
@@ -248,10 +274,12 @@ const AdInspectorPage = () => {
                                         </div>
                                     </a>
                                 </div>
-                               
+
                                 Annonsens gjennomsnittlige vurdering:
                                 {/* stjerner for å vise gjennomsnittsrating til annonsen */}
-                                <StaticRatingStars value={avgrating} />                                <ReviewList/>
+
+                                <StaticRatingStars value={avgrating} />
+                                <ReviewList reviews={reviewsList2} users={users2} />
                             </div>
 
                         
@@ -260,7 +288,7 @@ const AdInspectorPage = () => {
                             <div>
                                 {isAdSaved ? (
                                     <IconButton onClick={() => handleRemoveAd()}>
-                                    <Favorite className="text-red-500 cursor-pointer" fontSize="large" />
+                                        <Favorite className="text-red-500 cursor-pointer" fontSize="large" />
                                     </IconButton>
                                 ) : (
                                     <IconButton onClick={() => handleSaveAd()} >
