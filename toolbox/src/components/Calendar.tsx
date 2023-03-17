@@ -117,11 +117,14 @@ export default function Calendar({ad}: AdProps) {
 	return (
 		<LocalizationProvider dateAdapter={AdapterDayjs}>
 			<div>
-				<div className='flex flex-row'>
-					<DatePicker label="Start Date" value={selectedStartDate} onChange={handleStartDateChange} format="DD-MM-YYYY" shouldDisableDate={disableDate(today)}/>
-					<DatePicker label="End Date" value={selectedEndDate} onChange={handleEndDateChange} format="DD-MM-YYYY" shouldDisableDate={disableDate(today)}/>
+				<p className='mb-5'>Ønsker du å leie produktet? Velg start- og sluttdato for å bestemme leieperiode, og trykk "Legg inn reservasjon"</p>
+				<div className='flex flex-row gap-1 mb-2'>
+					<DatePicker label="Fra dato" value={selectedStartDate} onChange={handleStartDateChange} format="DD-MM-YYYY" shouldDisableDate={disableDate(today)}/>
+					<DatePicker label="Til dato" value={selectedEndDate} onChange={handleEndDateChange} format="DD-MM-YYYY" shouldDisableDate={disableDate(today)}/>
 				</div>
-				<Button variant="contained" onClick={handleReserve}>Reserver produkt</Button>
+				<p className='text-gray-400 mb-5'>MERK: enkelte datoer kan være utilgjengelige på grunn av andre reservasjoner.</p>
+
+				<Button fullWidth variant="contained" sx={{p:1.5}} onClick={handleReserve}>Legg inn reservasjon</Button>
 			</div>
 		</LocalizationProvider>
 	);

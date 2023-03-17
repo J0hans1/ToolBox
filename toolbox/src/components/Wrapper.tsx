@@ -10,13 +10,14 @@ interface section {
     height: string;
     bg_color: string;
     text_fill: string;
+    direction: string;
     children: React.ReactNode;
 }
 
 const Wrapper = (props: section) => {
     return (
-    <section className={`flex content-center ${props.height} ${props.bg_color} ${props.text_fill}`}>
-        <div className='flex m-auto w-full max-w-7xl p-10 text-current'>
+    <section className={`flex flex-col content-center ${props.height} ${props.bg_color} ${props.text_fill}`}>
+        <div className={`flex ${props.direction} m-auto w-full max-w-7xl p-10 text-current`}>
             {props.children}
         </div> 
     </section>
