@@ -234,6 +234,10 @@ const AdInspectorPage = () => {
         if (adID !== null) {
             const averageRating = Number(await getAdRating(adID));
             console.log(averageRating);
+            if (isNaN(averageRating)) {
+                setAvgrating(0);
+                return;
+            }
             setAvgrating(averageRating);
         }
 
@@ -246,10 +250,6 @@ const AdInspectorPage = () => {
             console.log(numReviews);
             setNumReviews(numReviews);
         }
-
-    }
-
-    function handleReserve() {
 
     }
 
