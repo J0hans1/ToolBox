@@ -28,8 +28,6 @@ import { EndDateContext, StartDateContext } from "../context/Context";
 import { FavoriteBorder, Favorite } from "@material-ui/icons";
 
 
-
-
 interface Info {
     name?: string;
     email?: string;

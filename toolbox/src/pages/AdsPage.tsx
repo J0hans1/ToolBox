@@ -1,10 +1,10 @@
 import Filter from '../components/Filter';
-import { Button, TextField, styled } from '@mui/material';
+import { Button } from '@mui/material';
 import { Ad } from '../types/types';
 import { useState, useEffect } from 'react';
 import AdComponent from '../components/Ad';
 import { AdsQuery } from '../lib/controller';
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { selectAdFilters } from "../store/AdFiltersReducer";
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';

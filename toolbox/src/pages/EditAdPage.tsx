@@ -1,4 +1,4 @@
-import { MenuItem, Select, TextField, Button, FormControl, InputLabel, ImageList } from "@mui/material";
+import { MenuItem, Select, Button, FormControl, InputLabel } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { getAd, updateAd, uploadImages } from "../lib/controller";
 import { UpdateAd } from "../types/types";

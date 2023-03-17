@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { selectAdFilters, setAdFilter } from '../store/AdFiltersReducer';
-import { useState } from 'react';
 import TwStyles from '../Data';
 
 interface TextFieldProps  {
