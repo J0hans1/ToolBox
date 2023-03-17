@@ -57,27 +57,7 @@ const Ads = () => {
                 </div>            
     
                 <section className='flex flex-col h-auto w-3/5'>
-                {currentUser ? (
-                    <div className=' flex flex-row justify-left gap-5'>
-                        <div className='lg:hidden block'>
-                            <Button variant="contained">Filter</Button>
-                        </div>
-                        <div className='h-full w-2/5 lg:w-3/5 gap-1 flex flex-row'>
-                            <Searchfield Label='Ønsket Produkt' Type='text' Width='w-full'/>
-                        </div>
-                        <Button color="info" variant="contained" onClick={() => navigate("/adcreator")}>Opprett annonse</Button>
-                    </div>
-                ) : (
-                    <div className='w-full flex flex-row justify-left gap-5'>
-                    <div className='lg:hidden block'>
-                        <Button variant="contained">Filter</Button>
-                    </div>
-                    <div className='h-full w-2/5 lg:w-3/5 gap-1 flex flex-row'>
-                       <Searchfield Label='Ønsket Produkt' Type='text' Width='w-full'/>
-                    </div>
-                    <Button disabled={true} color="info" variant="contained" onClick={() => navigate("/adcreator")}>Opprett annonse</Button>
-                </div>
-                )}
+                
 
                     <div className='flex m-2 max-w-7xl pt-10 text-current flex-wrap flex-row justify-left'>
                         {ads?.map((ad) => (
