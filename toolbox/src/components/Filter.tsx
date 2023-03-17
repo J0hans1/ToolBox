@@ -45,6 +45,9 @@ const Filter = () => {
                                 border: "2px solid black",
                                 color: "black",
                                 backgroundColor: "#ffff",
+                                "&:hover": {
+                                    backgroundColor: "white" 
+                                }
                             }
                         }
                     >
