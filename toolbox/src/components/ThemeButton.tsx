@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import Brightness3Icon from '@mui/icons-material/Brightness3';
 import { useDispatch, useSelector } from 'react-redux';

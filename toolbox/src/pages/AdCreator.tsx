@@ -1,4 +1,4 @@
-import { MenuItem, Select, TextField, Button, FormControl, InputLabel, ImageList } from "@mui/material";
+import { MenuItem, Select, Button, FormControl, InputLabel } from "@mui/material";
 import { useContext, useState } from "react";
 import { addAd, uploadImages } from "../lib/controller";
 import { NewAd } from "../types/types";
@@ -6,10 +6,10 @@ import Title from "../components/Title";
 import Step from "../components/Step";
 import { validateAddress, validateCity, validateDescription, validatePrice, validateTitle, validateZip } from "../lib/validation";
 import { useNavigate } from "react-router-dom";
-import { Snack, SnackbarContext } from "../context/Context";
 import { useAuth } from "../context/AuthContext";
-import TwStyles from "../Data";
 import { useSelector } from "react-redux";
+import { Snack, SnackbarContext } from "../context/Context";
+import TwStyles from "../Data";
 
 
 
@@ -189,8 +189,6 @@ const AdCreator = () => {
                                     onChange={(e) => { setTitle(e.target.value) }}
                                     className={TwStyles.TextField}
                                 />
-                                {/* <TextField fullWidth label="Tittel" variant="outlined"  /> */}
-                                {/* <TextField fullWidth multiline minRows={4} label="Beskrivelse" variant="outlined" value={description} onChange={(e) => { setDescription(e.target.value) }} /> */}
                                 <textarea
                                     placeholder = "Beskrivelse"
                                     value={description} 
@@ -254,10 +252,6 @@ const AdCreator = () => {
                                     onChange={(e) => setAddress(e.target.value)}
                                     className={TwStyles.TextField}
                                 />
-                                {/* <div className='flex flex-row w-full gap-2'>
-                                    <TextField label="Postnummer" variant="outlined" value={zip} onChange={(e) => setZip(e.target.value)} />
-                                    <TextField fullWidth label="By" variant="outlined" value={city} onChange={(e) => setCity(e.target.value)} />
-                                </div> */}
                                 <div className='flex flex-row w-full gap-2'>
                                     <input
                                         placeholder = "Postnummer"

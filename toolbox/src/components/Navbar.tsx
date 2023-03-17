@@ -1,12 +1,10 @@
-import { Button, TextField, styled } from '@mui/material';
+import  { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from "react-redux";
-import { selectAdFilters, setAdFilter } from "../store/AdFiltersReducer";
+import { useSelector } from "react-redux";
 import ThemeButton from './ThemeButton';
 import { useAuth } from '../context/AuthContext';
 import { Snack, SnackbarContext } from '../context/Context';
 import { useState, useContext, useEffect } from 'react';
-import { text } from 'stream/consumers';
 import { Searchfield } from './TextField';
 
 const Navbar = () => {
@@ -16,12 +14,8 @@ const Navbar = () => {
     );
 
     let StandardColor = MuiMode ? 'white' : 'black';
-    let BorderColorFocused = MuiMode ? '#FFD542' : 'black';
-
 
     let navigate = useNavigate();
-    const dispatch = useDispatch();
-    const AdFilters = useSelector(selectAdFilters);
     const { currentUser, logout, login } = useAuth();
     const { setSnack } = useContext(SnackbarContext);
     const [disableButton, setDisableButton] = useState(false);

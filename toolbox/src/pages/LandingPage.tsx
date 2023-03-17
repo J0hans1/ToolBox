@@ -1,4 +1,4 @@
-import { TextField, Button, styled } from '@mui/material/';
+import { Button } from '@mui/material/';
 import { DocumentData, onSnapshot, QuerySnapshot } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -18,14 +18,12 @@ import Dots from '../img/square-dots.svg';
 import Category from '../components/Category';
 import UserStep from '../components/UserStep';
 import TitledIcon from '../components/TitledIcon';
-import { useDispatch, useSelector } from "react-redux";
-import { selectAdFilters, setAdFilter } from "../store/AdFiltersReducer";
-import { CustomTextField, Searchfield } from '../components/TextField';
+import { useSelector } from "react-redux";
+import { Searchfield } from '../components/TextField';
+import { landingData } from '../Data';
 
 const LandingPage = () => {
     let navigate = useNavigate();
-    const dispatch = useDispatch();
-    const filters = useSelector(selectAdFilters);
     const [ads, setAds] = useState<Ad[]>([]);
     const threeAds = ads.slice(0, 3);
 
@@ -129,10 +127,10 @@ const LandingPage = () => {
                     <Title size='text-5xl' heading='Steg-for-steg' description='Hvordan funker det?' />
 
                     <div className='h-auto flex flex-row w-1/2 text-left gap-1 flex-wrap'>
-                        <UserStep icon={SEARCH} span={'01: '} description={'Bruk kategori eller søkefunksjon for å finne verktøyet du leter etter.'} />
-                        <UserStep icon={TOOLS} span={'02: '} description={'Finn en passende annonse. Velg leieperioden du ønsker verktøyet.'} />
-                        <UserStep icon={AGREEMENT} span={'03: '} description={'Ta kontakt med utleier og fullfør bestillingen. Verktøyet kan hentes hos utleier.'} />
-                        <UserStep icon={VALUE} span={'04: '} description={'Bruk verkøyet til å fullføre ditt prosjekt, og lever tilbake når ferdig.'} />
+                        <UserStep icon={SEARCH} span={'01: '} description={landingData.userStep[0]} />
+                        <UserStep icon={TOOLS} span={'02: '} description={landingData.userStep[1]} />
+                        <UserStep icon={AGREEMENT} span={'03: '} description={landingData.userStep[2]} />
+                        <UserStep icon={VALUE} span={'04: '} description={landingData.userStep[3]} />
                     </div>
                 </div>
             </div>
@@ -142,8 +140,8 @@ const LandingPage = () => {
         <div id="c_section" className='flex h-auto content-center bg-black text-white overflow-hidden'>
             <div id="c_container" className='flex flex-row mr-auto ml-auto mt-auto mb-auto w-full max-w-7xl p-10'>
                 <div id="c_wrapper" className='max-w-3xl text-left z-10 flex-row'>
-                    <Title size='text-5xl' heading='Hvorfor oss?' description='Med 16 år i bransjen er vi en gammel spiller i et ungt game. Hos oss er du garantert en enkel og smidig utlånsopplevelse. Gjør som 69 andre og prøv oss ut i dag. Enten du ønsker å låne eller leie ut verktøy!' />
-                </div>
+                    <Title size='text-5xl' heading={landingData.why.title} description={landingData.why.desc}/>
+                 </div>
             </div>
         </div>
     </div>

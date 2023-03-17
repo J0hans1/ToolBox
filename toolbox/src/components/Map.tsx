@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
-import ReactMapboxGl, { Marker } from 'react-mapbox-gl';
+import React, { useState, useEffect } from 'react';
+import ReactMapboxGl from 'react-mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import mapboxgl from "mapbox-gl";
+import mapboxgl, { Marker } from "mapbox-gl";
 
 
 
@@ -54,10 +54,10 @@ const MapComponent: React.FC<Props> = ({ address }) => {
       zoom={[12]}
       containerStyle={{ height: '320px', width: '100%' }}
     >
-      <Marker
+      {/* <Marker
         longitude={coordinates[0]}
         latitude={coordinates[1]}
-      />
+      /> */}
 
     </Map>
 

@@ -3,6 +3,7 @@ import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { Snack, SnackbarContext } from '../context/Context';
+import { FooterData } from "../Data";
 
 const Footer = () => {
     const { currentUser, login, logout} = useAuth();
@@ -33,13 +34,13 @@ const Footer = () => {
 
     return (
         <div className="w-full h-auto text-left">
-            <h1 className="text-4xl mb-5">Toolbox</h1>
+            <h1 className="text-4xl mb-5">{FooterData.title}</h1>
             <div className="flex flex-row w-full gap-20 mb-10">
                 <div id="ROW_LEFT" className="flex flex-col text-left max-w-1/2">
                     <h2 className="text-2xl mb-2">Kontakt oss:</h2>
-                    <p>Adressegaten 23B, 7069, Trondheim</p>
-                    <p>Mail: kontakt@toolbox.no</p>
-                    <p>Telefon: +47 412 36 689</p>
+                    <p>{FooterData.adresse}</p>
+                    <p>{FooterData.email}</p>
+                    <p>{FooterData.telefon}</p>
                 </div>
                 {currentUser ? (
                 <div id="ROW_RIGHT" className="flex flex-col text-center max-w-1/2" text-white>
@@ -51,7 +52,7 @@ const Footer = () => {
                     <Button onClick={handleClickLogout} style={{ color: "white" }}>Logg ut</Button>
                 </div>
                 ) : (
-                    <div id="ROW_RIGHT" className="flex flex-col text-center max-w-1/2" text-white>
+                <div id="ROW_RIGHT" className="flex flex-col text-center max-w-1/2" text-white>
                     <h2 className="text-2xl mb-2">Sider:</h2>
                     <Button onClick={() => navigate("/ads")} style={{ color: "white" }}>Annonser</Button>
                     <Button onClick={() => navigate("/")} style={{ color: "white" }}>Om oss</Button>
@@ -60,8 +61,7 @@ const Footer = () => {
                 </div>
                 )}
             </div>
-            <p>© ToolBox AS 2023</p>
-
+            <p>{FooterData.trademark}</p>
         </div>
     );
 }
