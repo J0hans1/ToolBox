@@ -26,20 +26,17 @@ export default function ReviewComponent(props: Review) {
     }, [props.user?.photoURL]);
 
     return (
-        <div className=" p-5 rounded-md mt-2 shadow">
-            <div className="flex flex-row justify-between">
+        <div className="flex flex-col p-5 rounded-md mt-2 bg-slate-100">
+            <div className="flex flex-row gap-5">
                 <img src={image} alt="User profile" style={{ width: '60px', height: '60px', borderRadius: '50%', marginRight: '8px' }} />
-                <div className="w-full p-3">
-                    {props.user?.displayName}
-                    <div className="m-3 aligin-right text-right content-end">
-                        <StaticRatingStars value={Number(props.rating)} />
-                        <div className="mt-5">
-                            {props.comment}
-                        </div>
-                    </div>
+                <div>
+                    <h2 className="mb-2 text-xl">{props.user?.displayName}</h2>
+                    <StaticRatingStars value={Number(props.rating)} />
                 </div>
             </div>
-
+            <div className="mt-5 break-words">
+                {props.comment}
+            </div>
         </div>
     );
 

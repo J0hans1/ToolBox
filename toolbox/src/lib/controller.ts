@@ -517,6 +517,19 @@ export async function getAdRating(adId: string) {
   return ratingSum / ratingCount;
 }
 
+// get number of reviews
+export async function getNumReviews(adId: string) {
+  let sum: number = 0;
+
+  const reviewSnapshot = await getDocs(collection(firestore, "reviews"));
+  reviewSnapshot.forEach((doc) => {
+    if (doc.data().adId === adId) {
+      sum += 1;
+    }
+  })
+
+  return sum;
+}
 
 
 export async function getReview(reviewId: string) {

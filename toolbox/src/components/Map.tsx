@@ -4,6 +4,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import mapboxgl from "mapbox-gl";
 
 
+
 const Map = ReactMapboxGl({
   accessToken: 'pk.eyJ1IjoiYW5uZW9sZCIsImEiOiJjbGV3bnNrMHIwZWw5M3pxdzJwNHM3dDdiIn0.R8xh7lwFlJu0-2hK76_qqg'
 });
@@ -15,11 +16,16 @@ interface Props {
 }
 
 const MapComponent: React.FC<Props> = ({ address }) => {
+  while (address.length < 4) {
+    address = "0" + address;
+  }
+
   const [coordinates, setCoordinates] = useState<[number, number]>([10.40620, 63.41660]);
-  const marker = new mapboxgl.Marker({
-    color: "#ff1500",
-    draggable: false,
-  }).setLngLat(coordinates);
+
+  // const marker = new mapboxgl.Marker({
+  //   color: "#ff1500",
+  //   draggable: false,
+  // }).setLngLat(coordinates);
 
 
   useEffect(() => {
@@ -43,11 +49,18 @@ const MapComponent: React.FC<Props> = ({ address }) => {
 
   return (
     <Map
-      style="mapbox://styles/mapbox/streets-v11"
+      style="mapbox://styles/mapbox/streets-v12"
       center={coordinates}
       zoom={[12]}
-      containerStyle={{ height: '50vh', width: '100%' }}
-    />
+      containerStyle={{ height: '320px', width: '100%' }}
+    >
+      <Marker
+        longitude={coordinates[0]}
+        latitude={coordinates[1]}
+      />
+
+    </Map>
+
   );
 };
 

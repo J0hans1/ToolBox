@@ -7,9 +7,9 @@ interface IconText {
 
  const TitledIcon = (props : IconText) => { 
     return (
-        <div className={`flex flex-row items-center ${props.iconSize}`}>
-            <img className="h-10 w-auto mr-5" src={props.icon} alt="icon" />
-            <p className={`ml-1 mt-3 ${props.textSize}`}>{props.text}</p>
+        <div className={`flex flex-row items-center gap-2 ${props.iconSize}`}>
+            <img className="h-8 w-auto" src={props.icon} alt="decorative icon" />
+            <p className={`${props.textSize}`}>{props.text}</p>
         </div>
     )
 }
