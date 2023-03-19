@@ -41,7 +41,7 @@ export function dateToText(date: Date){
     return date.toString().slice(12, 16) + "," + month + "," + date.toString().slice(5,7);
 }
 
-function dateToText2(date: Date){
+export function dateToText2(date: Date){
     let dateDate = date.toString();
     let month = dateDate.slice(4,7);
     if (month === "Jan"){
@@ -115,4 +115,9 @@ export function validateDates(startDate: Date, endDate: Date, bookedDatesSec: nu
         }  
     }
     return true;
+}
+
+export function getStartDate(startDate: Date){
+    const startDateDate = new Date(startDate);
+    console.log(dateToText2(startDateDate));
 }

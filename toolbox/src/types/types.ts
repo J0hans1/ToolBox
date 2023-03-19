@@ -72,9 +72,25 @@ export interface BookedDate{
 
 export interface NewBookedDates{
     id?: string;
-    userID: string;
+    userId: string;
     adId:string;
     date?: string;
+}
+
+export interface Reservation{
+    id: string;
+    userId?: string;
+    adId?: string;
+    startDate?: string;
+    endDate?: string;
+}
+
+export interface NewReservation{
+    id?: string;
+    userId?: string;
+    adId?: string;
+    startDate?: string;
+    endDate?: string;
 }
 
 export interface NewGoogleUser {
