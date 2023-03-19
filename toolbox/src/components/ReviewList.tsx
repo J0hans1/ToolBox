@@ -1,3 +1,4 @@
+import { usersCollection } from "../lib/controller";
 import { Review, GoogleUser } from "../types/types";
 import ReviewComponent from "./ReviewComponent";
 
@@ -13,7 +14,7 @@ function ReviewList(props: Props) {
             <div className=" flex flex-col overflow-y-auto max-h-96">
                 <div className=' w-full text-current justify-center flex-col '>
                     {props.reviews.map((review, index) => (
-                        <ReviewComponent user={props.users[index]} adId={review.adId} rating={review.rating} comment={review.comment} />
+                        <ReviewComponent user={props.users[index]} adId={review.adId} rating={review.rating} comment={review.comment} key={`${review.adId}+${index}`} />
                     ))}
                 </div>
             </div>

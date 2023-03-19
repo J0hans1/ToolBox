@@ -142,7 +142,7 @@ export default function Calendar({ad}: AdProps) {
 				</div>
 				<p className='text-gray-400 mb-5'>MERK: enkelte datoer kan være utilgjengelige på grunn av andre reservasjoner.</p>
 
-				<Button fullWidth variant="contained" sx={{p:1.5}} onClick={handleReserve}>Legg inn reservasjon</Button>
+				<Button fullWidth variant="contained" disabled={currentUser ? false : true } sx={{p:1.5}} onClick={handleReserve}>Legg inn reservasjon</Button>
 			</div>
 		</LocalizationProvider>
 	);
