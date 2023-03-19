@@ -1,10 +1,11 @@
 import { addDoc, collection, deleteDoc, doc, DocumentData, getDoc, getDocs, getFirestore, Query, query, updateDoc, where } from "firebase/firestore";
 import { app, storage } from "./firebase";
-import { Ad, NewReview, NewGoogleUser, Review, UpdateAd, GoogleUser, UpdateBookedDates, NewBookedDates, BookedDate } from "../types/types";
+import { Ad, NewReview, NewGoogleUser, Review, UpdateAd, GoogleUser, UpdateBookedDates, NewBookedDates, BookedDate, NewReservation, Reservation } from "../types/types";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { GoogleAuthProvider, signInWithPopup } from "@firebase/auth";
 import { auth } from "./firebase";
 import { doExpression } from "@babel/types";
+import { async } from "@firebase/util";
 
 const firestore = getFirestore(app);
 
@@ -71,8 +72,6 @@ export async function getUserFromUid(uid: string) {
 }
 
 
-
-
 // CRUD FUNCTIONS
 // CREATE A NEW ADD
 export const addAd = async (adData: any) => {
@@ -112,10 +111,29 @@ export async function addBookedDates(bookedDatesData: NewBookedDates) {
   }
 }
 
+export async function addReservation(reservationData: NewReservation){
+  const res = await addDoc(reservationCollection, {...reservationData});
+  const userDoc = doc(firestore, `users/${reservationData.userId}`);
+  const user = await getDoc(userDoc);
+  if (user.exists()){
+    const userData = user.data();
+    const reservations = userData.reservations || [];
+    reservations.push(res.id);
+    await updateDoc(userDoc, {reservations});
+  } else {
+    console.log("No such user!");
+  }
+  if (res) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 // Create a new review
 export async function addReview(reviewData: NewReview) {
   const res = await addDoc(reviewCollection, { ...reviewData });
-  console.log(`New review created${res.path}`)
+  console.log(`New review created${res.path}`);
   // add reviewId to user's myReviews array
   const userDoc = doc(firestore, `users/${reviewData.userId}`);
   const user = await getDoc(userDoc);
@@ -161,6 +179,7 @@ export const usersCollection = collection(firestore, "users"); // Get all users
 export const adsCollection = collection(firestore, "ads"); // Get all ads
 export const reviewCollection = collection(firestore, "reviews"); // Get all reviews
 export const bookedDatesCollection = collection(firestore, "bookedDates"); // Get all bookedDates
+export const reservationCollection = collection(firestore, "reservations");
 
 
 // Query for filtering ads by category, price (min, max), location (zip) and search term
@@ -310,13 +329,19 @@ export const AdsQuery = async (
 };
 
 
-
 // GET SPECIFIC USER
 export const getUser = async (id: string) => {
   const document = doc(firestore, `users/${id}`);
   const user = await getDoc(document);
   return user;
 };
+
+// GET SPECIFIC RESERVATION
+export const getSpesificReservation = async (id: string) => {
+  const document = doc(firestore, `reservations/${id}`);
+  const reservation = await getDoc(document);
+  return reservation;
+}
 
 // Get ad when clicking on ad
 export const getAd = async (adId: string) => {
@@ -338,6 +363,47 @@ export const getAd = async (adId: string) => {
     throw error;
   }
 };
+
+export const getReservation = async (reservationId: string) => {
+  const document = doc(firestore, `reservations/${reservationId}`);
+  try {
+    const reservation = await getDoc(document);
+    if (reservation.exists()){
+      return reservation;
+    }
+    else {
+      return null;
+    }
+  } catch (error){
+    console.error(`Error getting reservation with ID ${reservationId}: ${error}`);
+    throw error;
+  }
+}
+
+export const getUserReservation = async (id: string) => {
+  const user = await getUser(id);
+  const userReservations: Reservation[] = [];
+  if (user.exists() && user.data().reservations) {
+    const reservations = user.data().reservations;
+    const reservationPromises = reservations.map(async (reservationId: string) => {
+      const reservation = await getReservation(reservationId);
+      console.log(reservation);
+      if (reservation !== null && reservation.exists()) {
+        return {
+          id: reservation.id,
+          userId: reservation.data().userId,
+          adId: reservation.data().adId,
+          startDate: reservation.data().startDate,
+          endDate: reservation.data().endDate,
+        };
+      }
+      return null;
+    });
+    const reservationResults = await Promise.all(reservationPromises);
+    userReservations.push(...reservationResults.filter((reservation) => reservation !== null));
+  }
+  return userReservations
+}
 
 // Get all ads from a specific user
 export const getUserAds = async (id: string) => {
@@ -369,9 +435,6 @@ export const getUserAds = async (id: string) => {
   return userAds;
 };
 
-
-
-
 // UPDATE 
 // UPDATE A USER
 export const updateUser = async (id: string, userData: GoogleUser) => {
@@ -385,12 +448,6 @@ export const updateAd = async (adId: string, adData: UpdateAd) => {
   const document = doc(firestore, `ads/${adId}`);
   await updateDoc(document, { ...adData });
 };
-
-/*
-export const updateBookedAds = async (adID: string, adData: string[] ) => {
-  const document = doc(firestore, `ads/${adID}/bookedDates`)
-  await updateDoc(document, {...adData});
-}*/
 
 // Delete review
 export const deleteReview = async (id: string) => {

@@ -3,12 +3,12 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useContext, useEffect, useState } from 'react';
 import { EndDateContext, StartDateContext } from '../context/Context';
-import { Ad, BookedDate, NewBookedDates } from '../types/types';
+import { Ad, BookedDate, NewBookedDates, NewReservation } from '../types/types';
 import Button from '@mui/material/Button';
 import { Snack, SnackbarContext } from "../context/Context";
-import { addBookedDates, getAdBookedDates } from '../lib/controller';
+import { addBookedDates, addReservation, getAdBookedDates } from '../lib/controller';
 import { useAuth } from '../context/AuthContext';
-import { dateToText, findDatesBetween, validateDates } from '../lib/datecontroller';
+import { dateToText, dateToText2, findDatesBetween, getStartDate, validateDates } from '../lib/datecontroller';
 
 interface AdProps {
   ad: Ad
@@ -86,20 +86,38 @@ export default function Calendar({ad}: AdProps) {
 			if (selectedStartDate && selectedEndDate){
 				if (validateDates(selectedStartDate, selectedEndDate, bookedDatesSec)){
 					const bookedDates = findDatesBetween(dateToText(selectedStartDate), dateToText(selectedEndDate));
+					//update myReservation
+					const startDate = new Date(selectedStartDate);
+					const endDate = new Date(selectedEndDate);
+
+					const newReservation: NewReservation = {
+						userId: currentUser?.id,
+						adId: ad.id,
+						startDate: dateToText2(startDate),
+						endDate: dateToText2(endDate)
+					}
+					const res1 = await addReservation(newReservation);
+					if (res1 === true) {
+						setSnack(new Snack({ message: 'Produkt reservert!', color: 'success', autoHideDuration: 5000, open: true }));
+					} else {
+						setSnack(new Snack({ message: 'Noe gikk galt, prøv igjen senere', color: 'warning', autoHideDuration: 5000, open: true }));
+					}
+
 					//updateBookedAds(ad.id, bookedDates)
 					bookedDates.forEach(async date => {
 						const newBookedDate: NewBookedDates = {
-							userID: currentUser?.id,
+							userId: currentUser?.id,
 							adId: ad.id,
 							date: date
 						}
-						const res = await addBookedDates(newBookedDate);
-						if (res === true) {
+						const res2 = await addBookedDates(newBookedDate);
+						if (res2 === true) {
 							setSnack(new Snack({ message: 'Produkt reservert!', color: 'success', autoHideDuration: 5000, open: true }));
 						} else {
 							setSnack(new Snack({ message: 'Noe gikk galt, prøv igjen senere', color: 'warning', autoHideDuration: 5000, open: true }));
 						}
 					});
+					
 				} else {
 					setSnack(new Snack({ message: 'Ikke gyldig datoer!', color: 'error', autoHideDuration: 5000, open: true }));
 				}

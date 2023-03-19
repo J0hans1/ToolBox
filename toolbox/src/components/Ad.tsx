@@ -50,12 +50,12 @@ export default function AdComponent({ad}: AdProps){
                 rounded-lg w-40 h-40 md:w-60 md:h-60 lg:w-80 lg:h-80 
                 shadow-lg overflow-hidden relative hover:scale-105 hover:shadow-2xl dark:shadow-dark-white/25 active:scale-100 duration-200 m-3
             '>
-        <div className="flex h-full w-full overflow-hidden bg-cover bg-center" style={{backgroundImage: `url(${picture})`}}>
-            {/*
-            !Denne linjen med kode legger et bilde over bakgrunnsbildet, det er det som skaper gjentagelses buggen. 
-             <img className="h-40 w-full " src={picture} alt="AdPicture" /> med h-full vil deler av bildet bli dekket av tekst
-             */}
-        </div>
+            <div className="flex h-full w-full overflow-hidden bg-cover bg-center" style={{backgroundImage: `url(${picture})`}}>
+                {/*
+                !Denne linjen med kode legger et bilde over bakgrunnsbildet, det er det som skaper gjentagelses buggen. 
+                <img className="h-40 w-full " src={picture} alt="AdPicture" /> med h-full vil deler av bildet bli dekket av tekst
+                */}
+            </div>
 
         <div className="flex flex-row">
 
