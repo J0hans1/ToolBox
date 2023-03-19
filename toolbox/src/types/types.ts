@@ -1,5 +1,3 @@
-import { string } from "yargs";
-
 export interface Ad {
     id: string;
     userid?: string;

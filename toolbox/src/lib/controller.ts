@@ -4,7 +4,6 @@ import { Ad, NewReview, NewGoogleUser, Review, UpdateAd, GoogleUser, UpdateBooke
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { GoogleAuthProvider, signInWithPopup } from "@firebase/auth";
 import { auth } from "./firebase";
-import { doExpression } from "@babel/types";
 import { async } from "@firebase/util";
 
 const firestore = getFirestore(app);
@@ -92,7 +91,7 @@ export const addAd = async (adData: any) => {
 
 // Book a product
 export async function addBookedDates(bookedDatesData: NewBookedDates) {
-  const res = await addDoc(bookedDatesCollection, {...bookedDatesData});
+  const res = await addDoc(bookedDatesCollection, { ...bookedDatesData });
 
   const adDoc = doc(firestore, `ads/${bookedDatesData.adId}`);
   const ad = await getDoc(adDoc);
@@ -349,14 +348,9 @@ export const getAd = async (adId: string) => {
   try {
     const ad = await getDoc(document);
     if (ad.exists()) {
-      if (ad.data().userid) {
-        sessionStorage.setItem("userIDFromAd", ad.data().userid);
-      } else {
-        console.log("No user ID");
-      }
       return ad;
     } else {
-      return null 
+      return null
     }
   } catch (error) {
     console.error(`Error getting ad with ID ${adId}: ${error}`);
@@ -542,11 +536,11 @@ export async function getAdReviews(adId: string) {
 }
 
 // get booked dates for ad
-export async function getAdBookedDates(adId: string){
+export async function getAdBookedDates(adId: string) {
   const bookedDates: BookedDate[] = [];
   const bookedDateSnapshot = await getDocs(collection(firestore, "bookedDates"));
   bookedDateSnapshot.forEach((doc) => {
-    if (doc.data().adId === adId){
+    if (doc.data().adId === adId) {
       bookedDates.push({
         id: doc.id,
         userId: doc.data().userId,
@@ -831,7 +825,7 @@ export async function saveAdToUser(userId: string, adId: string) {
 export const getSavedAdsFromUser = async (id: string): Promise<Ad[]> => {
   const user = await getUser(id);
   const userAds: Ad[] = [];
-  
+
   if (user.exists() && user.data().savedAds) {
     const savedAds = user.data().savedAds;
     const adPromises = savedAds.map(async (adId: string) => {
@@ -858,7 +852,7 @@ export const getSavedAdsFromUser = async (id: string): Promise<Ad[]> => {
     const adResults = await Promise.all(adPromises);
     userAds.push(...adResults.filter((ad) => ad !== null));
   }
-  
+
   return userAds;
 };
 
