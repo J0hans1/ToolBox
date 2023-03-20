@@ -48,8 +48,17 @@ const AdUserInfo = (props: Info) => {
 
                 <div className="w-full">
                     <h2 className="text-3xl mt-2">{props.name}</h2>
-                    <p className="mt-3">{props.email}</p>
-                    <p className="mt-3">{props.phone}</p>
+                    <div className="flex flex-col gap-2 mt-3">
+                        <div className="flex flex-row gap-3">
+                            <img className="h-6 w-auto" src="https://cdn-icons-png.flaticon.com/512/3178/3178165.png" alt="icon mail" />
+                            <p>{props.email}</p>
+                        </div>
+                        <div className="flex flex-row gap-3">
+                            <img className="h-6 w-auto" src="https://cdn-icons-png.flaticon.com/512/3178/3178167.png" alt="icon mail" />
+                            <p>{props.phone}</p>
+                        </div>
+
+                    </div>
                 </div>
             </div>
 
@@ -304,7 +313,8 @@ const AdInspectorPage = () => {
                             <div className="w-full h-auto flex flex-row">
                                 <div className="flex flex-col w-1/2 pr-10">
                                     <div className="flex flex-row justify-between">
-                                        <Title size={"text-5xl"} heading={ad.title} key={ad.title} />
+                                        {/* <Title size={"text-5xl"} heading={ad.title} key={ad.title} /> */}
+                                        <h1 className="text-5xl my-5" key={ad.title}>{ad.title}</h1>
                                     </div>
                                     <p className="break-words" key={ad.description}>
                                         {ad.description}
@@ -321,7 +331,7 @@ const AdInspectorPage = () => {
                                     </div>
                                 </div>
 
-                                <div className="flex flex-col w-1/2 bg-pu-svart text-white h-80">
+                                <div className="flex flex-col w-1/2 bg-pu-svart text-white h-80 overflow-hidden">
 
                                     <a href={`https://www.google.com/maps/dir/?api=1&destination=${ad.address} ${ad.zip} ${ad.city}`}>
                                         <div className="absolute pt-40 text-center pl-7">
@@ -387,7 +397,7 @@ const AdInspectorPage = () => {
                             <div className="w-full h-auto flex flex-row">
                                 <div className="flex flex-col w-1/2 pr-10">
                                     <div className="flex flex-row justify-between">
-                                        <Title size={"text-5xl"} heading={ad.title} key={ad.title} />
+                                        <h1 className="text-5xl my-5" key={ad.title}>{ad.title}</h1>
 
                                         <div>
                                             {isAdSaved ? (
@@ -410,7 +420,7 @@ const AdInspectorPage = () => {
                                     </div>
                                 </div>
 
-                                <div className="flex flex-col w-1/2 bg-pu-svart text-white h-80">
+                                <div className="flex flex-col w-1/2 bg-pu-svart text-white h-80 overflow-hidden">
 
                                     <a href={`https://www.google.com/maps/dir/?api=1&destination=${ad.address} ${ad.zip} ${ad.city}`}>
                                         <div className="absolute pt-40 text-center pl-7">

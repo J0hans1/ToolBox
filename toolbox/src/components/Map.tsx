@@ -13,12 +13,12 @@ interface Props {
 const MapComponent: React.FC<Props> = ({ coordinates }) => {
 
   return (
-    <div style={{ height: '50vh', width: '100%' }}>
+    <div style={{ height: '350px', width: '100%' }}>
       <Map
         style="mapbox://styles/mapbox/streets-v11"
         center={coordinates}
         zoom={[12]}
-        containerStyle={{ height: '50vh', width: '100%' }}
+        containerStyle={{ height: '350px', width: '100%' }}
       >
       </Map>
     </div>
