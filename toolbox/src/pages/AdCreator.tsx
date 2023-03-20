@@ -12,8 +12,6 @@ import { Snack, SnackbarContext } from "../context/Context";
 import TwStyles from "../Data";
 
 
-
-
 const AdCreator = () => {
 
     const MuiMode = useSelector((state: any) => 
@@ -34,9 +32,12 @@ const AdCreator = () => {
     const [city, setCity] = useState("");
     const [images, setImages] = useState<FileList | null>(null);
 
+    const [isDisabled, setIsDisabled] = useState(false);
+
     const {setSnack} = useContext(SnackbarContext);
 
     const handleOnClick = async () => {
+        disableButton();
         // check if all fields are filled
         if (title === "" || description === "" || category === "" || price === "" || address === "" || zip === "" || city === "") {
             setSnack(new Snack({message: 'Alle felt må fylles ut!', color:'warning', autoHideDuration:5000, open: true}));
@@ -65,6 +66,15 @@ const AdCreator = () => {
         }
         await uploadImagesToBackend(images);
     }
+
+    const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
+
+    const disableButton = () => {
+        setIsDisabled(true);
+        setTimeout(() => {
+            setIsDisabled(false)
+        }, 3000);
+    };
 
     function writeAdToDatabase(props: NewAd) {
         const ad = {
@@ -287,7 +297,7 @@ const AdCreator = () => {
                         </div>
 
                         <div className='flex flex-col w-full gap-2 my-2'>
-                            <Button variant="contained" color="primary" sx={{ p: 2 }} onClick={() => handleOnClick()}> Publiser annonse </Button>
+                            <Button variant="contained" color="primary" sx={{ p: 2 }} onClick={() => handleOnClick()} disabled={isDisabled}> Publiser annonse </Button>
                         </div>
                     </div>
                 </div>
