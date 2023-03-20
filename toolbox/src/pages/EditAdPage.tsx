@@ -4,7 +4,7 @@ import { getAd, updateAd, uploadImages } from "../lib/controller";
 import { UpdateAd } from "../types/types";
 import Title from "../components/Title";
 import Step from "../components/Step";
-import { validateAddress, validateCity, validateDescription, validatePrice, validateTitle, validateZip } from "../lib/validation";
+import { validateAddress, validateCity, validatePrice, validateTitle, validateZip } from "../lib/validation";
 import { useNavigate } from "react-router-dom";
 import { Snack, SnackbarContext } from "../context/Context";
 import { useAuth } from "../context/AuthContext";
@@ -109,10 +109,7 @@ const EditAd = () => {
             setSnack(new Snack({message: 'Ikke en gyldig tittel!', color:'warning', autoHideDuration:5000, open: true}));
             return;
         }
-        if (!validateDescription(description)) {
-            setSnack(new Snack({message: 'Ikke en gyldig beskrivelse!', color:'warning', autoHideDuration:5000, open: true}));
-            return;
-        }
+        
         if (!validateAddress(address)) {
             setSnack(new Snack({message: 'Ikke en gyldig adresse!', color:'warning', autoHideDuration:5000, open: true}));
             return;

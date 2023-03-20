@@ -19,10 +19,7 @@ export function validateCity(city: string){
     return regEx.test(city);
 }
 
-export function validateDescription(description: string){
-    const regEx = new RegExp('^.{5,500}$'); // Minimum 5 characters, maximum 500 characters
-    return regEx.test(description);
-}
+
 
 export function validatePrice(price: string){
     const regEx = new RegExp('^[0-9]{1,6}$'); // Minimum 1 number, maximum 6 numbers
@@ -30,6 +27,6 @@ export function validatePrice(price: string){
 }
 
 export function validateTitle(title: string){
-    const regEx = new RegExp('^.{4,20}$'); // Minimum 4 characters, maximum 20 characters
+    const regEx = new RegExp('^.{4,50}$'); // Minimum 4 characters, maximum 20 characters
     return regEx.test(title);
 }

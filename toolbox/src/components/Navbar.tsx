@@ -91,14 +91,13 @@ const Navbar = () => {
                             {currentUser ? (
                                 // if user is logged in, render logout button
                                 <div className='flex flex-row gap-1 w-auto'>
-                                    <Button sx={{color: StandardColor}} onClick={() => navigate("/")}>Om oss</Button>
                                     <Button sx={{color: StandardColor}} onClick={() => navigate("/ads")}>Annonser</Button>
+                                    <Button sx={{color: StandardColor}} onClick={() => navigate("/adcreator")}>Opprett annonse</Button>
                                     <Button sx={{color: StandardColor}} onClick={() => navigate("/FAQ")}>FAQ</Button>
                                     <Button sx={{color: StandardColor}} onClick={() => navigate("/profile")} >Min side</Button>
                                 </div>
                             ) : (
                                 <div className='flex flex-row gap-1 w-auto'>
-                                    <Button sx={{color: StandardColor}} onClick={() => navigate("/")}>Om oss</Button>
                                     <Button sx={{color: StandardColor}} onClick={() => navigate("/ads")}>Annonser</Button>
                                     <Button sx={{color: StandardColor}} onClick={() => navigate("/FAQ")}>FAQ</Button>
                                 </div>

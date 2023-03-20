@@ -4,7 +4,7 @@ import { addAd, uploadImages } from "../lib/controller";
 import { NewAd } from "../types/types";
 import Title from "../components/Title";
 import Step from "../components/Step";
-import { validateAddress, validateCity, validateDescription, validatePrice, validateTitle, validateZip } from "../lib/validation";
+import { validateAddress, validateCity, validatePrice, validateTitle, validateZip } from "../lib/validation";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useSelector } from "react-redux";
@@ -46,10 +46,7 @@ const AdCreator = () => {
             setSnack(new Snack({message: 'Ikke gyldig tittel!', color:'warning', autoHideDuration:5000, open: true}));
             return;
         }
-        if (!validateDescription(description)) {
-            setSnack(new Snack({message: 'Ikke en gyldig beksrivelse!', color:'warning', autoHideDuration:5000, open: true}));
-            return;
-        }
+        
         if (!validateAddress(address)) {
             setSnack(new Snack({message: 'Ikke en gyldig adresse!', color:'warning', autoHideDuration:5000, open: true}));
             return;

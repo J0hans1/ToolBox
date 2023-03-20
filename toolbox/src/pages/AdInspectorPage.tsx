@@ -353,7 +353,7 @@ const AdInspectorPage = () => {
                                 <div className="flex flex-col w-1/2 pr-5">
                                     <div className="mb-5">
                                         <h2 className="text-2xl mb-5">Anmeldelser</h2>
-                                        <p>Les hva andre brukere mener om produktet og utleier. Ikke fornøyd med ratingen? Skjerp deg.</p>
+                                        <p>Les hva andre brukere mener om produktet og utleier.</p>
                                     </div>
 
                                     <h1 className="text-xl font-light mb-2">Totalvurdering:</h1>

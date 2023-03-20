@@ -32,7 +32,7 @@ export const faq = {
         qna: [
             {
                 Q: 'Hva er ToolBox?',
-                A: 'This website is a tool to help you find the best deals on the internet. We are not affiliated with any of the companies listed on this website. We are just a group of people who love to shop online and want to help others save money.'
+                A: 'Hygglo er en markedsplass for utleie mellom privatpersoner. Plattformen tilbyr et trygt miljø hvor du kan leie de tingene du trenger og tjene penger på tingene du eier.'
             },
             {
                 Q:"Hvilket ansvar har utleier?",
