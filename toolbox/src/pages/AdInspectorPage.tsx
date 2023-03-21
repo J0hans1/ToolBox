@@ -8,6 +8,9 @@ import { useNavigate } from "react-router-dom";
 import { Snack, SnackbarContext } from "../context/Context";
 import Wrapper from "../components/Wrapper";
 import IconButton from '@mui/material/IconButton';
+import { useSelector } from 'react-redux';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import RoomIcon from '@mui/icons-material/Room';
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation, Pagination } from 'swiper'
 import 'swiper/scss'
@@ -34,21 +37,27 @@ interface Info {
 const AdUserInfo = (props: Info) => {
     const [image, setImage] = useState<string>("");
 
+    const MuiMode = useSelector((state: any) =>
+        state.darkMode.active
+    );
+
+    let StandardColor = MuiMode ? 'white' : 'black';
+
     useEffect(() => {
         if (props.avatar) {
             setImage(props.avatar);
         }
     }, [props]);
     return (
-        <div className='relative p-10'>
-            <div className="flex flex-col gap-3 mb-5">
-                <div className="w-1/4">
+        <div className='relative w-full p-10 dark:bg-dark-lysGraa'>
+            <div className="flex flex-col gap-3 mb-5  dark:bg-dark-lysGraa">
+                <div className="w-1/4  dark:bg-dark-lysGraa">
                     <img src={image} alt="User profile" style={{ width: '70px', height: '70px', borderRadius: '50%', marginRight: '8px' }} />
                 </div>
 
-                <div className="w-full">
+                <div className="w-full dark:text-dark-white dark:bg-dark-lysGraa">
                     <h2 className="text-3xl mt-2">{props.name}</h2>
-                    <div className="flex flex-col gap-2 mt-3">
+                    <div className="flex flex-col gap-2 mt-3 ">
                         <div className="flex flex-row gap-3">
                             <img className="h-6 w-auto" src="https://cdn-icons-png.flaticon.com/512/3178/3178165.png" alt="icon mail" />
                             <p>{props.email}</p>
@@ -64,7 +73,20 @@ const AdUserInfo = (props: Info) => {
 
             <div className="flex flex-row w-full gap-1">
                 <Button variant="contained" sx={{ px: 5 }} href={`mailto: ${props.email}`}>E-post</Button>
-                <Button variant="outlined" sx={{ px: 5 }} href={`tel: ${props.phone}`}>Telefon</Button>
+                <Button variant="contained" sx={
+                    MuiMode ? {
+                        px: 5,
+                        border: "1px solid #292929",
+                    } : {
+                        px: 5,
+                        border: "1px solid black",
+                        color: "black",
+                        backgroundColor: "#ffff",
+                        "&:hover": {
+                            backgroundColor: "white"
+                        }
+                    }
+                } href={`tel: ${props.phone}`}>Telefon</Button>
             </div>
         </div>
     )
@@ -129,6 +151,12 @@ const AdInspectorPage = () => {
     const [reviewsList2, setReviewList2] = useState<Review[]>([]);
     const [users2, setUsers2] = useState<GoogleUser[]>([]);
     const adIDFromSessionStorage = sessionStorage.getItem("ADID");
+
+    const MuiMode = useSelector((state: any) =>
+        state.darkMode.active
+    );
+
+    let StandardColor = MuiMode ? 'white' : 'black';
 
 
     const handleEditAd = async () => {
@@ -296,15 +324,15 @@ const AdInspectorPage = () => {
     const renderPageControll = () => {
         if (isOwnedAd) {
             return (
-                <div className="w-full h-auto">
+                <div className="w-full h-auto dark:bg-dark-graa">
                     {ad?.map((ad) =>
-                        <div className="w-full h-auto text-left">
+                        <div className="w-full h-auto text-left dark:bg-dark-graa">
                             <div className="flex flex-row w-full h-96 mt-32 mb-5 content-start">
                                 <div className="w-2/3 h-96">
                                     <ImageSlider slides={pictures} key={pictures.toString()} />
                                 </div>
 
-                                <div className="flex flex-row w-1/3 bg-slate-100">
+                                <div className="flex flex-row w-1/3 bg-slate-100 dark:bg-dark-lysGraa">
                                     <AdUserInfo name={userFromAd?.displayName} email={userFromAd?.email} phone={userFromAd?.phoneNumber} avatar={userFromAd?.photoURL} key={userFromAd?.uid} />
                                 </div>
 
@@ -320,9 +348,20 @@ const AdInspectorPage = () => {
                                         {ad.description}
                                     </p>
 
-                                    <div className="flex flex-row h-28 w-full justify-start gap-10">
-                                        <TitledIcon icon="https://cdn-icons-png.flaticon.com/512/567/567600.png" key={ad.price} text={ad.price?.toString() + " kr/dag"} iconSize="h-full" textSize="" />
-                                        <TitledIcon icon="https://cdn-icons-png.flaticon.com/512/3037/3037821.png" key={ad.city} text={`${ad.address}, ${ad.zip}, ${ad.city}`} iconSize="h-full" textSize="" />
+                                    <div className="flex flex-row h-28 w-full justify-start gap-10 pt-10 pb-10 dark:text-dark-white">
+
+                                        <div className="flex flex-row h-5">
+                                            <AttachMoneyIcon color="secondary" />
+                                            <p className="text-md text-pu-ghost ml-1 dark:text-dark-white">{ad.price}kr</p>
+                                        </div>
+
+                                        <div className="flex flex-row h-5">
+                                            <RoomIcon color="secondary" />
+                                            <p className="text-md text-pu-ghost ml-1 dark:text-dark-white">{ad.city}</p>
+                                        </div>
+
+
+
                                     </div>
 
                                     <div className="flex flex-row gap-1">
@@ -348,7 +387,7 @@ const AdInspectorPage = () => {
                                 </div>
                             </div>
 
-                            <div className="flex flex-row w-full h-auto mt-5">
+                            <div className="flex flex-row w-full h-auto mt-5 dark:bg-dark-graa dark:text-dark-white">
 
                                 <div className="flex flex-col w-1/2 pr-5">
                                     <div className="mb-5">
@@ -381,9 +420,9 @@ const AdInspectorPage = () => {
 
         else {
             return (
-                <div className="w-full h-auto">
+                <div className="w-full h-auto dark:bg-dark-graa">
                     {ad?.map((ad) =>
-                        <div className="w-full h-auto text-left">
+                        <div className="w-full h-auto text-left dark:bg-dark-graa">
                             <div className="flex flex-row w-full h-96 mt-32 mb-5 content-start">
                                 <div className="w-2/3 h-96">
                                     <ImageSlider slides={pictures} key={pictures[0]} />
@@ -394,7 +433,7 @@ const AdInspectorPage = () => {
                                 </div>
                             </div>
 
-                            <div className="w-full h-auto flex flex-row">
+                            <div className="w-full h-auto flex flex-row dark:bg-dark-graa dark:text-dark-white">
                                 <div className="flex flex-col w-1/2 pr-10">
                                     <div className="flex flex-row justify-between">
                                         <h1 className="text-5xl my-5" key={ad.title}>{ad.title}</h1>
@@ -402,11 +441,11 @@ const AdInspectorPage = () => {
                                         <div>
                                             {isAdSaved ? (
                                                 <IconButton sx={{ p: 1.5 }} onClick={() => handleRemoveAd()}>
-                                                    <Favorite className="text-black cursor-pointer" fontSize="large" />
+                                                    <Favorite className="text-black dark:text-white  cursor-pointer" fontSize="large" />
                                                 </IconButton>
                                             ) : (
                                                 <IconButton sx={{ p: 1.5 }} onClick={() => handleSaveAd()} >
-                                                    <FavoriteBorder className="text-black" fontSize="large" />
+                                                    <FavoriteBorder className="text-black dark:text-white " fontSize="large" />
                                                 </IconButton>)}
                                         </div>
                                     </div>
@@ -414,9 +453,17 @@ const AdInspectorPage = () => {
                                         {ad.description}
                                     </p>
 
-                                    <div className="flex flex-row h-28 w-full justify-start gap-10">
-                                        <TitledIcon icon="https://cdn-icons-png.flaticon.com/512/567/567600.png" key={ad.price} text={ad.price?.toString() + " kr/dag"} iconSize="h-full" textSize="" />
-                                        <TitledIcon icon="https://cdn-icons-png.flaticon.com/512/3037/3037821.png" key={ad.city} text={`${ad.address}, ${ad.zip}, ${ad.city}`} iconSize="h-full" textSize="" />
+                                    <div className="flex flex-row h-28 w-full justify-start gap-10 pb-10 pt-10  dark:text-dark-white">
+                                        <div className="flex flex-row ">
+                                            <AttachMoneyIcon color="secondary" />
+                                            <p className="text-md text-pu-ghost ml-1 dark:text-dark-white">{ad.price}kr</p>
+                                        </div>
+
+                                        <div className="flex flex-row">
+                                            <RoomIcon color="secondary" />
+                                            <p className="text-md text-pu-ghost ml-1 dark:text-dark-white">{ad.address}, {ad.zip} {ad.city}</p>
+                                        </div>
+
                                     </div>
                                 </div>
 
@@ -437,7 +484,7 @@ const AdInspectorPage = () => {
                                 </div>
                             </div>
 
-                            <div className="flex flex-row w-full h-auto mt-5">
+                            <div className="flex flex-row w-full h-auto mt-5 dark:bg-dark-graa dark:text-dark-white">
 
                                 <div className="flex flex-col w-1/2 pr-5">
                                     <div className="mb-5">
@@ -455,7 +502,19 @@ const AdInspectorPage = () => {
                                     </div>
 
                                     <div className="mb-5">
-                                        <Button fullWidth disabled={currentUser ? false : true} onClick={handleRedirect} sx={{ p: 1.5 }} variant="outlined" color="primary">Skriv en anmeldelse</Button>
+                                        <Button fullWidth disabled={currentUser ? false : true} onClick={handleRedirect} variant="contained" sx={
+                                            MuiMode ? {
+                                                px: 1.5,
+                                                border: "1px solid #292929",
+                                            } : {
+                                                px: 1.5,
+                                                border: "1px solid black",
+                                                color: "black",
+                                                backgroundColor: "#ffff",
+                                                "&:hover": {
+                                                    backgroundColor: "white"
+                                                }
+                                            }} color="primary">Skriv en anmeldelse</Button>
                                     </div>
 
 
@@ -501,7 +560,7 @@ const AdInspectorPage = () => {
     }
 
     return (
-        <Wrapper height={"h-auto"} bg_color={"bg-white"} text_fill={"text-black"} direction={"flex-col"}>
+        <Wrapper height={"h-auto"} bg_color={"bg-white dark:bg-dark-graa"} text_fill={"text-black dark:dark-text-white"} direction={"flex-col"}>
             <div className="flex flex-col">
                 <div className="w-full">
                     <div>

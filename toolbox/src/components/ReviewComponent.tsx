@@ -26,7 +26,7 @@ export default function ReviewComponent(props: Review) {
     }, [props.user?.photoURL]);
 
     return (
-        <div className="flex flex-col p-5 rounded-md mt-2 bg-slate-100">
+        <div className="flex flex-col p-5 rounded-md mt-2 bg-slate-100 dark:bg-dark-lysGraa">
             <div className="flex flex-row gap-5">
                 <img src={image} alt="User profile" style={{ width: '60px', height: '60px', borderRadius: '50%', marginRight: '8px' }} />
                 <div>
