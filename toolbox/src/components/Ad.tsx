@@ -88,7 +88,7 @@ export default function AdComponent({ad}: AdProps){
                         </div>
                     </div>
                 </div>
-            </div>
+        </div>
         </div>
     </div>
         )
