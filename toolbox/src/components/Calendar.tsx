@@ -136,9 +136,13 @@ export default function Calendar({ad}: AdProps) {
 		<LocalizationProvider dateAdapter={AdapterDayjs}>
 			<div>
 				<p className='mb-5'>Ønsker du å leie produktet? Velg start- og sluttdato for å bestemme leieperiode, og trykk "Legg inn reservasjon"</p>
-				<div className='flex flex-row gap-1 mb-2'>
+				<div className='flex flex-row gap-1 mb-2 '>
+					<div className="dark:bg-dark-white rounded-md">
 					<DatePicker label="Fra dato" value={selectedStartDate} onChange={handleStartDateChange} format="DD-MM-YYYY" shouldDisableDate={disableDate(today)}/>
+					</div>
+					<div className="dark:bg-dark-white rounded-md">
 					<DatePicker label="Til dato" value={selectedEndDate} onChange={handleEndDateChange} format="DD-MM-YYYY" shouldDisableDate={disableDate(today)}/>
+					</div>
 				</div>
 				<p className='text-gray-400 mb-5'>MERK: enkelte datoer kan være utilgjengelige på grunn av andre reservasjoner.</p>
 

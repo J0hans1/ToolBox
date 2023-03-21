@@ -27,8 +27,8 @@ const ProfileBar = () => {
                 <div className="flex flex-col gap-2">
                     <Button variant="contained" sx={BtnStyle} onClick={() => navigate("/profile")}>Min profil</Button>
                     <Button variant="contained" sx={BtnStyle} onClick={() => navigate("/myads")}>Mine annonser</Button>
-                    <Button variant="contained" sx={BtnStyle} onClick={() => navigate("/savedAds")}>Lagrede annonser</Button>
                     <Button variant="contained" sx={BtnStyle} onClick={() => navigate("/myReservations")}>Mine reservasjoner</Button>
+                    <Button variant="contained" sx={BtnStyle} onClick={() => navigate("/savedads")}>Lagrede annonser</Button>
                 </div>
             </div>
         </div>
