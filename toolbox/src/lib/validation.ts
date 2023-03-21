@@ -27,6 +27,6 @@ export function validatePrice(price: string){
 }
 
 export function validateTitle(title: string){
-    const regEx = new RegExp('^.{4,50}$'); // Minimum 4 characters, maximum 20 characters
+    const regEx = new RegExp('^.{4,40}$'); // Minimum 4 characters, maximum 20 characters
     return regEx.test(title);
 }
