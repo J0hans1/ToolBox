@@ -16,7 +16,7 @@ const ProfileBar = () => {
     }, [currentUser]);
 
     const BtnStyle = {
-        p:2,
+        p: 2,
     }
 
     return (

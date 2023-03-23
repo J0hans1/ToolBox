@@ -6,7 +6,7 @@ import { Snack, SnackbarContext } from '../context/Context';
 import { FooterData } from "../Data";
 
 const Footer = () => {
-    const { currentUser, login, logout} = useAuth();
+    const { currentUser, login, logout } = useAuth();
     let navigate = useNavigate();
     const { setSnack } = useContext(SnackbarContext);
 
@@ -43,22 +43,20 @@ const Footer = () => {
                     <p>{FooterData.telefon}</p>
                 </div>
                 {currentUser ? (
-                <div id="ROW_RIGHT" className="flex flex-col text-center max-w-1/2" text-white>
-                    <h2 className="text-2xl mb-2">Sider:</h2>
-                    <Button onClick={() => navigate("/ads")} style={{ color: "white" }}>Annonser</Button>
-                    <Button onClick={() => navigate("/")} style={{ color: "white" }}>Om oss</Button>
-                    <Button onClick={() => navigate("/profile")} style={{ color: "white" }}>Min side</Button>
-                    <Button onClick={() => navigate("/adcreator")} style={{ color: "white" }}>Opprett annonse</Button>
-                    <Button onClick={handleClickLogout} style={{ color: "white" }}>Logg ut</Button>
-                </div>
+                    <div id="ROW_RIGHT" className="flex flex-col text-center max-w-1/2" text-white>
+                        <h2 className="text-2xl mb-2">Sider:</h2>
+                        <Button onClick={() => navigate("/ads")} style={{ color: "white" }}>Annonser</Button>
+                        <Button onClick={() => navigate("/profile")} style={{ color: "white" }}>Min side</Button>
+                        <Button onClick={() => navigate("/adcreator")} style={{ color: "white" }}>Opprett annonse</Button>
+                        <Button onClick={handleClickLogout} style={{ color: "white" }}>Logg ut</Button>
+                    </div>
                 ) : (
-                <div id="ROW_RIGHT" className="flex flex-col text-center max-w-1/2" text-white>
-                    <h2 className="text-2xl mb-2">Sider:</h2>
-                    <Button onClick={() => navigate("/ads")} style={{ color: "white" }}>Annonser</Button>
-                    <Button onClick={() => navigate("/")} style={{ color: "white" }}>Om oss</Button>
-                    <Button onClick={handleClickLogin} style={{ color: "white" }}>Logg inn</Button>
-                    <Button onClick={() => navigate("/FAQ")} style={{ color: "white" }}>Ofte stilte spørsmål</Button>
-                </div>
+                    <div id="ROW_RIGHT" className="flex flex-col text-center max-w-1/2" text-white>
+                        <h2 className="text-2xl mb-2">Sider:</h2>
+                        <Button onClick={() => navigate("/ads")} style={{ color: "white" }}>Annonser</Button>
+                        <Button onClick={() => navigate("/FAQ")} style={{ color: "white" }}>Ofte stilte spørsmål</Button>
+                        <Button onClick={handleClickLogin} style={{ color: "white" }}>Logg inn</Button>
+                    </div>
                 )}
             </div>
             <p>{FooterData.trademark}</p>

@@ -27,7 +27,7 @@ const initialState: IAdFiltersSlice = {
     search: "",
     category: "",
     minPrice: undefined,
-    maxPrice: undefined, 
+    maxPrice: undefined,
     zipCode: undefined,
 }
 

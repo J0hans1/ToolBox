@@ -1,11 +1,10 @@
-import { usersCollection } from "../lib/controller";
 import { Review, GoogleUser } from "../types/types";
 import ReviewComponent from "./ReviewComponent";
 
 interface Props {
     reviews: Review[];
     users: GoogleUser[];
-  }
+}
 
 function ReviewList(props: Props) {
 

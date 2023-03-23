@@ -14,7 +14,7 @@ import TwStyles from "../Data";
 
 const AdCreator = () => {
 
-    const MuiMode = useSelector((state: any) => 
+    const MuiMode = useSelector((state: any) =>
         state.darkMode.active
     );
 
@@ -34,40 +34,38 @@ const AdCreator = () => {
 
     const [isDisabled, setIsDisabled] = useState(false);
 
-    const {setSnack} = useContext(SnackbarContext);
+    const { setSnack } = useContext(SnackbarContext);
 
     const handleOnClick = async () => {
         disableButton();
         // check if all fields are filled
         if (title === "" || description === "" || category === "" || price === "" || address === "" || zip === "" || city === "") {
-            setSnack(new Snack({message: 'Alle felt må fylles ut!', color:'warning', autoHideDuration:5000, open: true}));
+            setSnack(new Snack({ message: 'Alle felt må fylles ut!', color: 'warning', autoHideDuration: 5000, open: true }));
             return;
         }
         if (!validateTitle(title)) {
-            setSnack(new Snack({message: 'Ikke gyldig tittel!', color:'warning', autoHideDuration:5000, open: true}));
+            setSnack(new Snack({ message: 'Ikke gyldig tittel!', color: 'warning', autoHideDuration: 5000, open: true }));
             return;
         }
-        
+
         if (!validateAddress(address)) {
-            setSnack(new Snack({message: 'Ikke en gyldig adresse!', color:'warning', autoHideDuration:5000, open: true}));
+            setSnack(new Snack({ message: 'Ikke en gyldig adresse!', color: 'warning', autoHideDuration: 5000, open: true }));
             return;
         }
         if (!validateZip(zip)) {
-            setSnack(new Snack({message: 'Ikke et gyldig postnummer!', color:'warning', autoHideDuration:5000, open: true}));
+            setSnack(new Snack({ message: 'Ikke et gyldig postnummer!', color: 'warning', autoHideDuration: 5000, open: true }));
             return;
         }
         if (!validateCity(city)) {
-            setSnack(new Snack({message: 'Ikke gyldig navn på by!', color:'warning', autoHideDuration:5000, open: true}));
+            setSnack(new Snack({ message: 'Ikke gyldig navn på by!', color: 'warning', autoHideDuration: 5000, open: true }));
             return;
         }
         if (!validatePrice(price)) {
-            setSnack(new Snack({message: 'Pris kan ikke være tom!', color:'warning', autoHideDuration:5000, open: true}));
+            setSnack(new Snack({ message: 'Pris kan ikke være tom!', color: 'warning', autoHideDuration: 5000, open: true }));
             return;
         }
         await uploadImagesToBackend(images);
     }
-
-    const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
 
     const disableButton = () => {
         setIsDisabled(true);
@@ -88,9 +86,8 @@ const AdCreator = () => {
             city: props.city,
             pictures: props.pictures || ['http://www.sitech.co.id/assets/img/products/default.jpg'] // default image if none is provided
         }
-        console.log(ad)
         addAd(ad); // Add ad to database
-        setSnack(new Snack({message: 'Annonse er opprettet!', color:'success', autoHideDuration:5000, open: true}));        
+        setSnack(new Snack({ message: 'Annonse er opprettet!', color: 'success', autoHideDuration: 5000, open: true }));
     }
 
     async function uploadImagesToBackend(images: FileList | null) {
@@ -153,9 +150,9 @@ const AdCreator = () => {
                                     },
                                 }}>
                                     <InputLabel sx={{
-                                       color: StandardColor,
-                                            '&.Mui-focused': { color: StandardColor },
-                                        }}
+                                        color: StandardColor,
+                                        '&.Mui-focused': { color: StandardColor },
+                                    }}
                                         id="category"
                                     >
                                         Kategori
@@ -185,20 +182,20 @@ const AdCreator = () => {
 
                         <div id="TITLE_DESC" className='flex flex-col my-5 dark:text-dark-white'>
                             <Step nr={'02'} title={'Tittel og beskrivelse'} />
-                            
+
                             <p> Velg en kort og beskrivende tittel. Legg til en mer detaljert beskrivelse så bruker kan få mer informasjon om produktet når de trykker på annonsen. </p>
 
                             <div className='flex flex-col w-full mt-5 gap-2 my-2'>
                                 <input
-                                    placeholder = "Tittel"
-                                    type = 'text'
-                                    value={title} 
+                                    placeholder="Tittel"
+                                    type='text'
+                                    value={title}
                                     onChange={(e) => { setTitle(e.target.value) }}
                                     className={TwStyles.TextField}
                                 />
                                 <textarea
-                                    placeholder = "Beskrivelse"
-                                    value={description} 
+                                    placeholder="Beskrivelse"
+                                    value={description}
                                     onChange={(e) => { setDescription(e.target.value) }}
                                     rows={4}
                                     className={TwStyles.TextField + " resize-none h-40"}
@@ -213,8 +210,6 @@ const AdCreator = () => {
                             <p>Vis frem produktet så brukere kan se hva du leier ut. Vi anbefaler 3-5 bilder for best resultat. Trykk på boksene eller bruk knappen.</p>
 
                             <div className='flex flex-col w-full mt-5 gap-2'>
-                                {/* <ImageList sx={{ width: 500, height: "auto" }} cols={3} rowHeight={164}>
-                                </ImageList> */}
                                 <Button
                                     variant="contained"
                                     component="label"
@@ -251,45 +246,43 @@ const AdCreator = () => {
                             <p> Gi produktet en adresse. Dette vil gjøre annonsen din synlig for brukere i nærheten, og vil gi kjøpere mulighet til å hente produktet hos deg. Merk: adressen din blir kun synlig for andre brukere etter at utlån er avtalt og godkjent av deg.</p>
 
                             <div className='flex flex-col w-full mt-5 gap-2'>
-                                {/* <TextField label="Hjemmeadresse" variant="outlined" value={address} onChange={(e) => setAddress(e.target.value)} /> */}
                                 <input
-                                    placeholder = "Hjemmeadresse"
-                                    type = 'text'
-                                    value={address} 
+                                    placeholder="Hjemmeadresse"
+                                    type='text'
+                                    value={address}
                                     onChange={(e) => setAddress(e.target.value)}
                                     className={TwStyles.TextField}
                                 />
                                 <div className='flex flex-row w-full gap-2'>
                                     <input
-                                        placeholder = "Postnummer"
-                                        type = 'number'
+                                        placeholder="Postnummer"
+                                        type='number'
                                         min={0}
-                                        value={zip} 
+                                        value={zip}
                                         onChange={(e) => setZip(e.target.value)}
                                         className={TwStyles.TextField + "w-1/4"}
                                     />
                                     <input
-                                        placeholder = "By"
-                                        type = 'text'
-                                        value={city} 
+                                        placeholder="By"
+                                        type='text'
+                                        value={city}
                                         onChange={(e) => setCity(e.target.value)}
                                         className={TwStyles.TextField}
                                     />
                                 </div>
                             </div>
                         </div>
-    
+
                         <div id="PRICE" className='flex flex-col my-5 dark:text-dark-white' >
                             <Step nr={'05'} title={'Velg pris'} />
                             <p>Vi anbefaler at du sjekker prisen til tilsvarende produkter. En passende pris øker sannsynligheten for utlån.</p>
 
                             <div className='flex flex-col w-full mt-5 gap-2'>
-                                {/* <TextField label="Pris" type="number" InputLabelProps={{ shrink: true, }} value={price} onChange={(e) => { setPrice(e.target.value) }} /> */}
                                 <input
-                                    placeholder = "Pris"
-                                    type = 'number'
+                                    placeholder="Pris"
+                                    type='number'
                                     min={0}
-                                    value={price} 
+                                    value={price}
                                     onChange={(e) => setPrice(e.target.value)}
                                     className={TwStyles.TextField}
                                 />

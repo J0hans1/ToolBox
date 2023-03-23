@@ -8,7 +8,7 @@ import { useAuth } from "../context/AuthContext";
 
 
 const MyAds = () => {
-    
+
     const [myAds, setAds] = useState<Ad[]>([]);
     const { currentUser } = useAuth();
 

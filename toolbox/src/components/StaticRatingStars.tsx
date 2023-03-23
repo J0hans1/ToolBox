@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import StarIcon from '@mui/icons-material/Star';
 
 interface defaultValues {
-  value:number;
+  value: number;
 }
 
 const labels: { [index: string]: string } = {
@@ -26,7 +26,7 @@ export default function StaticRatingStars(props: defaultValues) {
         display: 'flex',
       }}
     >
-     
+
       <Rating
         name="read-only"
         value={props.value}
@@ -35,7 +35,7 @@ export default function StaticRatingStars(props: defaultValues) {
         readOnly
         emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
       />
-      
+
     </Box>
   );
 }

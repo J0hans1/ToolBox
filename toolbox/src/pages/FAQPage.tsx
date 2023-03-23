@@ -19,28 +19,28 @@ interface CategoryFAQ {
 
 const Category = (props: CategoryFAQ) => {
   const IconStyle = {
-    height : 70,
-    width : 70,
+    height: 70,
+    width: 70,
   }
-  let iconElement = <AccountBoxIcon color="secondary" sx={IconStyle}/>
+  let iconElement = <AccountBoxIcon color="secondary" sx={IconStyle} />
 
-  switch(props.icon) {
+  switch (props.icon) {
     case 'account':
       break;
     case 'question':
-      iconElement = <QuestionMarkIcon color="secondary" sx={IconStyle}/>
+      iconElement = <QuestionMarkIcon color="secondary" sx={IconStyle} />
       break
     case 'rent':
-      iconElement = <HandshakeIcon color="secondary" sx={IconStyle}/>
+      iconElement = <HandshakeIcon color="secondary" sx={IconStyle} />
       break;
     case 'ads':
-      iconElement = <ReceiptIcon color="secondary" sx={IconStyle}/>
+      iconElement = <ReceiptIcon color="secondary" sx={IconStyle} />
       break;
     case 'support':
-      iconElement = <SupportAgentIcon color="secondary" sx={IconStyle}/>
-     break;
+      iconElement = <SupportAgentIcon color="secondary" sx={IconStyle} />
+      break;
     case 'forest':
-      iconElement = <ForestIcon color="secondary" sx={IconStyle}/>
+      iconElement = <ForestIcon color="secondary" sx={IconStyle} />
       break;
   }
   return (
@@ -65,7 +65,7 @@ const FAQ = () => {
             <Title size={"text-5xl"} heading={faq.title} description={faq.desc} />
 
             <div className="flex flex-row w-full flex-wrap">
-            <Category title={faq.C1.title} icon="question">
+              <Category title={faq.C1.title} icon="question">
                 <ControlledAccordions>
                   <SingleAccordion question={faq.C1.qna[0].Q} answer={faq.C1.qna[0].A} panel={"panel1"} />
                   <SingleAccordion question={faq.C1.qna[1].Q} answer={faq.C1.qna[1].A} panel={"panel2"} />

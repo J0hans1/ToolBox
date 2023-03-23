@@ -8,15 +8,15 @@ import Button from '@mui/material/Button';
 import { Snack, SnackbarContext } from "../context/Context";
 import { addBookedDates, addReservation, getAdBookedDates } from '../lib/controller';
 import { useAuth } from '../context/AuthContext';
-import { dateToText, dateToText2, findDatesBetween, getStartDate, validateDates } from '../lib/datecontroller';
+import { dateToText, dateToText2, findDatesBetween, validateDates } from '../lib/datecontroller';
 
 interface AdProps {
-  ad: Ad
+	ad: Ad
 }
 
-export default function Calendar({ad}: AdProps) {
-	const {setStartDate} = useContext(StartDateContext);
-	const {setEndDate} = useContext(EndDateContext);
+export default function Calendar({ ad }: AdProps) {
+	const { setStartDate } = useContext(StartDateContext);
+	const { setEndDate } = useContext(EndDateContext);
 
 	const [selectedStartDate, setSelectedStartDate] = useState<Date | null>(null);
 	const [selectedEndDate, setSelectedEndDate] = useState<Date | null>(null);
@@ -36,55 +36,55 @@ export default function Calendar({ad}: AdProps) {
 	}
 
 	useEffect(() => {
-        getBookedDates()
-    },[]);
+		getBookedDates()
+	}, []);
 
-	function disableDate(today: Date){
+	function disableDate(today: Date) {
 		const startSeconds = Date.parse(today.toString());
 		bookedDates.forEach((d) => {
-			if (d.date){
+			if (d.date) {
 				const dateList: string[] = d.date.split(",");
 				const year: number = +dateList[0];
 				const month: number = +dateList[1];
 				const date: number = +dateList[2];
-				const newDate = new Date(year, month -1, date);
+				const newDate = new Date(year, month - 1, date);
 				bookedDatesSec.push(Date.parse(newDate.toString()));
 			}
 		})
 
 		return (date: Date) => {
-			if (Date.parse(date.toString()) < startSeconds){
-			  return true;
+			if (Date.parse(date.toString()) < startSeconds) {
+				return true;
 			}
 			const sec = Date.parse(date.toString());
-	
-			if (bookedDatesSec.includes(sec)){
-			  return true;
+
+			if (bookedDatesSec.includes(sec)) {
+				return true;
 			}
-		   else {
-			  return false;
+			else {
+				return false;
 			}
-	    }
+		}
 	}
 
 	const handleStartDateChange = (startDate: Date | null) => {
 		setSelectedStartDate(startDate);
-		if (startDate){
-		setStartDate(startDate);
+		if (startDate) {
+			setStartDate(startDate);
 		}
 	}
 
 	const handleEndDateChange = (endDate: Date | null) => {
 		setSelectedEndDate(endDate);
-		if (endDate){
-		setEndDate(endDate);
+		if (endDate) {
+			setEndDate(endDate);
 		}
 	}
 
-	const handleReserve = async() => {
-		if (currentUser?.id !== null && currentUser !== undefined){
-			if (selectedStartDate && selectedEndDate){
-				if (validateDates(selectedStartDate, selectedEndDate, bookedDatesSec)){
+	const handleReserve = async () => {
+		if (currentUser?.id !== null && currentUser !== undefined) {
+			if (selectedStartDate && selectedEndDate) {
+				if (validateDates(selectedStartDate, selectedEndDate, bookedDatesSec)) {
 					const bookedDates = findDatesBetween(dateToText(selectedStartDate), dateToText(selectedEndDate));
 					//update myReservation
 					const startDate = new Date(selectedStartDate);
@@ -117,19 +117,19 @@ export default function Calendar({ad}: AdProps) {
 							setSnack(new Snack({ message: 'Noe gikk galt, prøv igjen senere', color: 'warning', autoHideDuration: 5000, open: true }));
 						}
 					});
-					
+
 				} else {
 					setSnack(new Snack({ message: 'Ikke gyldig datoer!', color: 'error', autoHideDuration: 5000, open: true }));
 				}
 			}
-			else{
+			else {
 				setSnack(new Snack({ message: 'Ikke gyldig dato!', color: 'warning', autoHideDuration: 5000, open: true }))
 			}
 		}
 		else {
 			setSnack(new Snack({ message: 'Du må logge inn for å reservere et produkt!', color: 'warning', autoHideDuration: 5000, open: true }));
 		}
-		
+
 	}
 
 	return (
@@ -138,15 +138,15 @@ export default function Calendar({ad}: AdProps) {
 				<p className='mb-5'>Ønsker du å leie produktet? Velg start- og sluttdato for å bestemme leieperiode, og trykk "Legg inn reservasjon"</p>
 				<div className='flex flex-row gap-1 mb-2 '>
 					<div className="dark:bg-dark-white rounded-md">
-					<DatePicker label="Fra dato" value={selectedStartDate} onChange={handleStartDateChange} format="DD-MM-YYYY" shouldDisableDate={disableDate(today)}/>
+						<DatePicker label="Fra dato" value={selectedStartDate} onChange={handleStartDateChange} format="DD-MM-YYYY" shouldDisableDate={disableDate(today)} />
 					</div>
 					<div className="dark:bg-dark-white rounded-md">
-					<DatePicker label="Til dato" value={selectedEndDate} onChange={handleEndDateChange} format="DD-MM-YYYY" shouldDisableDate={disableDate(today)}/>
+						<DatePicker label="Til dato" value={selectedEndDate} onChange={handleEndDateChange} format="DD-MM-YYYY" shouldDisableDate={disableDate(today)} />
 					</div>
 				</div>
 				<p className='text-gray-400 mb-5'>MERK: enkelte datoer kan være utilgjengelige på grunn av andre reservasjoner.</p>
 
-				<Button fullWidth variant="contained" disabled={currentUser ? false : true } sx={{p:1.5}} onClick={handleReserve}>Legg inn reservasjon</Button>
+				<Button fullWidth variant="contained" disabled={currentUser ? false : true} sx={{ p: 1.5 }} onClick={handleReserve}>Legg inn reservasjon</Button>
 			</div>
 		</LocalizationProvider>
 	);

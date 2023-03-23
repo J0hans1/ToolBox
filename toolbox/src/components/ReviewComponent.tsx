@@ -12,9 +12,6 @@ interface Review {
 }
 
 
-
-
-
 export default function ReviewComponent(props: Review) {
 
     const [image, setImage] = useState<string>("");
@@ -31,7 +28,7 @@ export default function ReviewComponent(props: Review) {
                 <img src={image} alt="User profile" style={{ width: '60px', height: '60px', borderRadius: '50%', marginRight: '8px' }} />
                 <div>
                     <h2 className="mb-2 text-xl">{props.user?.displayName}</h2>
-                    <StaticRatingStars value={Number(props.rating)} key={props.id}/>
+                    <StaticRatingStars value={Number(props.rating)} key={props.id} />
                 </div>
             </div>
             <div className="mt-5 break-words">

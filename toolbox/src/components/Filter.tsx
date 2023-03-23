@@ -19,7 +19,7 @@ const Filter = () => {
     let radioStyle = {
         m: -1,
         color: Basecolor,
-        '& .MuiSvgIcon-root:not(.MuiSvgIcon-root ~ .MuiSvgIcon-root)':{
+        '& .MuiSvgIcon-root:not(.MuiSvgIcon-root ~ .MuiSvgIcon-root)': {
             color: Basecolor,
         },
         '& .MuiSvgIcon-root + .MuiSvgIcon-root': {
@@ -32,28 +32,28 @@ const Filter = () => {
 
             <FilterModule title="Kategori" margin="mt-4" >
                 <RadioGroup value={filters.category || ""} >
-                <div className='mb-4 py-2'>
-                    <Button 
-                        variant="contained"
-                        onClick={
-                            () => dispatch(setAdFilter({ field: "category", value: "" }))
-                        }
-                        sx = {
-                            MuiMode ? {
-                                border: "2px solid #292929",
-                            } : {
-                                border: "2px solid black",
-                                color: "black",
-                                backgroundColor: "#ffff",
-                                "&:hover": {
-                                    backgroundColor: "white" 
+                    <div className='mb-4 py-2'>
+                        <Button
+                            variant="contained"
+                            onClick={
+                                () => dispatch(setAdFilter({ field: "category", value: "" }))
+                            }
+                            sx={
+                                MuiMode ? {
+                                    border: "2px solid #292929",
+                                } : {
+                                    border: "2px solid black",
+                                    color: "black",
+                                    backgroundColor: "#ffff",
+                                    "&:hover": {
+                                        backgroundColor: "white"
+                                    }
                                 }
                             }
-                        }
-                    >
-                        Nullstill Kategori
-                    </Button>
-                </div>
+                        >
+                            Nullstill Kategori
+                        </Button>
+                    </div>
                     <FormControlLabel sx={radioStyle} control={<Radio />} label="Elektronikk" value="Elektronikk" onChange={(event: any) => {
                         dispatch(setAdFilter({ field: "category", value: "Elektronikk" }));
                     }} />
