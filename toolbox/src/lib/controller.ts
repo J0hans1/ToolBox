@@ -1,10 +1,9 @@
 import { addDoc, collection, deleteDoc, doc, DocumentData, getDoc, getDocs, getFirestore, Query, query, updateDoc, where } from "firebase/firestore";
 import { app, storage } from "./firebase";
-import { Ad, NewReview, NewGoogleUser, Review, UpdateAd, GoogleUser, UpdateBookedDates, NewBookedDates, BookedDate, NewReservation, Reservation } from "../types/types";
+import { Ad, NewReview, NewGoogleUser, Review, UpdateAd, GoogleUser, NewBookedDates, BookedDate, NewReservation, Reservation } from "../types/types";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { GoogleAuthProvider, signInWithPopup } from "@firebase/auth";
 import { auth } from "./firebase";
-import { async } from "@firebase/util";
 
 const firestore = getFirestore(app);
 
@@ -30,25 +29,21 @@ export const loginWithGoogle = async () => {
     };
     await addGoogleUser(userData);
   }
-  console.log(result.user);
   return result.user;
 };
 
 export const logOut = async () => {
   await auth.signOut();
-  console.log("User logged out");
 };
 
 export const addGoogleUser = async (userData: NewGoogleUser) => {
-  const newUser = await addDoc(usersCollection, { ...userData });
-  console.log(`New user created${newUser.path}`)
+  await addDoc(usersCollection, { ...userData });
 };
 
 export async function getUserFromUid(uid: string) {
   const q = query(usersCollection, where("uid", "==", uid));
   const snapshot = await getDocs(q);
   if (snapshot.empty) {
-    console.log("No matching documents.");
     return;
   }
 
@@ -83,10 +78,7 @@ export const addAd = async (adData: any) => {
     const myAds = userData.myAds || []; // use default empty array if myAds is undefined
     myAds.push(newAd.id);
     await updateDoc(userDoc, { myAds });
-  } else {
-    console.log("No such user!");
-  }
-  console.log(`New ad created${newAd.path}`)
+  } 
 };
 
 // Book a product
@@ -100,9 +92,7 @@ export async function addBookedDates(bookedDatesData: NewBookedDates) {
     const bookedDates = adData.bookedDates || []; // use default empty array if reviews is undefined
     bookedDates.push(res.id);
     await updateDoc(adDoc, { bookedDates });
-  } else {
-    console.log("No such ad!");
-  }
+  } 
   if (res) {
     return true;
   } else {
@@ -110,18 +100,16 @@ export async function addBookedDates(bookedDatesData: NewBookedDates) {
   }
 }
 
-export async function addReservation(reservationData: NewReservation){
-  const res = await addDoc(reservationCollection, {...reservationData});
+export async function addReservation(reservationData: NewReservation) {
+  const res = await addDoc(reservationCollection, { ...reservationData });
   const userDoc = doc(firestore, `users/${reservationData.userId}`);
   const user = await getDoc(userDoc);
-  if (user.exists()){
+  if (user.exists()) {
     const userData = user.data();
     const reservations = userData.reservations || [];
     reservations.push(res.id);
-    await updateDoc(userDoc, {reservations});
-  } else {
-    console.log("No such user!");
-  }
+    await updateDoc(userDoc, { reservations });
+  } 
   if (res) {
     return true;
   } else {
@@ -132,7 +120,6 @@ export async function addReservation(reservationData: NewReservation){
 // Create a new review
 export async function addReview(reviewData: NewReview) {
   const res = await addDoc(reviewCollection, { ...reviewData });
-  console.log(`New review created${res.path}`);
   // add reviewId to user's myReviews array
   const userDoc = doc(firestore, `users/${reviewData.userId}`);
   const user = await getDoc(userDoc);
@@ -141,9 +128,7 @@ export async function addReview(reviewData: NewReview) {
     const myReviews = userData.myReviews || []; // use default empty array if myReviews is undefined
     myReviews.push(res.id);
     await updateDoc(userDoc, { myReviews });
-  } else {
-    console.log("No such user!");
-  }
+  } 
   // add reviewId to ad's reviews array
   const adDoc = doc(firestore, `ads/${reviewData.adId}`);
   const ad = await getDoc(adDoc);
@@ -152,9 +137,7 @@ export async function addReview(reviewData: NewReview) {
     const reviews = adData.reviews || []; // use default empty array if reviews is undefined
     reviews.push(res.id);
     await updateDoc(adDoc, { reviews });
-  } else {
-    console.log("No such ad!");
-  }
+  } 
   if (res) {
     return true;
   } else {
@@ -362,13 +345,13 @@ export const getReservation = async (reservationId: string) => {
   const document = doc(firestore, `reservations/${reservationId}`);
   try {
     const reservation = await getDoc(document);
-    if (reservation.exists()){
+    if (reservation.exists()) {
       return reservation;
     }
     else {
       return null;
     }
-  } catch (error){
+  } catch (error) {
     console.error(`Error getting reservation with ID ${reservationId}: ${error}`);
     throw error;
   }
@@ -381,7 +364,6 @@ export const getUserReservation = async (id: string) => {
     const reservations = user.data().reservations;
     const reservationPromises = reservations.map(async (reservationId: string) => {
       const reservation = await getReservation(reservationId);
-      console.log(reservation);
       if (reservation !== null && reservation.exists()) {
         return {
           id: reservation.id,
@@ -469,30 +451,12 @@ export const deleteUser = async (id: string) => {
     await deleteUserAdsCollection(id);
     const userRef = doc(firestore, `users/${id}`);
     await deleteDoc(userRef);
-    console.log(`Deleted user with ID: ${id}`);
   } catch (error) {
     console.error(`Error deleting user with ID: ${id}`, error);
   }
 };
 
 //get ad reviews
-/* export async function getAdReviews(adId: string) {
-  const reviews: Review[] = [];
-  const reviewSnapshot = await getDocs(collection(firestore, "reviews"));
-  reviewSnapshot.forEach((doc) => {
-    if (doc.data().adId === adId) {
-      reviews.push({
-        id: doc.id,
-        adId: doc.data().adId,
-        userId: doc.data().userId,
-        rating: doc.data().rating,
-        comment: doc.data().comment,
-      });
-    }
-  })
-
-  return reviews;
-} */
 export async function getAdReviews(adId: string) {
   const reviews: Review[] = [];
   const reviewSnapshot = await getDocs(collection(firestore, "reviews"));
@@ -589,30 +553,7 @@ export async function getReview(reviewId: string) {
   return review;
 }
 
-/* export async function getMyReviews(userId: string) {
-  // get reviewId from user's myReviews array
-  const reviews: Review[] = [];
-  const user = await getUser(userId);
-  if (user.exists() && user.data().myReviews) {
-    const myReviews = user.data().myReviews;
-    const reviewPromises = myReviews.map(async (reviewId: string) => {
-      const review = await getReview(reviewId);
-      if (review.exists()) {
-        return {
-          id: review.id,
-          adId: review.data().adId,
-          userId: review.data().userId,
-          rating: review.data().rating,
-          comment: review.data().comment,
-        };
-      }
-      return null;
-    });
-    const reviewResults = await Promise.all(reviewPromises);
-    reviews.push(...reviewResults.filter((review) => review !== null));
-  }
-  return reviews;
-} */
+
 export async function getMyReviews(userId: string) {
   // get reviewId from user's myReviews array
   const reviews: Review[] = [];
@@ -651,7 +592,6 @@ export const deleteAd = async (adId: string) => {
     const reviewPromises = reviews.map(async (review) => {
       const reviewRef = doc(firestore, `reviews/${review.id}`);
       await deleteDoc(reviewRef);
-      console.log(`Deleted review with ID: ${review.id}`);
     });
     await Promise.all(reviewPromises);
     // delete ad from user's myAds array
@@ -669,7 +609,6 @@ export const deleteAd = async (adId: string) => {
     }
     const adRef = doc(firestore, `ads/${adId}`);
     await deleteDoc(adRef);
-    console.log(`Deleted ad with ID: ${adId}`);
   } catch (error) {
     console.error(`Error deleting ad with ID: ${adId}`, error);
   }
@@ -748,80 +687,7 @@ export async function saveAdToUser(userId: string, adId: string) {
 
 // get all saved ads for user
 // Get all ads from a specific user
-/* export const getSavedAdsFromUser = async (id: string) => {
-  const user = await getUser(id);
-  const userAds: Ad[] = [];
 
-  if (user.exists() && user.data().savedAds) {
-    const savedAds = user.data().savedAds;
-    const adPromises = savedAds.map(async (adId: string) => {
-      const ad = await getAd(adId);
-      if (ad.exists()) {
-        return {
-          id: ad.id,
-          userid: ad.data().userid,
-          title: ad.data().title,
-          description: ad.data().description,
-          category: ad.data().category,
-          price: ad.data().price,
-          address: ad.data().address,
-          zip: ad.data().zip,
-          city: ad.data().city,
-          pictures: ad.data().pictures,
-        };
-      }
-      return null;
-    });
-    const adResults = await Promise.all(adPromises);
-    userAds.push(...adResults.filter((ad) => ad !== null));
-  }
-
-  return userAds;
-}; */
-/* export const getSavedAdsFromUser = async (id: string) => {
-  const user = await getUser(id);
-  const userAds: Ad[] = [];
-
-  if (user.exists() && user.data().savedAds) {
-    const savedAds = user.data().savedAds;
-    const updatedSavedAds = savedAds.filter(async (adId: string) => {
-      try {
-      const ad = await getAd(adId);
-      if (ad !== null && ad.exists()) {
-        return true;
-      }
-    } catch (error) {
-      // remove ad from savedAds array
-      await removeAdFromUser(id, adId);
-      return false;
-    }
-    });
-    await updateUser(id, {
-      id,
-      savedAds: updatedSavedAds,
-    });
-    const adPromises = updatedSavedAds.map(async (adId: string) => {
-      const ad = await getAd(adId);
-      if (ad !== null && ad.exists()) {
-      return {
-        id: ad.id,
-        userid: ad.data().userid,
-        title: ad.data().title,
-        description: ad.data().description,
-        category: ad.data().category,
-        price: ad.data().price,
-        address: ad.data().address,
-        zip: ad.data().zip,
-        city: ad.data().city,
-        pictures: ad.data().pictures,
-      };
-    }});
-    const adResults = await Promise.all(adPromises);
-    userAds.push(...adResults);
-  }
-
-  return userAds;
-}; */
 export const getSavedAdsFromUser = async (id: string): Promise<Ad[]> => {
   const user = await getUser(id);
   const userAds: Ad[] = [];
@@ -855,32 +721,3 @@ export const getSavedAdsFromUser = async (id: string): Promise<Ad[]> => {
 
   return userAds;
 };
-
-/* export const getUserAds = async (id: string) => {
-  const user = await getUser(id);
-  const userAds: Ad[] = [];
-  if (user.exists() && user.data().myAds) {
-    const myAds = user.data().myAds;
-    const adPromises = myAds.map(async (adId: string) => {
-      const ad = await getAd(adId);
-      if (ad !== null && ad.exists()) {
-        return {
-          id: ad.id,
-          userid: ad.data().userid,
-          title: ad.data().title,
-          description: ad.data().description,
-          category: ad.data().category,
-          price: ad.data().price,
-          address: ad.data().address,
-          zip: ad.data().zip,
-          city: ad.data().city,
-          pictures: ad.data().pictures,
-        };
-      }
-      return null;
-    });
-    const adResults = await Promise.all(adPromises);
-    userAds.push(...adResults.filter((ad) => ad !== null));
-  }
-  return userAds;
-}; */

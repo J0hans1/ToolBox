@@ -26,7 +26,7 @@ const EditAd = () => {
     const [pictures, setPictures] = useState<string[]>([]);
     const [images, setImages] = useState<FileList | null>(null);
 
-    const {setSnack} = useContext(SnackbarContext);
+    const { setSnack } = useContext(SnackbarContext);
     const { currentUser } = useAuth();
 
 
@@ -35,7 +35,6 @@ const EditAd = () => {
             const adIDFromSessionStorage = sessionStorage.getItem("ADID");
             if (adIDFromSessionStorage != null) {
                 const adFromDatabase = await getAdFromDatabase(adIDFromSessionStorage);
-                console.log(adFromDatabase);
                 if (adFromDatabase !== undefined) {
                     setAd(adFromDatabase);
                     setDescription(adFromDatabase.description);
@@ -89,12 +88,11 @@ const EditAd = () => {
                 ad.pictures = ['http://www.sitech.co.id/assets/img/products/default.jpg']; // default image if none is provided
             }
 
-            console.log(ad)
             updateAd(adID, ad);
-            setSnack(new Snack({message: 'Annonse er oppdatert!', color:'success', autoHideDuration:5000, open: true}));
+            setSnack(new Snack({ message: 'Annonse er oppdatert!', color: 'success', autoHideDuration: 5000, open: true }));
 
             navigate(`/adinspector/${ad.id}`); // redirect back to same ad
-            setSnack(new Snack({message: 'Annonse er oppdatert!', color:'success', autoHideDuration:5000, open: true}));
+            setSnack(new Snack({ message: 'Annonse er oppdatert!', color: 'success', autoHideDuration: 5000, open: true }));
         }
     }
 
@@ -102,28 +100,28 @@ const EditAd = () => {
     const handleOnClick = async () => {
         // check if all fields are filled
         if (title === "" || description === "" || category === "" || price === "" || address === "" || zip === "" || city === "") {
-            setSnack(new Snack({message: 'Alle felt må fylles ut!', color:'warning', autoHideDuration:5000, open: true}));
+            setSnack(new Snack({ message: 'Alle felt må fylles ut!', color: 'warning', autoHideDuration: 5000, open: true }));
             return;
         }
         if (!validateTitle(title)) {
-            setSnack(new Snack({message: 'Ikke en gyldig tittel!', color:'warning', autoHideDuration:5000, open: true}));
+            setSnack(new Snack({ message: 'Ikke en gyldig tittel!', color: 'warning', autoHideDuration: 5000, open: true }));
             return;
         }
-        
+
         if (!validateAddress(address)) {
-            setSnack(new Snack({message: 'Ikke en gyldig adresse!', color:'warning', autoHideDuration:5000, open: true}));
+            setSnack(new Snack({ message: 'Ikke en gyldig adresse!', color: 'warning', autoHideDuration: 5000, open: true }));
             return;
         }
         if (!validateZip(zip)) {
-            setSnack(new Snack({message: 'Ikke et gyldig postnummer!', color:'warning', autoHideDuration:5000, open: true}));
+            setSnack(new Snack({ message: 'Ikke et gyldig postnummer!', color: 'warning', autoHideDuration: 5000, open: true }));
             return;
         }
         if (!validateCity(city)) {
-            setSnack(new Snack({message: 'Ikke gyldig navn på by!', color:'warning', autoHideDuration:5000, open: true}));
+            setSnack(new Snack({ message: 'Ikke gyldig navn på by!', color: 'warning', autoHideDuration: 5000, open: true }));
             return;
         }
         if (!validatePrice(price)) {
-            setSnack(new Snack({message: 'Pris kan ikke være tom!', color:'warning', autoHideDuration:5000, open: true}));
+            setSnack(new Snack({ message: 'Pris kan ikke være tom!', color: 'warning', autoHideDuration: 5000, open: true }));
             return;
         }
         await uploadImagesToBackend(images);
@@ -166,7 +164,7 @@ const EditAd = () => {
         }
     }
 
-    const MuiMode = useSelector((state: any) => 
+    const MuiMode = useSelector((state: any) =>
         state.darkMode.active
     );
 
@@ -186,7 +184,7 @@ const EditAd = () => {
                             <p> Velg en passende kategori så brukere enkelt kan finne annonsen din. Sjekk gjerne at valgt kategori inneholder lignende produkter.</p>
 
                             <div className='flex flex-row w-full gap-2 mt-5 my-2'>
-                            <FormControl fullWidth sx={{
+                                <FormControl fullWidth sx={{
                                     '& .MuiOutlinedInput-root': {
                                         '& fieldset': {
                                             borderColor: StandardColor,
@@ -201,11 +199,11 @@ const EditAd = () => {
                                     },
                                 }}>
                                     <InputLabel sx={{
-                                       color: StandardColor,
-                                            '&.Mui-focused': { color: StandardColor },
-                                        }}
+                                        color: StandardColor,
+                                        '&.Mui-focused': { color: StandardColor },
+                                    }}
                                         id="category"
-                                    >            
+                                    >
                                         Kategori
                                     </InputLabel>
                                     <Select
@@ -238,15 +236,15 @@ const EditAd = () => {
 
                             <div className='flex flex-col w-full mt-5 gap-2 my-2 '>
                                 <input
-                                    placeholder = "Tittel"
-                                    type = 'text'
-                                    value={title} 
+                                    placeholder="Tittel"
+                                    type='text'
+                                    value={title}
                                     onChange={(e) => { setTitle(e.target.value) }}
                                     className={TwStyles.TextField}
                                 />
                                 <textarea
-                                    placeholder = "Beskrivelse"
-                                    value={description} 
+                                    placeholder="Beskrivelse"
+                                    value={description}
                                     onChange={(e) => { setDescription(e.target.value) }}
                                     rows={4}
                                     className={TwStyles.TextField + " resize-none h-40"}
@@ -260,8 +258,6 @@ const EditAd = () => {
                             <Step nr={'03'} title={'Last opp bilder'} />
                             <p>Vis frem produktet så brukere kan se hva du leier ut. Vi anbefaler 3-5 bilder for best resultat. Trykk på boksene eller bruk knappen.</p>
                             <div className='flex flex-col w-full mt-5 gap-2'>
-                                {/* <ImageList sx={{ width: 500, height: "auto" }} cols={3} rowHeight={164}>
-                                </ImageList> */}
                                 <Button
                                     variant="contained"
                                     component="label"
@@ -299,25 +295,25 @@ const EditAd = () => {
 
                             <div className='flex flex-col w-full mt-5 gap-2'>
                                 <input
-                                    placeholder = "Hjemmeadresse"
-                                    type = 'text'
-                                    value={address} 
+                                    placeholder="Hjemmeadresse"
+                                    type='text'
+                                    value={address}
                                     onChange={(e) => setAddress(e.target.value)}
                                     className={TwStyles.TextField}
                                 />
                                 <div className='flex flex-row w-full gap-2'>
                                     <input
-                                        placeholder = "Postnummer"
-                                        type = 'number'
+                                        placeholder="Postnummer"
+                                        type='number'
                                         min={0}
-                                        value={zip} 
+                                        value={zip}
                                         onChange={(e) => setZip(e.target.value)}
                                         className={TwStyles.TextField + "w-1/4"}
                                     />
                                     <input
-                                        placeholder = "By"
-                                        type = 'text'
-                                        value={city} 
+                                        placeholder="By"
+                                        type='text'
+                                        value={city}
                                         onChange={(e) => setCity(e.target.value)}
                                         className={TwStyles.TextField}
                                     />
@@ -331,13 +327,13 @@ const EditAd = () => {
 
                             <div className='flex flex-col w-full mt-5 gap-2'>
                                 <input
-                                        placeholder = "Pris"
-                                        type = 'number'
-                                        min={0}
-                                        value={price} 
-                                        onChange={(e) => setPrice(e.target.value)}
-                                        className={TwStyles.TextField}
-                                    />
+                                    placeholder="Pris"
+                                    type='number'
+                                    min={0}
+                                    value={price}
+                                    onChange={(e) => setPrice(e.target.value)}
+                                    className={TwStyles.TextField}
+                                />
                             </div>
                         </div>
 

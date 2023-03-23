@@ -45,7 +45,7 @@ export interface NewAd {
     reviews?: string[];
 }
 
-export interface Review{
+export interface Review {
     id: string;
     userId?: string;
     adId?: string;
@@ -53,7 +53,7 @@ export interface Review{
     comment?: string;
 }
 
-export interface NewReview{
+export interface NewReview {
     id?: string;
     userId: string;
     adId: string;
@@ -61,21 +61,21 @@ export interface NewReview{
     comment?: string;
 }
 
-export interface BookedDate{
+export interface BookedDate {
     id: string;
     userId?: string;
     adId?: string;
     date?: string;
 }
 
-export interface NewBookedDates{
+export interface NewBookedDates {
     id?: string;
     userId: string;
-    adId:string;
+    adId: string;
     date?: string;
 }
 
-export interface Reservation{
+export interface Reservation {
     id: string;
     userId?: string;
     adId?: string;
@@ -83,7 +83,7 @@ export interface Reservation{
     endDate?: string;
 }
 
-export interface NewReservation{
+export interface NewReservation {
     id?: string;
     userId?: string;
     adId?: string;

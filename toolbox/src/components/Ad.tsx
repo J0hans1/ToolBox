@@ -1,5 +1,3 @@
-import { Avatar } from "@mui/material";
-import { amber } from "@mui/material/colors";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Ad, GoogleUser } from "../types/types";

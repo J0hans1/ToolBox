@@ -1,4 +1,3 @@
-import './App.css';
 import PageNotFound from './pages/PageNotFound';
 import LandingPage from './pages/LandingPage';
 import Ads from './pages/AdsPage';
@@ -28,11 +27,7 @@ import MyReservations from './pages/MyReservations';
 
 export default function App() {
   const [snack, setSnack] = useState(new Snack({ open: false }));
-  const [startDate, setStartDate] = useState<Date>(new Date());
-  const [endDate, setEndDate] = useState<Date>(new Date());
 
-
-  
   const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
       return;
@@ -43,7 +38,7 @@ export default function App() {
 
 
   //--------------------MUI Theme control----------------------
-  const MuiMode = useSelector((state: any) => 
+  const MuiMode = useSelector((state: any) =>
     state.darkMode.active
   );
 
@@ -78,7 +73,7 @@ export default function App() {
       action: {
         disabled: grey[400],
       }
-      },
+    },
   });
 
   //-----------------------------Render--------------------------------

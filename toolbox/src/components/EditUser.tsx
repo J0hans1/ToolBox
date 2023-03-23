@@ -16,8 +16,8 @@ export default function EditUser() {
     const { currentUser, setCurrentUser, logout } = useAuth();
     const [displayName, setDisplayName] = useState(currentUser?.displayName);
     const [phone, setPhone] = useState(currentUser?.phoneNumber);
-    
-    const MuiMode = useSelector((state: any) => 
+
+    const MuiMode = useSelector((state: any) =>
         state.darkMode.active
     );
 
@@ -34,7 +34,7 @@ export default function EditUser() {
                     }).catch((err) => {
                         setSnack(new Snack({ message: 'Noe gikk galt!', color: 'error', autoHideDuration: 5000, open: true }))
                     })
-                    
+
                 }).catch((err) => {
                     setSnack(new Snack({ message: 'Noe gikk galt!', color: 'error', autoHideDuration: 5000, open: true }))
                 }
@@ -71,7 +71,7 @@ export default function EditUser() {
 
             <div id="PERSONAL_INFO" className='flex flex-col'>
                 <div className='flex flex-col w-full gap-2'>
-                    <input 
+                    <input
                         type='text'
                         placeholder="E-post"
                         //Email should not be able to null, but can be, have to override this with ternary operator
@@ -83,7 +83,7 @@ export default function EditUser() {
             </div>
             <div id="PERSONAL_INFO" className='flex flex-col'>
                 <div className='flex flex-col w-full gap-2'>
-                    <input 
+                    <input
                         type='text'
                         placeholder="Telefon"
                         value={phone != null ? phone : ''}
@@ -96,11 +96,11 @@ export default function EditUser() {
 
             <div id="PERSONAL_INFO" className='flex flex-col'>
                 <div className='flex flex-col w-full gap-2'>
-                    <input 
+                    <input
                         type='text'
                         placeholder="Navn"
                         value={displayName != null ? displayName : ''}
-                        onChange={(e) => setDisplayName(e.target.value)}                        
+                        onChange={(e) => setDisplayName(e.target.value)}
                         className={TwStyles.TextField}
                         disabled={!editMode}
                     />
@@ -120,7 +120,7 @@ export default function EditUser() {
 
                 <div style={{ display: editMode ? 'block' : 'none' }}>
                     <Button
-                        sx={{ 
+                        sx={{
                             p: 2,
                             color: StandardColor,
                         }}
@@ -135,10 +135,10 @@ export default function EditUser() {
 
                 <div>
                     <Button
-                        sx={{ 
+                        sx={{
                             p: 2,
                             color: StandardColor,
-                        }}                        onClick={
+                        }} onClick={
                             async () => await deleteUserButton()
                         }
                         variant="outlined"

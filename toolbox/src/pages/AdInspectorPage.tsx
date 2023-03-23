@@ -1,5 +1,3 @@
-import Title from "../components/Title";
-import TitledIcon from "../components/TitledIcon";
 import { getAd, isSaved, isOwned, removeAdFromUser, saveAdToUser, deleteAd, getAdReviews, getUser } from "../lib/controller";
 import { Ad, GoogleUser, Review } from "../types/types";
 import { useContext, useEffect, useState } from "react";
@@ -23,7 +21,6 @@ import { getAdRating, getNumReviews } from "../lib/controller";
 import ReviewList from "../components/ReviewList";
 import { useAuth } from "../context/AuthContext";
 import Calendar from "../components/Calendar";
-import { EndDateContext, StartDateContext } from "../context/Context";
 import { FavoriteBorder, Favorite } from "@material-ui/icons";
 
 
@@ -48,6 +45,7 @@ const AdUserInfo = (props: Info) => {
             setImage(props.avatar);
         }
     }, [props]);
+
     return (
         <div className='relative w-full p-10 dark:bg-dark-lysGraa'>
             <div className="flex flex-col gap-3 mb-5  dark:bg-dark-lysGraa">
@@ -100,10 +98,6 @@ const ImageSlider = (props: Slides) => {
     return (
         <div className={styles.container}>
             <Swiper
-                // style={{
-                //     "--swiper-navigation-color": "#fff",
-                //     "--swiper-pagination-color": "#fff",
-                // }}
                 modules={[Navigation, Pagination]}
                 navigation
                 pagination={{ clickable: true }}
@@ -132,8 +126,6 @@ const AdInspectorPage = () => {
     const [isOwnedAd, setIsOwnedAd] = useState(false);
     const [isAdSaved, setIsAdSaved] = useState(false);
     const { setSnack } = useContext(SnackbarContext);
-    const { startDate } = useContext(StartDateContext);
-    const { endDate } = useContext(EndDateContext);
     const [avgrating, setAvgrating] = useState<number>(-1);
     const [numReviews, setNumReviews] = useState<number>(-1);
     const [userFromAd, setUserFromAd] = useState<GoogleUser>({
@@ -341,7 +333,6 @@ const AdInspectorPage = () => {
                             <div className="w-full h-auto flex flex-row">
                                 <div className="flex flex-col w-1/2 pr-10">
                                     <div className="flex flex-row justify-between">
-                                        {/* <Title size={"text-5xl"} heading={ad.title} key={ad.title} /> */}
                                         <h1 className="text-5xl my-5" key={ad.title}>{ad.title}</h1>
                                     </div>
                                     <p className="break-words" key={ad.description}>
@@ -359,8 +350,6 @@ const AdInspectorPage = () => {
                                             <RoomIcon color="secondary" />
                                             <p className="text-md text-pu-ghost ml-1 dark:text-dark-white">{ad.city}</p>
                                         </div>
-
-
 
                                     </div>
 
@@ -383,7 +372,6 @@ const AdInspectorPage = () => {
                                             </div>
                                         </div>
                                     </a>
-                                    {/* <Map address={`${ad.address} ${ad.zip} ${ad.city}`} /> */}
                                 </div>
                             </div>
 
@@ -480,7 +468,6 @@ const AdInspectorPage = () => {
                                             </div>
                                         </div>
                                     </a>
-                                    {/* <Map address={`${ad.address} ${ad.zip} ${ad.city}`} /> */}
                                 </div>
                             </div>
 
@@ -533,20 +520,6 @@ const AdInspectorPage = () => {
             )
         }
     }
-
-    // const renderMap = () => {
-    //     return (
-    //         <StaticDateRangePicker
-    //         defaultValue={[dayjs('2022-04-17'), dayjs('2022-04-21')]}
-    //         sx={{
-    //           [`.${pickersLayoutClasses.contentWrapper}`]: {
-    //             alignItems: 'center',
-    //           },
-    //         }}
-    //       />
-    //     )
-    // }
-
 
 
     const [pictures, setImage] = useState<string[]>([]);

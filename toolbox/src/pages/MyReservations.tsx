@@ -7,7 +7,7 @@ import { getUserReservation } from "../lib/controller";
 import { Reservation } from "../types/types";
 
 
-export default function MyReservations(){
+export default function MyReservations() {
 
     const [myReservations, setReservations] = useState<Reservation[]>([]);
     const { currentUser } = useAuth();
@@ -18,15 +18,15 @@ export default function MyReservations(){
             setReservations(adsFromDatabase);
         }
     }
-    
+
     useEffect(() => {
         getMyReservations();
     }, []);
 
-    
+
     return (
         <div className='flex w-screen h-auto text-current flex-wrap flex-row gap-20 bg-slate-100 dark:bg-dark-graa'>
-             <div className="flex flex-col">
+            <div className="flex flex-col">
                 <ProfileSidebar />
             </div>
             <div className="pt-60 text-left flex flex-col gap-10 pb-10">

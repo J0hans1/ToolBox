@@ -16,11 +16,11 @@ interface section {
 
 const Wrapper = (props: section) => {
     return (
-    <section className={`flex flex-col content-center ${props.height} ${props.bg_color} ${props.text_fill}`}>
-        <div className={`flex ${props.direction} m-auto w-full max-w-7xl p-10 text-current`}>
-            {props.children}
-        </div> 
-    </section>
+        <section className={`flex flex-col content-center ${props.height} ${props.bg_color} ${props.text_fill}`}>
+            <div className={`flex ${props.direction} m-auto w-full max-w-7xl p-10 text-current`}>
+                {props.children}
+            </div>
+        </section>
     )
 }
 

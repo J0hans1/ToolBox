@@ -16,7 +16,7 @@ const SavedAds = () => {
             const adsFromDatabase = await getSavedAdsFromUser(currentUser?.id);
             if (adsFromDatabase !== undefined && adsFromDatabase.length > 0) {
                 setSavedAds(adsFromDatabase);
-            } 
+            }
         }
     }
 

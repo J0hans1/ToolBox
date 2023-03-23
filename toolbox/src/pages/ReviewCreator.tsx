@@ -13,7 +13,6 @@ import Rating from '@mui/material/Rating';
 import Box from '@mui/material/Box';
 import StarIcon from '@mui/icons-material/Star';
 
-//TODO: få verdien fra stjernene til å bli med videre 
 const ReviewCreator = () => {
     let navigate = useNavigate();
     const [rating, setRating] = useState(0);
@@ -87,14 +86,6 @@ const ReviewCreator = () => {
                         <div id="RATING" className='flex flex-col my-5 dark:text-dark-white'>
                             <Step nr={'01'} title={'Rating'} />
                             <p> Gi en anmeldelse av produktet. </p>
-                            {/* <input
-                                    placeholder = "Rating"
-                                    type = 'number'
-                                    min={0}
-                                    value={rating} 
-                                    onChange={(e) => setRating(parseInt(e.target.value))}
-                                    className={TwStyles.TextField}
-                                /> */}
                             <Box
                                 sx={{
                                     width: 400,
@@ -125,10 +116,6 @@ const ReviewCreator = () => {
                                     <Box sx={{ ml: 2 }}>{labels[hover !== -1 ? hover : value]}</Box>
                                 )}
                             </Box>
-
-                            {/* <div className='flex flex-col w-full mt-5 gap-2'>
-                                <TextField label="Rating" type="number" InputLabelProps={{ shrink: true, }} value={rating} onChange={(e) => { setRating(parseInt(e.target.value)) }} />
-                            </div> */}
                         </div>
 
                         <div id="REVIEW" className='flex flex-col my-5 dark:text-dark-white'>
@@ -136,8 +123,8 @@ const ReviewCreator = () => {
                             <p> Skriv en anmeldelse av produktet. </p>
                             <div className='flex flex-col w-full mt-5 gap-2 my-2'>
                                 <textarea
-                                    placeholder = "Anmeldelse"
-                                    value={review} 
+                                    placeholder="Anmeldelse"
+                                    value={review}
                                     onChange={(e) => { setReview(e.target.value) }}
                                     rows={4}
                                     className={TwStyles.TextField + " resize-none h-40"}

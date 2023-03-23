@@ -1,4 +1,4 @@
-import  { Button } from '@mui/material';
+import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from "react-redux";
 import ThemeButton from './ThemeButton';
@@ -9,7 +9,7 @@ import { Searchfield } from './TextField';
 
 const Navbar = () => {
 
-    const MuiMode = useSelector((state: any) => 
+    const MuiMode = useSelector((state: any) =>
         state.darkMode.active
     );
 
@@ -63,7 +63,7 @@ const Navbar = () => {
                     <div className='flex flex-col w-4/5'>
                         <div className='flex flex-row justify-between'>
                             <div className='flex flex-row gap-1 w-3/5'>
-                                <Searchfield Label='Søk' Type='text'/>
+                                <Searchfield Label='Søk' Type='text' />
                                 <Button color="primary" variant="contained" sx={{ p: 2 }} onClick={() => navigate("/ads")}> Søk </Button>
                             </div>
 
@@ -74,7 +74,7 @@ const Navbar = () => {
                                         <Button disabled={disableButton} onClick={handleClickLogout} variant="contained">
                                             Logg ut
                                         </Button>
-                                        <Button sx={{color: StandardColor}} color="primary" variant="outlined" onClick={() => navigate("/profile")} >
+                                        <Button sx={{ color: StandardColor }} color="primary" variant="outlined" onClick={() => navigate("/profile")} >
                                             <img src={image} alt="User profile" style={{ width: '20px', height: '20px', borderRadius: '50%', marginRight: '8px' }} />
                                             {currentUser?.displayName}
                                         </Button>
@@ -91,15 +91,15 @@ const Navbar = () => {
                             {currentUser ? (
                                 // if user is logged in, render logout button
                                 <div className='flex flex-row gap-1 w-auto'>
-                                    <Button sx={{color: StandardColor}} onClick={() => navigate("/ads")}>Annonser</Button>
-                                    <Button sx={{color: StandardColor}} onClick={() => navigate("/adcreator")}>Opprett annonse</Button>
-                                    <Button sx={{color: StandardColor}} onClick={() => navigate("/FAQ")}>FAQ</Button>
-                                    <Button sx={{color: StandardColor}} onClick={() => navigate("/profile")} >Min side</Button>
+                                    <Button sx={{ color: StandardColor }} onClick={() => navigate("/ads")}>Annonser</Button>
+                                    <Button sx={{ color: StandardColor }} onClick={() => navigate("/adcreator")}>Opprett annonse</Button>
+                                    <Button sx={{ color: StandardColor }} onClick={() => navigate("/FAQ")}>FAQ</Button>
+                                    <Button sx={{ color: StandardColor }} onClick={() => navigate("/profile")} >Min side</Button>
                                 </div>
                             ) : (
                                 <div className='flex flex-row gap-1 w-auto'>
-                                    <Button sx={{color: StandardColor}} onClick={() => navigate("/ads")}>Annonser</Button>
-                                    <Button sx={{color: StandardColor}} onClick={() => navigate("/FAQ")}>FAQ</Button>
+                                    <Button sx={{ color: StandardColor }} onClick={() => navigate("/ads")}>Annonser</Button>
+                                    <Button sx={{ color: StandardColor }} onClick={() => navigate("/FAQ")}>FAQ</Button>
                                 </div>
                             )}
                         </div>
