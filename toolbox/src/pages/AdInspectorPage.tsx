@@ -326,7 +326,7 @@ const AdInspectorPage = () => {
             return (
                 <div className="w-full h-auto dark:bg-dark-graa">
                     {ad?.map((ad) =>
-                        <div className="w-full h-auto text-left dark:bg-dark-graa">
+                        <div className="w-full h-auto text-left dark:bg-dark-graa dark:text-dark-white">
                             <div className="flex flex-row w-full h-96 mt-32 mb-5 content-start">
                                 <div className="w-2/3 h-96">
                                     <ImageSlider slides={pictures} key={pictures.toString()} />
@@ -420,9 +420,9 @@ const AdInspectorPage = () => {
 
         else {
             return (
-                <div className="w-full h-auto dark:bg-dark-graa">
+                <div className="w-full h-auto dark:bg-dark-graa dark:text-dark-white">
                     {ad?.map((ad) =>
-                        <div className="w-full h-auto text-left dark:bg-dark-graa">
+                        <div className="w-full h-auto text-left dark:bg-dark-graa dark:text-dark-white">
                             <div className="flex flex-row w-full h-96 mt-32 mb-5 content-start">
                                 <div className="w-2/3 h-96">
                                     <ImageSlider slides={pictures} key={pictures[0]} />
